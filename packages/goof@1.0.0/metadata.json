@@ -1,0 +1,12 @@
+{
+  "name": "strata-math-utils",
+  "version": "1.0.0",
+  "description": "A collection of utility math functions for Strata.",
+  "author": "Strata",
+  "license": "MIT",
+  "main": "main.str",
+  "dependencies": {
+    "strata-io-utils": "^1.0.0"
+  },
+  "keywords": ["strata", "math", "utilities", "package"]
+}
