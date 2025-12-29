@@ -1,0 +1,16 @@
+import str.math
+import str.util
+
+# Calculate the hypotenuse
+func calcHypotenuse {
+    let a = 3
+    let b = 4
+    let hyp = math.sqrt(a * a + b * b)
+    io.print(hyp)  # Output: 5
+}
+
+# Random number generation
+func randomExample {
+    let n = util.randomInt(100)
+    io.print(n)  # Output: random int 0-99
+}
