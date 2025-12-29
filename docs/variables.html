@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Strata Variables</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100">
+
+<main class="max-w-4xl mx-auto p-8">
+  <h1 class="text-4xl font-bold mb-6">Variables</h1>
+
+  <p class="text-lg text-slate-300">
+    Variables in Strata must be explicitly created before use.
+  </p>
+
+  <h2 class="text-2xl font-semibold mt-8 mb-4">Creating Variables</h2>
+  <pre class="bg-slate-900 p-4 rounded text-lg">
+create int x
+  </pre>
+
+  <h2 class="text-2xl font-semibold mt-8 mb-4">Setting Variables</h2>
+  <pre class="bg-slate-900 p-4 rounded text-lg">
+set x = 42
+  </pre>
+
+  <h2 class="text-2xl font-semibold mt-8 mb-4">Using Variables</h2>
+  <pre class="bg-slate-900 p-4 rounded text-lg">
+io.print(x)
+  </pre>
+
+  <p class="text-lg text-slate-400 mt-4">
+    Using a variable before creation will throw an error.
+  </p>
+</main>
+
+</body>
+</html>
