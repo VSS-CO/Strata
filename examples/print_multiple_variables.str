@@ -1,0 +1,4 @@
+import str.io
+
+io.print("The answer is")
+io.print(42)
