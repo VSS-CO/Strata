@@ -1,0 +1,14 @@
+{
+  "name": "strata-lang",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "strata": "./dist/main.js"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3"
+  }
+}
