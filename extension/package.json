@@ -1,0 +1,32 @@
+{
+  "name": "strata-language",
+  "displayName": "Strata Language",
+  "description": "Syntax highlighting + autocomplete for Strata programming language",
+  "version": "0.0.1",
+  "publisher": "yourname",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Programming Languages"],
+  "activationEvents": [
+    "onLanguage:strata"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "strata",
+        "aliases": ["Strata", "strata"],
+        "extensions": [".str"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "strata",
+        "scopeName": "source.strata",
+        "path": "./strata.tmLanguage.json"
+      }
+    ]
+  }
+}
