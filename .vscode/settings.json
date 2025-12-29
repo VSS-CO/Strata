@@ -1,0 +1,33 @@
+{
+  "files.associations": {
+    "*.str": "strata"
+  },
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": "keyword.control.strata",
+        "settings": { "foreground": "#FF6188", "fontStyle": "bold" }
+      },
+      {
+        "scope": "support.class.strata",
+        "settings": { "foreground": "#78DCE8" }
+      },
+      {
+        "scope": "string.quoted.single.strata",
+        "settings": { "foreground": "#A9DC76" }
+      },
+      {
+        "scope": "constant.numeric.strata",
+        "settings": { "foreground": "#FFD866" }
+      },
+      {
+        "scope": "comment.line.double-slash.strata",
+        "settings": { "foreground": "#65737E", "fontStyle": "italic" }
+      },
+      {
+        "scope": "comment.block.strata",
+        "settings": { "foreground": "#65737E", "fontStyle": "italic" }
+      }
+    ]
+  }
+}
