@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Strata Syntax</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100">
+
+<main class="max-w-4xl mx-auto p-8">
+  <h1 class="text-4xl font-bold mb-6">Syntax</h1>
+
+  <p class="text-lg text-slate-300 mb-6">
+    Strata uses a simple statement-based syntax. Programs execute
+    from top to bottom.
+  </p>
+
+  <h2 class="text-2xl font-semibold mt-8 mb-4">Hello World</h2>
+  <pre class="bg-slate-900 p-4 rounded text-lg">
+import str.io
+
+io.print("Hello, world")
+  </pre>
+
+  <h2 class="text-2xl font-semibold mt-8 mb-4">Tokens</h2>
+  <ul class="list-disc list-inside text-lg space-y-2">
+    <li>Identifiers: <code>x</code>, <code>math.sqrt</code></li>
+    <li>Numbers: <code>123</code></li>
+    <li>Strings: <code>"text"</code></li>
+    <li>Symbols: <code>{ } ( ) = ,</code></li>
+  </ul>
+
+  <h2 class="text-2xl font-semibold mt-8 mb-4">Keywords</h2>
+  <pre class="bg-slate-900 p-4 rounded text-lg">
+import func create set
+true false null
+  </pre>
+</main>
+
+</body>
+</html>
