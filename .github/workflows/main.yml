@@ -1,0 +1,17 @@
+name: build-macos
+on: [push]
+
+jobs:
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: npm i -g pkg
+      - run: pkg dist/main.cjs --targets node18-macos-x64,node18-macos-arm64 --output strata
+      - uses: actions/upload-artifact@v4
+        with:
+          name: strata-macos
+          path: strata
