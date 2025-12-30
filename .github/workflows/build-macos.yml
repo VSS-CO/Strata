@@ -12,7 +12,7 @@ jobs:
       - run: npm i -g pkg
       - run: mkdir -p dist
       - run: rm -f dist/strata
-      - run: pkg dist/test.js --targets node18-macos-x64,node18-macos-arm64 --output dist/strata
+      - run: pkg dist/test.js --targets node18-macos-x64,node18-macos-arm64 --output dist/test
       - run: chmod +x dist/test
       - name: Show working directory
         run: pwd
