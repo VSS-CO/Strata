@@ -1,9 +1,19 @@
-# Treat .strata files as Strata language (repo-local only)
-*.strata linguist-language=Strata
+## GitHub Linguist Configuration for Strata Language
 
-# Ignore generated output
-dist/** linguist-generated=true
-build/** linguist-generated=true
+# Define Strata language for .str files
+*.str linguist-language=Strata
 
-# Ignore dependencies
+# Mark example files as documentation
+examples/** linguist-documentation
+examples/*.str linguist-language=Strata
+
+# Mark test files as tests
+test_*.str linguist-detectable=true
+*_test.str linguist-detectable=true
+
+# Exclude dist and vendor directories from language statistics
+dist/** linguist-vendored=false
 node_modules/** linguist-vendored=true
+
+# Mark generated C output as C
+out.c linguist-language=C
