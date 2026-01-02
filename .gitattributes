@@ -11,9 +11,6 @@ examples/*.str linguist-language=Strata
 test_*.str linguist-detectable=true
 *_test.str linguist-detectable=true
 
-# Exclude dist and vendor directories from language statistics
-dist/** linguist-vendored=false
-node_modules/** linguist-vendored=true
 
 # Mark generated C output as C
 out.c linguist-language=C
