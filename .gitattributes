@@ -1,0 +1,9 @@
+# Treat .strata files as Strata language (repo-local only)
+*.strata linguist-language=Strata
+
+# Ignore generated output
+dist/** linguist-generated=true
+build/** linguist-generated=true
+
+# Ignore dependencies
+node_modules/** linguist-vendored=true
