@@ -1,6 +1,0 @@
-import str.io
-
-create int x
-set x = 10
-
-io.print(x)
