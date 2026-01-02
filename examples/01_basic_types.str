@@ -1,0 +1,38 @@
+// Examples: Primitive Types and Variables
+// Demonstrates: let, const, var and all primitive types
+
+import io from str
+
+// Immutable bindings with explicit types
+let x: int = 42
+let y: float = 3.14159
+let z: bool = true
+let c: char = 'A'
+let s: string = "Strata Language"
+
+io.print("=== Primitive Types ===")
+io.print(x)
+io.print(y)
+io.print(z)
+io.print(c)
+io.print(s)
+
+// const creates immutable bindings
+const PI: float = 3.14159
+const MAX_SIZE: int = 1000
+
+io.print("=== Constants ===")
+io.print(PI)
+io.print(MAX_SIZE)
+
+// var creates mutable variables
+var counter: int = 0
+counter = 1
+counter = 2
+
+io.print("=== Mutable Variables ===")
+io.print(counter)
+
+// any type for gradual typing
+let anything: any = 42
+io.print(anything)

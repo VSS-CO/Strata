@@ -1,0 +1,35 @@
+// Examples: Util Module
+// Demonstrates: util.randomInt
+
+import io from str
+import util from str
+
+io.print("=== Random Integer ===")
+let rand1: int = util.randomInt(10)
+io.print(rand1)
+
+let rand2: int = util.randomInt(10)
+io.print(rand2)
+
+let rand3: int = util.randomInt(100)
+io.print(rand3)
+
+io.print("=== Dice Rolls ===")
+// Simulate 6-sided die
+let die1: int = util.randomInt(6)
+io.print(die1)
+
+let die2: int = util.randomInt(6)
+io.print(die2)
+
+io.print("=== Random in Range ===")
+// Random number from 1 to 5 (0-4 + 1)
+let val1: int = util.randomInt(5)
+io.print(val1)
+
+// Multiple random values
+io.print("=== Generate Random Sequence ===")
+for (var i: int = 0; i < 5; var i: int = i + 1) {
+  let random_val: int = util.randomInt(20)
+  io.print(random_val)
+}

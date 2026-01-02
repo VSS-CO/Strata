@@ -1,0 +1,61 @@
+// Examples: Immutability
+// Demonstrates: let, const (immutable) vs var (mutable)
+
+import io from str
+
+io.print("=== Immutable Variables ===")
+
+let x: int = 10
+io.print(x)
+
+// x = 20  // ERROR: cannot reassign let
+// io.print(x)
+
+const PI: float = 3.14159
+io.print(PI)
+
+// PI = 3.0  // ERROR: cannot reassign const
+// io.print(PI)
+
+io.print("=== Mutable Variables ===")
+
+var counter: int = 0
+io.print(counter)
+
+var counter: int = counter + 1
+io.print(counter)
+
+var counter: int = counter + 1
+io.print(counter)
+
+io.print("=== Scoped Immutability ===")
+
+let outer: int = 100
+
+if (true) {
+  let inner: int = 200
+  io.print(inner)
+  // inner = 300  // ERROR: cannot reassign
+}
+
+io.print(outer)
+// io.print(inner)  // ERROR: out of scope
+
+io.print("=== Mixed Usage ===")
+
+let fixed_value: int = 42
+var changing_value: int = 0
+
+changing_value = 10
+changing_value = 20
+changing_value = 30
+
+io.print(fixed_value)
+io.print(changing_value)
+
+// Immutable by default pattern
+let data: string = "Strata"
+// data = "Other"  // ERROR: safer by default
+
+var mutable_data: string = "Strata"
+var mutable_data: string = "Other"  // OK: explicitly mutable

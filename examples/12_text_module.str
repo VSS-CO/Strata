@@ -1,0 +1,48 @@
+// Examples: Text Module
+// Demonstrates: text.toUpper, text.toLower, text.length
+
+import io from str
+import text from str
+
+io.print("=== To Uppercase ===")
+let upper: string = text.toUpper("hello")
+io.print(upper)
+
+let upper2: string = text.toUpper("Strata Language")
+io.print(upper2)
+
+io.print("=== To Lowercase ===")
+let lower: string = text.toLower("HELLO")
+io.print(lower)
+
+let lower2: string = text.toLower("Strata Language")
+io.print(lower2)
+
+io.print("=== String Length ===")
+let len1: int = text.length("hello")
+io.print(len1)
+
+let len2: int = text.length("Strata")
+io.print(len2)
+
+let len3: int = text.length("")
+io.print(len3)
+
+io.print("=== Combined Operations ===")
+let phrase: string = "Hello World"
+let upper_phrase: string = text.toUpper(phrase)
+io.print(upper_phrase)
+
+let len_upper: int = text.length(upper_phrase)
+io.print(len_upper)
+
+// Check string properties
+io.print("=== Conditionals with Strings ===")
+let word: string = "strata"
+let len: int = text.length(word)
+
+if (len > 5) {
+  io.print("Long word")
+} else {
+  io.print("Short word")
+}

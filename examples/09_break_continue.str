@@ -1,0 +1,50 @@
+// Examples: Break and Continue Statements
+// Demonstrates: loop control flow
+
+import io from str
+
+io.print("=== Break Example ===")
+for (var i: int = 0; i < 10; var i: int = i + 1) {
+  if (i == 5) {
+    break
+  }
+  io.print(i)
+}
+
+io.print("=== Continue Example ===")
+for (var i: int = 0; i < 10; var i: int = i + 1) {
+  if (i == 5) {
+    continue
+  }
+  io.print(i)
+}
+
+io.print("=== Skip Even Numbers ===")
+for (var i: int = 0; i < 10; var i: int = i + 1) {
+  if (i % 2 == 0) {
+    continue
+  }
+  io.print(i)
+}
+
+io.print("=== Stop at 7 ===")
+var n: int = 0
+while (n < 20) {
+  if (n == 7) {
+    break
+  }
+  if (n % 3 == 0) {
+    var n: int = n + 1
+    continue
+  }
+  io.print(n)
+  var n: int = n + 1
+}
+
+io.print("=== Find First Multiple of 13 ===")
+for (var i: int = 1; i <= 100; var i: int = i + 1) {
+  if (i % 13 == 0) {
+    io.print(i)
+    break
+  }
+}

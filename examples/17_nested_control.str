@@ -1,0 +1,59 @@
+// Examples: Nested Control Flow
+// Demonstrates: complex if/else and loops within loops
+
+import io from str
+
+io.print("=== Nested If Statements ===")
+
+let x: int = 15
+let y: int = 10
+
+if (x > y) {
+  io.print("x > y")
+  
+  if (x > 20) {
+    io.print("x is large")
+  } else {
+    io.print("x is medium")
+  }
+} else {
+  io.print("x <= y")
+}
+
+io.print("=== Nested Loops ===")
+
+for (var i: int = 1; i <= 3; var i: int = i + 1) {
+  for (var j: int = 1; j <= 3; var j: int = j + 1) {
+    let product: int = i * j
+    io.print(product)
+  }
+}
+
+io.print("=== Multiplication Table ===")
+
+for (var row: int = 1; row <= 5; var row: int = row + 1) {
+  for (var col: int = 1; col <= 5; var col: int = col + 1) {
+    let cell: int = row * col
+    io.print(cell)
+  }
+}
+
+io.print("=== Loop with Conditional ===")
+
+for (var i: int = 1; i <= 10; var i: int = i + 1) {
+  if (i % 3 == 0) {
+    io.print(i)
+  }
+}
+
+io.print("=== While with Nested If ===")
+
+var count: int = 0
+while (count < 10) {
+  if (count % 2 == 0) {
+    io.print("even")
+  } else {
+    io.print("odd")
+  }
+  var count: int = count + 1
+}

@@ -1,0 +1,18 @@
+// Examples: Time Module
+// Demonstrates: time.now
+
+import io from str
+import time from str
+
+io.print("=== Current Timestamp ===")
+let now1: float = time.now()
+io.print(now1)
+
+let now2: float = time.now()
+io.print(now2)
+
+io.print("=== Multiple Timestamps ===")
+for (var i: int = 0; i < 3; var i: int = i + 1) {
+  let timestamp: float = time.now()
+  io.print(timestamp)
+}
