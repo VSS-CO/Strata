@@ -1,0 +1,43 @@
+// Examples: For Loops
+// Demonstrates: for loops with init, condition, update
+
+import io from str
+
+io.print("=== Simple Count ===")
+for (var i: int = 0; i < 5; var i: int = i + 1) {
+  io.print(i)
+}
+
+io.print("=== Count by 2 ===")
+for (var i: int = 0; i < 10; var i: int = i + 2) {
+  io.print(i)
+}
+
+io.print("=== Reverse Count ===")
+for (var i: int = 5; i > 0; var i: int = i - 1) {
+  io.print(i)
+}
+
+io.print("=== Sum 1 to 10 ===")
+var sum: int = 0
+for (var i: int = 1; i <= 10; var i: int = i + 1) {
+  var sum: int = sum + i
+}
+io.print(sum)
+
+io.print("=== Times Table 5 ===")
+for (var i: int = 1; i <= 10; var i: int = i + 1) {
+  let product: int = 5 * i
+  io.print(product)
+}
+
+io.print("=== Powers of 2 ===")
+for (var i: int = 0; i < 8; var i: int = i + 1) {
+  let power: int = 1
+  var p: int = 0
+  while (p < i) {
+    var power: int = power * 2
+    var p: int = p + 1
+  }
+  io.print(power)
+}

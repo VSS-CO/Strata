@@ -1,0 +1,58 @@
+// Examples: Operator Precedence
+// Demonstrates: proper evaluation order
+
+import io from str
+
+io.print("=== Arithmetic Precedence ===")
+
+let a: int = 2 + 3 * 4
+io.print(a)
+
+let b: int = (2 + 3) * 4
+io.print(b)
+
+let c: int = 10 - 3 - 2
+io.print(c)
+
+let d: int = 20 / 4 / 2
+io.print(d)
+
+io.print("=== Mixed Operators ===")
+
+let e: int = 5 + 3 * 2 - 1
+io.print(e)
+
+let f: bool = 10 > 5 && 3 < 2
+io.print(f)
+
+let g: bool = true || false && false
+io.print(g)
+
+io.print("=== Unary Precedence ===")
+
+let h: int = -5 * 2
+io.print(h)
+
+let i: int = -(5 * 2)
+io.print(i)
+
+let j: bool = !true && false
+io.print(j)
+
+let k: bool = !(true && false)
+io.print(k)
+
+io.print("=== Complex Expressions ===")
+
+let x: int = 10
+let y: int = 20
+let z: int = 5
+
+let result1: int = x + y * z
+io.print(result1)
+
+let result2: bool = x < y && y > z || x == z
+io.print(result2)
+
+let result3: int = -x + y * 2 - z
+io.print(result3)

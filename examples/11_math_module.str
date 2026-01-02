@@ -1,0 +1,52 @@
+// Examples: Math Module
+// Demonstrates: math.sqrt, math.pow, math.abs, math.floor, math.ceil, math.random
+
+import io from str
+import math from str
+
+io.print("=== Square Root ===")
+let sqrt_25: float = math.sqrt(25)
+io.print(sqrt_25)
+
+let sqrt_2: float = math.sqrt(2)
+io.print(sqrt_2)
+
+io.print("=== Power ===")
+let two_to_three: float = math.pow(2, 3)
+io.print(two_to_three)
+
+let ten_squared: float = math.pow(10, 2)
+io.print(ten_squared)
+
+io.print("=== Absolute Value ===")
+let abs_neg: float = math.abs(-42)
+io.print(abs_neg)
+
+let abs_pos: float = math.abs(42)
+io.print(abs_pos)
+
+io.print("=== Floor ===")
+let floor_val: float = math.floor(3.7)
+io.print(floor_val)
+
+let floor_neg: float = math.floor(-3.7)
+io.print(floor_neg)
+
+io.print("=== Ceiling ===")
+let ceil_val: float = math.ceil(3.2)
+io.print(ceil_val)
+
+let ceil_neg: float = math.ceil(-3.2)
+io.print(ceil_neg)
+
+io.print("=== Random ===")
+let rand1: float = math.random()
+io.print(rand1)
+
+let rand2: float = math.random()
+io.print(rand2)
+
+// Combined operations
+io.print("=== Combined ===")
+let hypotenuse: float = math.sqrt(math.pow(3, 2) + math.pow(4, 2))
+io.print(hypotenuse)

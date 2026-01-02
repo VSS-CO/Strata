@@ -1,0 +1,66 @@
+// Examples: Type Safety
+// Demonstrates: type checking and constraints
+
+import io from str
+
+io.print("=== Valid Type Operations ===")
+
+let x: int = 42
+let y: int = 10
+let sum: int = x + y
+io.print(sum)
+
+let f1: float = 3.5
+let f2: float = 2.5
+let f_sum: float = f1 + f2
+io.print(f_sum)
+
+let name: string = "Alice"
+let greeting: string = "Hello, "
+io.print(greeting)
+io.print(name)
+
+io.print("=== Type Checking in Comparisons ===")
+
+let a: int = 100
+let b: int = 50
+
+let is_greater: bool = a > b
+io.print(is_greater)
+
+let is_equal: bool = a == b
+io.print(is_equal)
+
+io.print("=== Type Checking in Conditionals ===")
+
+let age: int = 25
+
+if (age >= 18) {
+  io.print("Can vote")
+} else {
+  io.print("Cannot vote")
+}
+
+let score: float = 95.5
+
+if (score >= 90.0) {
+  io.print("Excellent")
+} else {
+  io.print("Not excellent")
+}
+
+io.print("=== Gradual Typing with any ===")
+
+let flexible: any = 42
+io.print(flexible)
+
+var flexible_var: any = "now a string"
+io.print(flexible_var)
+
+var flexible_var: any = true
+io.print(flexible_var)
+
+// Note: The following would cause type errors if uncommented:
+// let invalid: int = "hello"          // Type mismatch
+// let wrong: string = 42               // Type mismatch
+// let bad_assign: int = 3.14          // Implicit conversion not allowed

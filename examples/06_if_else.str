@@ -1,0 +1,49 @@
+// Examples: If/Else Control Flow
+// Demonstrates: if, else if, else
+
+import io from str
+
+let age: int = 25
+
+io.print("=== Age Check ===")
+if (age >= 18) {
+  io.print("Adult")
+} else {
+  io.print("Minor")
+}
+
+let score: int = 85
+
+io.print("=== Grade Assignment ===")
+if (score >= 90) {
+  io.print("Grade: A")
+} else if (score >= 80) {
+  io.print("Grade: B")
+} else if (score >= 70) {
+  io.print("Grade: C")
+} else {
+  io.print("Grade: F")
+}
+
+let x: int = 10
+let y: int = 20
+
+io.print("=== Comparison Logic ===")
+if (x > y) {
+  io.print("x is greater")
+} else if (x < y) {
+  io.print("y is greater")
+} else {
+  io.print("equal")
+}
+
+let value: int = 0
+
+io.print("=== Zero Check ===")
+if (value == 0) {
+  io.print("Zero")
+} else if (value > 0) {
+  io.print("Positive")
+} else {
+  io.print("Negative")
+}
