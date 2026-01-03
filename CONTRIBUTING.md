@@ -13,7 +13,7 @@ Create your own copy of the Strata repository by forking it.
 Clone your fork to your local machine:
 
 ```
-git clone https://github.com/your-username/strata.git
+git clone https://github.com/VSS-CO/strata.git
 cd strata
 ```
 
