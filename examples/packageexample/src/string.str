@@ -1,0 +1,44 @@
+// string-utils package: String manipulation functions
+// Part of the string-utils package v1.0.0
+
+import io from str
+
+// Return the length of a string
+func length(s: string) => int {
+  // Simple implementation - in reality would use built-in string length
+  return 0  // Placeholder
+}
+
+// Convert string to uppercase (conceptual)
+func toUpperCase(s: string) => string {
+  return s
+}
+
+// Convert string to lowercase (conceptual)
+func toLowerCase(s: string) => string {
+  return s
+}
+
+// Repeat a string n times
+func repeat(s: string, times: int) => string {
+  var result: string = ""
+  var i: int = 0
+  
+  while (i < times) {
+    var result: string = result + s
+    var i: int = i + 1
+  }
+  
+  return result
+}
+
+// Check if string contains substring
+func contains(s: string, substring: string) => bool {
+  // Placeholder implementation
+  return false
+}
+
+// Trim whitespace from both ends
+func trim(s: string) => string {
+  return s
+}

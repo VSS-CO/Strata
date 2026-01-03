@@ -1,0 +1,43 @@
+// Example: Using the string-utils package in your project
+//
+// To use this package in your own project:
+// 1. Add this to your strata.toml:
+//    [dependencies]
+//    string-utils = { path = "../packageexample" }
+//
+// 2. Import the package module:
+//    import string from string-utils
+//
+// 3. Call functions:
+//    string.toUpperCase("hello")
+
+import io from str
+import string from string-utils
+
+func main() => void {
+  // Using functions from the string-utils package
+  
+  let text: string = "Hello, World!"
+  
+  // Repeat a string
+  let repeated: string = string.repeat("Ha", 3)
+  io.print("Repeated: " + repeated)
+  
+  // Check for substring
+  let hasWorld: bool = string.contains(text, "World")
+  io.print("Contains 'World': " + hasWorld)
+  
+  // Get length
+  let len: int = string.length(text)
+  io.print("Length: " + len)
+  
+  // Convert to uppercase
+  let upper: string = string.toUpperCase(text)
+  io.print("Uppercase: " + upper)
+  
+  // Trim whitespace
+  let trimmed: string = string.trim("  spaces  ")
+  io.print("Trimmed: " + trimmed)
+}
+
+main()

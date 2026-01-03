@@ -1,0 +1,25 @@
+[project]
+# Package metadata - defines this as a package
+name = "string-utils"
+version = "1.0.0"
+description = "String utility functions for Strata"
+author = "Strata Contributors"
+license = "GPL-3.0"
+
+# Strata compiler version required
+strata = "1.0.0"
+
+# Export public API - these modules are accessible when imported
+[exports]
+# Module name -> file path
+string = "./src/string.str"
+
+# Optional: platform-specific builds
+[build]
+target = "c"
+optimization = "O2"
+
+# Optional: dependencies (this package depends on nothing for now)
+[dependencies]
+# http = "1.2.0"
+# crypto = ">=2.0.0,<3.0.0"
