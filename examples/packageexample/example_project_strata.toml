@@ -1,0 +1,27 @@
+# Example project that USES the string-utils package
+# This shows what a consumer project would look like
+
+[project]
+name = "my-app"
+version = "1.0.0"
+description = "Example application using string-utils package"
+strata = "1.0.0"
+
+[build]
+target = "c"
+optimization = "O2"
+output = "./dist/my-app"
+
+# Dependencies: This project depends on string-utils
+[dependencies]
+# Local path (development)
+string-utils = { path = "../packageexample" }
+
+# Registry (production - would pull from package registry)
+# string-utils = "1.0.0"
+
+# Version ranges
+# string-utils = ">=1.0.0,<2.0.0"
+
+# Git repository
+# string-utils = "git+https://github.com/strata-lang/string-utils#v1.0.0"
