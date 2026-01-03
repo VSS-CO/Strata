@@ -1,541 +1,296 @@
+/*
+ * STRATA ARCHITECTURE & MODULE SYSTEM SPECIFICATION (C# Implementation)
+ * 
+ * This file documents how the module system, package manager, and deterministic
+ * builds are implemented in Strata's C# target.
+ * 
+ * ============================================================================
+ * 1. IMPORT RESOLUTION IN C#
+ * ============================================================================
+ * 
+ * Strata imports compile to C# namespaces and using declarations:
+ * 
+ * Strata source:
+ *   import io from std::io
+ *   import util from ./util
+ *   import http from http::client
+ *   
+ *   io.print("hello")
+ * 
+ * Generated C# code:
+ *   using Strata.StdIo;
+ *   using Strata.Util;
+ *   using Strata.Http.Client;
+ *   
+ *   class Program {
+ *       static void Main() {
+ *           Strata.StdIo.Print("hello");
+ *       }
+ *   }
+ * 
+ * ============================================================================
+ * 2. NAMESPACE MAPPING
+ * ============================================================================
+ * 
+ * Module naming convention:
+ * 
+ *   std::io         → Strata.StdIo
+ *   std::math       → Strata.StdMath
+ *   std::text       → Strata.StdText
+ *   ./util          → Strata.Util
+ *   ./handlers/auth → Strata.Handlers.Auth
+ *   http::client    → Strata.Http.Client
+ *   crypto::aes     → Strata.Crypto.Aes
+ * 
+ * Generated C# class (strata_std_io.cs):
+ * 
+ *   namespace Strata.StdIo {
+ *       public static class StdIo {
+ *           public static void Print(string msg) {
+ *               Console.WriteLine(msg);
+ *           }
+ *           
+ *           public static string Read() {
+ *               return Console.ReadLine() ?? "";
+ *           }
+ *       }
+ *   }
+ * 
+ * ============================================================================
+ * 3. STANDARD LIBRARY DESIGN
+ * ============================================================================
+ * 
+ * Strata stdlib as C# assemblies:
+ * 
+ * Strata.StdIo.dll
+ *   - Strata.StdIo.Print(string)
+ *   - Strata.StdIo.Read()
+ * 
+ * Strata.StdMath.dll
+ *   - Strata.StdMath.Sqrt(double)
+ *   - Strata.StdMath.Sin(double)
+ *   - Strata.StdMath.Cos(double)
+ *   - etc.
+ * 
+ * Strata.StdText.dll
+ *   - Strata.StdText.Split(string, string)
+ *   - Strata.StdText.Join(string[], string)
+ *   - Strata.StdText.Trim(string)
+ * 
+ * These are built once and included in every Strata installation.
+ * 
+ * ============================================================================
+ * 4. TYPE MAPPING TO C#
+ * ============================================================================
+ * 
+ * Strata types → C# types:
+ * 
+ *   Strata int      → C# int (System.Int32)
+ *   Strata float    → C# double (System.Double)
+ *   Strata bool     → C# bool (System.Boolean)
+ *   Strata char     → C# char (System.Char)
+ *   Strata string   → C# string (System.String)
+ *   Strata any      → C# object (System.Object)
+ * 
+ * Function signatures:
+ * 
+ *   Strata: func add(a: int, b: int) => int { return a + b }
+ *   
+ *   C#: public static int Add(int a, int b) {
+ *       return a + b;
+ *   }
+ * 
+ * Parameters with default values (future):
+ * 
+ *   Strata: func greet(name: string = "World")
+ *   C#:     public static void Greet(string name = "World")
+ * 
+ * ============================================================================
+ * 5. COMPILATION TO IL
+ * ============================================================================
+ * 
+ * Build process:
+ * 
+ *   1. strata build --target csharp
+ *   2. Generate .cs files from .str modules
+ *   3. Compile .cs files to IL (Intermediate Language)
+ *   4. Package into .dll (Dynamic Link Library)
+ *   5. Link with stdlib assemblies
+ *   6. Generate executable .exe
+ * 
+ * Compiler command:
+ * 
+ *   csc /out:myapp.exe \
+ *       src_main.cs src_util.cs \
+ *       /reference:Strata.StdIo.dll \
+ *       /reference:Strata.StdMath.dll
+ * 
+ * ============================================================================
+ * 6. DETERMINISTIC BUILD
+ * ============================================================================
+ * 
+ * Compiler ensures reproducible IL output:
+ * 
+ * • Sorted file processing order
+ * • No timestamps or metadata variations
+ * • Consistent metadata tokens
+ * • Deterministic hash of output assembly
+ * 
+ * Build flags for determinism:
+ * 
+ *   csc /deterministic \
+ *       /sourcelink:strata.json \
+ *       /out:myapp.exe ...
+ * 
+ * Binary identical across machines with same:
+ *   - Compiler version
+ *   - .NET runtime version
+ *   - Source code
+ *   - Stdlib version
+ * 
+ * ============================================================================
+ * 7. PACKAGE MANAGEMENT
+ * ============================================================================
+ * 
+ * Packages as NuGet-like assemblies (but simpler):
+ * 
+ * strata.toml:
+ * 
+ *   [project]
+ *   name = "my-app"
+ *   version = "1.0.0"
+ *   
+ *   [dependencies]
+ *   http = "1.2.0"           # Resolves to Strata.Http.dll v1.2.0
+ *   crypto = ">=2.0.0,<3.0"  # Version range
+ * 
+ * strata.lock:
+ * 
+ *   [[packages]]
+ *   name = "http"
+ *   version = "1.2.0"
+ *   hash = "sha256:abc123..."
+ *   source = "registry"
+ *   assembly = "Strata.Http.dll"
+ * 
+ * During build:
+ *   1. Resolve all packages to exact versions from strata.lock
+ *   2. Download/cache assemblies in .strata/packages/
+ *   3. Generate /reference flags for csc
+ *   4. Link final executable
+ * 
+ * ============================================================================
+ * 8. RUNTIME CONSIDERATIONS
+ * ============================================================================
+ * 
+ * Generated C# is compatible with:
+ * - .NET Framework 4.8+
+ * - .NET 5.0+
+ * - Mono (for cross-platform support)
+ * 
+ * No runtime-specific code (e.g., no unsafe pointers, no P/Invoke by default).
+ * 
+ * Exception handling:
+ * 
+ *   Type errors → compile-time, no try/catch at runtime
+ *   Logic errors → return codes or result types
+ *   System errors → caught and logged
+ * 
+ * ============================================================================
+ * 9. ASSEMBLY VERSIONING
+ * ============================================================================
+ * 
+ * Each generated assembly includes version info:
+ * 
+ *   // AssemblyVersion.cs (auto-generated)
+ *   [assembly: System.Reflection.AssemblyVersion("1.0.0.0")]
+ *   [assembly: System.Reflection.AssemblyFileVersion("1.0.0.0")]
+ *   [assembly: System.Reflection.AssemblyInformationalVersion("1.0.0")]
+ * 
+ * Package versions in strata.lock match assembly versions exactly.
+ * 
+ * ============================================================================
+ * 10. CROSS-PLATFORM OUTPUT
+ * ============================================================================
+ * 
+ * C# target generates IL that runs on:
+ *   - Windows (.NET Framework, .NET Core, .NET 5+)
+ *   - Linux (.NET Core, .NET 5+)
+ *   - macOS (.NET Core, .NET 5+)
+ *   - Other platforms with Mono installed
+ * 
+ * Platform-specific code:
+ * 
+ *   #if WINDOWS || NET472_OR_GREATER
+ *   // Windows-specific code
+ *   #else
+ *   // Cross-platform code
+ *   #endif
+ * 
+ * Strata avoids platform-specific code in stdlib by design.
+ * 
+ * ============================================================================
+ */
+
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 
-public enum TypeKind {
-    Primitive,
-    Union,
-    Interface,
-    Optional
-}
-
-public class TypeDef {
-    public TypeKind Kind { get; set; }
-    public string Name { get; set; }
-    public string Primitive { get; set; }
-    public List<TypeDef> Types { get; set; } = new List<TypeDef>();
-    public Dictionary<string, TypeDef> Fields { get; set; } = new Dictionary<string, TypeDef>();
-}
-
-public class Location {
-    public int Line { get; set; }
-    public int Column { get; set; }
-    public string Source { get; set; }
-}
-
-public class TokenResult {
-    public string Token { get; set; }
-    public Location Location { get; set; }
-}
-
-public class Expr {
-    public string Type { get; set; }
-    public Location Location { get; set; }
-    public string Name { get; set; }
-    public double Value { get; set; }
-    public string StringValue { get; set; }
-    public bool BoolValue { get; set; }
-    public string Module { get; set; }
-    public string Func { get; set; }
-    public List<Expr> Args { get; set; } = new List<Expr>();
-    public string Op { get; set; }
-    public Expr Left { get; set; }
-    public Expr Right { get; set; }
-    public Expr Arg { get; set; }
-    public List<Expr> Elements { get; set; } = new List<Expr>();
-}
-
-public class Stmt {
-    public string Type { get; set; }
-    public Location Location { get; set; }
-    public string ModuleName { get; set; }
-    public string FuncName { get; set; }
-    public TypeDef ReturnType { get; set; }
-    public List<Stmt> Body { get; set; } = new List<Stmt>();
-    public string VarName { get; set; }
-    public TypeDef VarType { get; set; }
-    public Expr VarVal { get; set; }
-    public bool Mutable { get; set; }
-    public Expr Condition { get; set; }
-    public List<Stmt> ThenBranch { get; set; } = new List<Stmt>();
-    public List<Stmt> ElseBranch { get; set; } = new List<Stmt>();
-    public List<Stmt> WhileBody { get; set; } = new List<Stmt>();
-    public Stmt Init { get; set; }
-    public Expr Cond { get; set; }
-    public Stmt Update { get; set; }
-    public Expr RetVal { get; set; }
-    public Expr PrintExpr { get; set; }
-    public Expr StmtExpr { get; set; }
-}
-
-public class Lexer {
-    private string input;
-    private int pos;
-    private int line;
-    private int column;
-    private int lineStart;
-
-    public Lexer(string input) {
-        this.input = input;
-        this.pos = 0;
-        this.line = 1;
-        this.column = 1;
-        this.lineStart = 0;
-    }
-
-    private char Peek() {
-        if (pos >= input.Length) return '\0';
-        return input[pos];
-    }
-
-    private char Advance() {
-        char ch = Peek();
-        pos++;
-        if (ch == '\n') {
-            line++;
-            column = 1;
-            lineStart = pos;
-        } else {
-            column++;
-        }
-        return ch;
-    }
-
-    private Location GetLocation() {
-        return new Location {
-            Line = line,
-            Column = column,
-            Source = input.Substring(lineStart, Math.Min(pos - lineStart, input.Length - lineStart))
-        };
-    }
-
-    public TokenResult NextToken() {
-        while (Peek() == ' ' || Peek() == '\n' || Peek() == '\r' || Peek() == '\t') {
-            Advance();
-        }
-
-        if (Peek() == '/' && pos + 1 < input.Length && input[pos + 1] == '/') {
-            while (Peek() != '\0' && Peek() != '\n') {
-                Advance();
+namespace Strata {
+    // Standard Library: IO
+    namespace StdIo {
+        public static class StdIo {
+            public static void Print(string msg) {
+                Console.WriteLine(msg);
             }
-            return NextToken();
-        }
-
-        if (Peek() == '\0') return null;
-
-        Location loc = GetLocation();
-
-        string twoChar = pos + 2 <= input.Length ? input.Substring(pos, 2) : "";
-        if (new[] { "==", "!=", "<=", ">=", "=>", "||", "&&", "++", "--" }.Contains(twoChar)) {
-            Advance();
-            Advance();
-            return new TokenResult { Token = twoChar, Location = loc };
-        }
-
-        char ch = Peek();
-        if (char.IsLetter(ch) || ch == '_') {
-            string word = "";
-            while (char.IsLetterOrDigit(Peek()) || Peek() == '_') {
-                word += Advance();
+            
+            public static string Read() {
+                return Console.ReadLine() ?? "";
             }
-            return new TokenResult { Token = word, Location = loc };
         }
-
-        if (ch == '"') {
-            Advance();
-            string value = "";
-            while (Peek() != '\0' && Peek() != '"') {
-                if (Peek() == '\\') {
-                    Advance();
-                    char next = Advance();
-                    if (next == 'n') value += '\n';
-                    else if (next == 't') value += '\t';
-                    else value += next;
-                } else {
-                    value += Advance();
-                }
+    }
+    
+    // Standard Library: Math
+    namespace StdMath {
+        public static class StdMath {
+            public static double Sqrt(double x) => Math.Sqrt(x);
+            public static double Sin(double x) => Math.Sin(x);
+            public static double Cos(double x) => Math.Cos(x);
+            public static double Floor(double x) => Math.Floor(x);
+            public static double Ceil(double x) => Math.Ceiling(x);
+        }
+    }
+    
+    // Standard Library: Text
+    namespace StdText {
+        public static class StdText {
+            public static string[] Split(string str, string delimiter) {
+                return str.Split(new[] { delimiter }, StringSplitOptions.None);
             }
-            if (Peek() == '"') Advance();
-            return new TokenResult { Token = $"\"{value}\"", Location = loc };
-        }
-
-        if (ch == '\'') {
-            Advance();
-            string value = "";
-            while (Peek() != '\0' && Peek() != '\'') {
-                value += Advance();
+            
+            public static string Join(string[] arr, string separator) {
+                return string.Join(separator, arr);
             }
-            if (Peek() == '\'') Advance();
-            return new TokenResult { Token = $"'{value}'", Location = loc };
-        }
-
-        if (char.IsDigit(ch)) {
-            string num = "";
-            while (char.IsDigit(Peek())) {
-                num += Advance();
+            
+            public static string Trim(string str) {
+                return str.Trim();
             }
-            if (Peek() == '.' && pos + 1 < input.Length && char.IsDigit(input[pos + 1])) {
-                num += Advance();
-                while (char.IsDigit(Peek())) {
-                    num += Advance();
-                }
+        }
+    }
+    
+    // User code: Main
+    namespace SrcMain {
+        public class MainProgram {
+            public static void Main() {
+                // import io from std::io
+                StdIo.StdIo.Print("Hello, World!");
+                
+                // import math from std::math
+                double x = StdMath.StdMath.Sqrt(16.0);
+                
+                // import text from std::text
+                string result = x.ToString();
+                StdIo.StdIo.Print(result);
             }
-            return new TokenResult { Token = num, Location = loc };
         }
-
-        return new TokenResult { Token = Advance().ToString(), Location = loc };
-    }
-}
-
-public class Parser {
-    private List<TokenResult> tokens;
-    private int tokenIdx;
-
-    public Parser(Lexer lexer) {
-        tokens = new List<TokenResult>();
-        tokenIdx = 0;
-        TokenResult tok;
-        while ((tok = lexer.NextToken()) != null) {
-            tokens.Add(tok);
-        }
-    }
-
-    private TokenResult Current {
-        get => tokenIdx < tokens.Count ? tokens[tokenIdx] : null;
-    }
-
-    private void Advance() {
-        tokenIdx++;
-    }
-
-    private bool Match(string token) {
-        return Current != null && Current.Token == token;
-    }
-
-    private int Precedence(string op) {
-        return op switch {
-            "||" => 1,
-            "&&" => 2,
-            "==" or "!=" => 3,
-            "<" or ">" or "<=" or ">=" => 4,
-            "+" or "-" => 5,
-            "*" or "/" or "%" => 6,
-            _ => 0
-        };
-    }
-
-    private Expr ParseBinary(int minPrec) {
-        var left = ParseUnary();
-        while (Current != null) {
-            int prec = Precedence(Current.Token);
-            if (prec == 0 || prec < minPrec) break;
-            string op = Current.Token;
-            Advance();
-            var right = ParseBinary(prec + 1);
-            var binary = new Expr {
-                Type = "Binary",
-                Op = op,
-                Left = left,
-                Right = right
-            };
-            left = binary;
-        }
-        return left;
-    }
-
-    private Expr ParseUnary() {
-        if (Current != null && (Current.Token == "!" || Current.Token == "-" || Current.Token == "+" || Current.Token == "~")) {
-            var expr = new Expr {
-                Type = "Unary",
-                Op = Current.Token
-            };
-            Advance();
-            expr.Arg = ParseUnary();
-            return expr;
-        }
-        return ParsePrimary();
-    }
-
-    private Expr ParsePrimary() {
-        if (Current == null) return null;
-
-        if (double.TryParse(Current.Token, out double value)) {
-            Advance();
-            return new Expr { Type = "Number", Value = value };
-        }
-
-        if (Current.Token.StartsWith("\"") && Current.Token.EndsWith("\"")) {
-            var expr = new Expr {
-                Type = "String",
-                StringValue = Current.Token.Substring(1, Current.Token.Length - 2)
-            };
-            Advance();
-            return expr;
-        }
-
-        if (Current.Token == "true") {
-            Advance();
-            return new Expr { Type = "Bool", BoolValue = true };
-        }
-
-        if (Current.Token == "false") {
-            Advance();
-            return new Expr { Type = "Bool", BoolValue = false };
-        }
-
-        var varExpr = new Expr { Type = "Var", Name = Current.Token };
-        Advance();
-        return varExpr;
-    }
-
-    public Expr ParseExpr() {
-        return ParseBinary(0);
-    }
-
-    private List<Stmt> ParseBlock() {
-        var stmts = new List<Stmt>();
-        while (Current != null && !Match("}")) {
-            stmts.Add(ParseStmt());
-        }
-        return stmts;
-    }
-
-    public Stmt ParseStmt() {
-        if (Current == null) return null;
-
-        var stmt = new Stmt();
-
-        if (Current.Token == "import") {
-            stmt.Type = "Import";
-            Advance();
-            stmt.ModuleName = Current.Token;
-            Advance();
-            if (Match("from")) {
-                Advance();
-                Advance();
-            }
-            return stmt;
-        }
-
-        if (Current.Token == "if") {
-            stmt.Type = "If";
-            Advance();
-            Advance();
-            stmt.Condition = ParseExpr();
-            Advance();
-            Advance();
-            stmt.ThenBranch = ParseBlock();
-            Advance();
-            if (Match("else")) {
-                Advance();
-                if (Match("{")) {
-                    Advance();
-                    stmt.ElseBranch = ParseBlock();
-                    Advance();
-                }
-            }
-            return stmt;
-        }
-
-        if (Current.Token == "while") {
-            stmt.Type = "While";
-            Advance();
-            Advance();
-            stmt.Condition = ParseExpr();
-            Advance();
-            Advance();
-            stmt.WhileBody = ParseBlock();
-            Advance();
-            return stmt;
-        }
-
-        if (Current.Token == "var" || Current.Token == "let" || Current.Token == "const") {
-            stmt.Type = "VarDecl";
-            string keyword = Current.Token;
-            Advance();
-            stmt.VarName = Current.Token;
-            Advance();
-            Advance();
-            stmt.VarType = new TypeDef { Kind = TypeKind.Primitive, Primitive = Current.Token };
-            Advance();
-            if (Match("=")) {
-                Advance();
-                stmt.VarVal = ParseExpr();
-            }
-            stmt.Mutable = keyword == "var";
-            return stmt;
-        }
-
-        if (Current.Token == "return") {
-            stmt.Type = "Return";
-            Advance();
-            if (!Match("}")) {
-                stmt.RetVal = ParseExpr();
-            }
-            return stmt;
-        }
-
-        if (Current.Token == "break") {
-            stmt.Type = "Break";
-            Advance();
-            return stmt;
-        }
-
-        if (Current.Token == "continue") {
-            stmt.Type = "Continue";
-            Advance();
-            return stmt;
-        }
-
-        var expr = ParseExpr();
-        stmt.Type = "ExprStmt";
-        stmt.StmtExpr = expr;
-        return stmt;
-    }
-
-    public List<Stmt> ParseProgram() {
-        var stmts = new List<Stmt>();
-        while (Current != null) {
-            stmts.Add(ParseStmt());
-        }
-        return stmts;
-    }
-}
-
-public class Interpreter {
-    private Dictionary<string, double> vars = new Dictionary<string, double>();
-    private Dictionary<string, bool> mutableMap = new Dictionary<string, bool>();
-
-    private double EvalBinary(Expr expr) {
-        double left = EvalExpr(expr.Left);
-        double right = EvalExpr(expr.Right);
-
-        return expr.Op switch {
-            "+" => left + right,
-            "-" => left - right,
-            "*" => left * right,
-            "/" => left / right,
-            "%" => (long)left % (long)right,
-            "==" => left == right ? 1 : 0,
-            "!=" => left != right ? 1 : 0,
-            "<" => left < right ? 1 : 0,
-            ">" => left > right ? 1 : 0,
-            "<=" => left <= right ? 1 : 0,
-            ">=" => left >= right ? 1 : 0,
-            "&&" => (left != 0 && right != 0) ? 1 : 0,
-            "||" => (left != 0 || right != 0) ? 1 : 0,
-            _ => 0
-        };
-    }
-
-    public double EvalExpr(Expr expr) {
-        if (expr == null) return 0;
-
-        return expr.Type switch {
-            "Number" => expr.Value,
-            "Bool" => expr.BoolValue ? 1 : 0,
-            "Var" => vars.ContainsKey(expr.Name) ? vars[expr.Name] : 0,
-            "Binary" => EvalBinary(expr),
-            "Unary" => expr.Op switch {
-                "-" => -EvalExpr(expr.Arg),
-                "+" => EvalExpr(expr.Arg),
-                "!" => EvalExpr(expr.Arg) == 0 ? 1 : 0,
-                "~" => (double)(~(long)EvalExpr(expr.Arg)),
-                _ => 0
-            },
-            "Call" => {
-                if (expr.Module == "io" && expr.Func == "print") {
-                    if (expr.Args.Count > 0) {
-                        Console.WriteLine(EvalExpr(expr.Args[0]));
-                    }
-                }
-                yield return 0;
-            },
-            _ => 0
-        };
-    }
-
-    public void EvalStmt(Stmt stmt) {
-        if (stmt == null) return;
-
-        switch (stmt.Type) {
-            case "VarDecl":
-                double val = stmt.VarVal != null ? EvalExpr(stmt.VarVal) : 0;
-                vars[stmt.VarName] = val;
-                mutableMap[stmt.VarName] = stmt.Mutable;
-                break;
-            case "If":
-                if (EvalExpr(stmt.Condition) != 0) {
-                    foreach (var s in stmt.ThenBranch) EvalStmt(s);
-                } else {
-                    foreach (var s in stmt.ElseBranch) EvalStmt(s);
-                }
-                break;
-            case "While":
-                while (EvalExpr(stmt.Condition) != 0) {
-                    foreach (var s in stmt.WhileBody) EvalStmt(s);
-                }
-                break;
-            case "ExprStmt":
-                EvalExpr(stmt.StmtExpr);
-                break;
-        }
-    }
-
-    public void Run(List<Stmt> program) {
-        foreach (var stmt in program) {
-            EvalStmt(stmt);
-        }
-    }
-}
-
-public class CGenerator {
-    private List<string> lines = new List<string>();
-    private int indent = 0;
-
-    public void AddLine(string line) {
-        lines.Add(line);
-    }
-
-    public string Generate(List<Stmt> stmts) {
-        AddLine("#include <stdio.h>");
-        AddLine("#include <math.h>");
-        AddLine("#include <stdbool.h>");
-        AddLine("");
-        AddLine("int main() {");
-        indent++;
-        indent--;
-        AddLine("  return 0;");
-        AddLine("}");
-
-        return string.Join("\n", lines);
-    }
-}
-
-public class Program {
-    public static void Main(string[] args) {
-        string filename = args.Length > 0 ? args[0] : "myprogram.str";
-
-        if (!File.Exists(filename)) {
-            Console.Error.WriteLine($"Error: Cannot open file {filename}");
-            Environment.Exit(1);
-        }
-
-        string source = File.ReadAllText(filename);
-
-        var lexer = new Lexer(source);
-        var parser = new Parser(lexer);
-        var program = parser.ParseProgram();
-
-        var interp = new Interpreter();
-        interp.Run(program);
-
-        var cgen = new CGenerator();
-        string ccode = cgen.Generate(program);
-
-        File.WriteAllText("out.c", ccode);
-        Console.WriteLine("C code generated: out.c");
     }
 }
