@@ -8,28 +8,75 @@
 <body class="bg-slate-950 text-slate-100">
 
 <main class="max-w-4xl mx-auto p-8">
+  <a href="../docs.html" class="text-blue-400 hover:text-blue-300 mb-6">&larr; Back to Docs</a>
+
   <h1 class="text-4xl font-bold mb-6">Modules</h1>
 
-  <p class="text-lg text-slate-300">
-    Modules provide built-in functionality to Strata programs.
+  <p class="text-lg text-slate-300 mb-6">
+    Strata Extended provides a standard library of built-in modules for I/O, math, and more. Use the <code>import</code> statement to access them.
   </p>
 
-  <h2 class="text-2xl font-semibold mt-8 mb-4">Importing</h2>
+  <h2 class="text-2xl font-semibold mt-8 mb-4">Importing Modules</h2>
+  <p class="text-lg text-slate-300 mb-4">Import a module from the standard library with the <code>from str</code> syntax:</p>
   <pre class="bg-slate-900 p-4 rounded text-lg">
-import str.io
+import io from str
+import math from str
+  </pre>
+
+  <h2 class="text-2xl font-semibold mt-8 mb-4">Using I/O (str.io)</h2>
+  <p class="text-lg text-slate-300 mb-4">Print and read values:</p>
+  <pre class="bg-slate-900 p-4 rounded text-lg">
+import io from str
+
+io.print("Hello, World!")
+io.print(42)
+io.print(true)
+  </pre>
+
+  <h2 class="text-2xl font-semibold mt-8 mb-4">Using Math (str.math)</h2>
+  <p class="text-lg text-slate-300 mb-4">Basic mathematical operations:</p>
+  <pre class="bg-slate-900 p-4 rounded text-lg">
+import math from str
+
+let root: float = math.sqrt(16)   // 4.0
+let abs: int = math.abs(-42)       // 42
+let power: int = math.pow(2, 8)    // 256
   </pre>
 
   <h2 class="text-2xl font-semibold mt-8 mb-4">Available Modules</h2>
-  <ul class="list-disc list-inside text-lg space-y-2">
-    <li><code>str.io</code> – printing</li>
-    <li><code>str.math</code> – math functions</li>
-    <li><code>str.time</code> – time utilities</li>
-    <li><code>str.util</code> – helpers</li>
+  <ul class="list-disc list-inside text-lg space-y-4">
+    <li>
+      <strong><code>str.io</code></strong> – Input/output
+      <ul class="list-disc list-inside ml-4 space-y-1 mt-1">
+        <li><code>io.print(value: any) => void</code> – Print a value</li>
+      </ul>
+    </li>
+    <li>
+      <strong><code>str.math</code></strong> – Mathematical functions
+      <ul class="list-disc list-inside ml-4 space-y-1 mt-1">
+        <li><code>math.sqrt(n: float) => float</code> – Square root</li>
+        <li><code>math.abs(n: int) => int</code> – Absolute value</li>
+        <li><code>math.pow(base: int, exp: int) => int</code> – Power</li>
+      </ul>
+    </li>
   </ul>
 
-  <h2 class="text-2xl font-semibold mt-8 mb-4">Calling Functions</h2>
+  <h2 class="text-2xl font-semibold mt-8 mb-4">Complete Example</h2>
   <pre class="bg-slate-900 p-4 rounded text-lg">
-math.sqrt(9)
+import io from str
+import math from str
+
+func main() => void {
+  io.print("Enter a number:")
+  
+  let n: int = 16
+  let root: float = math.sqrt(n)
+  
+  io.print("Square root of 16 is:")
+  io.print(root)
+}
+
+main()
   </pre>
 </main>
 

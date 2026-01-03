@@ -8,24 +8,98 @@
 <body class="bg-slate-950 text-slate-100">
 
 <main class="max-w-4xl mx-auto p-8">
+  <a href="../docs.html" class="text-blue-400 hover:text-blue-300 mb-6">&larr; Back to Docs</a>
+
   <h1 class="text-4xl font-bold mb-6">Functions</h1>
 
-  <p class="text-lg text-slate-300">
-    Functions in Strata are structural blocks that execute inline.
+  <p class="text-lg text-slate-300 mb-6">
+    Functions in Strata Extended are typed subroutines with parameters and return values. All types must be explicitly annotated.
   </p>
 
-  <h2 class="text-2xl font-semibold mt-8 mb-4">Defining a Function</h2>
+  <h2 class="text-2xl font-semibold mt-8 mb-4">Basic Function Definition</h2>
+  <p class="text-lg text-slate-300 mb-4">Use <code>func</code> to define a function with explicit parameter and return types:</p>
   <pre class="bg-slate-900 p-4 rounded text-lg">
-func main {
-  io.print("Hello")
+func add(a: int, b: int) => int {
+  return a + b
+}
+
+func greet(name: string) => string {
+  return "Hello, " + name
 }
   </pre>
 
-  <h2 class="text-2xl font-semibold mt-8 mb-4">Execution Model</h2>
-  <p class="text-lg text-slate-300">
-    Function bodies execute immediately when encountered.
-    There are no parameters or return values yet.
-  </p>
+  <h2 class="text-2xl font-semibold mt-8 mb-4">Parameters</h2>
+  <p class="text-lg text-slate-300 mb-4">Functions can have zero or more parameters, each with a type:</p>
+  <pre class="bg-slate-900 p-4 rounded text-lg">
+func zero() => int {
+  return 0
+}
+
+func single(x: int) => int {
+  return x * 2
+}
+
+func multiple(a: int, b: float, c: string) => string {
+  return c
+}
+  </pre>
+
+  <h2 class="text-2xl font-semibold mt-8 mb-4">Return Types</h2>
+  <p class="text-lg text-slate-300 mb-4">Use <code>=></code> to specify the return type. Use <code>return</code> to exit early:</p>
+  <pre class="bg-slate-900 p-4 rounded text-lg">
+func absolute(n: int) => int {
+  if (n < 0) {
+    return -n
+  }
+  return n
+}
+
+func describe(age: int) => string {
+  if (age < 13) {
+    return "Child"
+  } else if (age < 18) {
+    return "Teenager"
+  } else {
+    return "Adult"
+  }
+}
+  </pre>
+
+  <h2 class="text-2xl font-semibold mt-8 mb-4">Function Calls</h2>
+  <p class="text-lg text-slate-300 mb-4">Call functions by name with arguments in parentheses:</p>
+  <pre class="bg-slate-900 p-4 rounded text-lg">
+let result: int = add(5, 3)
+let greeting: string = greet("World")
+let status: string = describe(25)
+
+io.print(result)     // 8
+io.print(greeting)   // Hello, World
+io.print(status)     // Adult
+  </pre>
+
+  <h2 class="text-2xl font-semibold mt-8 mb-4">Function Scope</h2>
+  <p class="text-lg text-slate-300 mb-4">Functions have their own scope with local variables:</p>
+  <pre class="bg-slate-900 p-4 rounded text-lg">
+func example() => int {
+  let local: int = 42
+  return local
+}
+
+let x: int = example()  // 42
+// io.print(local)      // ERROR: local is not defined
+  </pre>
+
+  <h2 class="text-2xl font-semibold mt-8 mb-4">Type Checking</h2>
+  <p class="text-lg text-slate-300 mb-4">Parameter and return types are checked at compile-time:</p>
+  <pre class="bg-slate-900 p-4 rounded text-lg">
+func process(n: int) => int {
+  return n * 2
+}
+
+let result: int = process(10)      // OK
+// let result: string = process(10) // ERROR: type mismatch
+// let result: int = process("10")  // ERROR: type mismatch
+  </pre>
 </main>
 
 </body>
