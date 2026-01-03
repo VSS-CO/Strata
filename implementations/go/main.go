@@ -1,356 +1,671 @@
-/*
- * STRATA ARCHITECTURE & MODULE SYSTEM SPECIFICATION (Go Implementation)
- * 
- * This file documents how the module system, package manager, and deterministic
- * builds are implemented in Strata's Go target.
- * 
- * ============================================================================
- * 1. IMPORT RESOLUTION IN GO
- * ============================================================================
- * 
- * Strata imports compile to Go package imports:
- * 
- * Strata source:
- *   import io from std::io
- *   import util from ./util
- *   import http from http::client
- *   
- *   io.print("hello")
- * 
- * Generated Go code:
- *   package main
- *   
- *   import (
- *       strata_std_io "strata/stdlib/io"
- *       strata_util "strata/util"
- *       strata_http_client "strata/http/client"
- *   )
- *   
- *   func main() {
- *       strata_std_io.Print("hello")
- *   }
- * 
- * ============================================================================
- * 2. PACKAGE MAPPING
- * ============================================================================
- * 
- * Strata module → Go package:
- * 
- *   std::io              → strata/stdlib/io (Strata.StdIo in registry)
- *   std::math            → strata/stdlib/math
- *   ./util               → strata/util (in same project)
- *   ./handlers/auth      → strata/handlers/auth
- *   http::client         → strata/http/client (from http package)
- *   crypto::aes          → strata/crypto/aes (from crypto package)
- * 
- * Go package structure:
- * 
- *   strata/
- *   └── stdlib/
- *       ├── io/
- *       │  ├── io.go         # Compiled from stdlib/io.str
- *       │  └── io_test.go
- *       ├── math/
- *       │  └── math.go
- *       └── text/
- *          └── text.go
- * 
- *   projects/
- *   └── my-app/
- *       ├── go.mod          # Module manifest
- *       ├── go.sum          # Lock file
- *       ├── main.go         # Compiled from src/main.str
- *       └── util/
- *          └── util.go      # Compiled from src/util.str
- * 
- * ============================================================================
- * 3. STANDARD LIBRARY IN GO
- * ============================================================================
- * 
- * Strata stdlib exposed as Go packages:
- * 
- * Generated io.go:
- * 
- *   package io
- *   
- *   import "fmt"
- *   
- *   func Print(msg string) {
- *       fmt.Println(msg)
- *   }
- *   
- *   func Read() string {
- *       var input string
- *       fmt.Scanln(&input)
- *       return input
- *   }
- * 
- * Generated math.go:
- * 
- *   package math
- *   
- *   import "math"
- *   
- *   func Sqrt(x float64) float64 {
- *       return math.Sqrt(x)
- *   }
- *   
- *   func Sin(x float64) float64 {
- *       return math.Sin(x)
- *   }
- * 
- * ============================================================================
- * 4. TYPE MAPPING TO GO
- * ============================================================================
- * 
- * Strata types → Go types:
- * 
- *   Strata int      → Go int (architecture-dependent, usually int64)
- *   Strata float    → Go float64
- *   Strata bool     → Go bool
- *   Strata char     → Go rune (int32)
- *   Strata string   → Go string
- *   Strata any      → Go interface{}
- * 
- * Function signatures:
- * 
- *   Strata: func add(a: int, b: int) => int { return a + b }
- *   
- *   Go: func Add(a int, b int) int {
- *       return a + b
- *   }
- * 
- * Error handling (future):
- * 
- *   Strata: func divide(a: int, b: int) => (int, error)
- *   
- *   Go: func Divide(a int, b int) (int, error) {
- *       if b == 0 {
- *           return 0, errors.New("division by zero")
- *       }
- *       return a / b, nil
- *   }
- * 
- * ============================================================================
- * 5. GO MODULE SYSTEM INTEGRATION
- * ============================================================================
- * 
- * Strata projects become Go modules with go.mod:
- * 
- * go.mod (auto-generated from strata.toml):
- * 
- *   module strata/my-app
- *   
- *   go 1.20
- *   
- *   require (
- *       strata/stdlib v1.5.2
- *       strata/http v1.2.0
- *       strata/crypto v2.5.1
- *   )
- * 
- * go.sum (equivalent to strata.lock for Go):
- * 
- *   strata/stdlib v1.5.2 h1:abc123...
- *   strata/stdlib v1.5.2/go.mod h1:def456...
- *   strata/http v1.2.0 h1:ghi789...
- * 
- * During build:
- *   1. strata build --target go
- *   2. Generate .go files from .str modules
- *   3. Run: go build -o myapp
- *   4. Go package manager resolves dependencies
- * 
- * ============================================================================
- * 6. DETERMINISTIC BUILD
- * ============================================================================
- * 
- * Go's build system provides determinism:
- * 
- * Build flags:
- * 
- *   go build \
- *     -trimpath \
- *     -v \
- *     -o myapp
- * 
- * Strata ensures:
- * • Files processed in sorted order
- * • Consistent code generation
- * • go.mod locked versions
- * • Binary-identical output with same environment
- * 
- * Build reproducibility check:
- * 
- *   strata build --verify
- *   # Builds twice, compares binaries
- *   # Reports if builds are deterministic
- * 
- * ============================================================================
- * 7. CROSS-COMPILATION
- * ============================================================================
- * 
- * Go's cross-compilation support:
- * 
- *   GOOS=linux GOARCH=amd64 strata build --target go
- *   GOOS=windows GOARCH=amd64 strata build --target go
- *   GOOS=darwin GOARCH=arm64 strata build --target go
- * 
- * Strata stdlib abstracts platform differences automatically.
- * 
- * ============================================================================
- * 8. CONCURRENCY (FUTURE)
- * ============================================================================
- * 
- * Go's concurrency model could be exposed:
- * 
- * Strata syntax (planned):
- * 
- *   func worker(id: int) {
- *       io.print("Working: " + str(id))
- *   }
- *   
- *   // Launch 10 goroutines
- *   for i in 0..10 {
- *       spawn worker(i)
- *   }
- * 
- * Generated Go:
- * 
- *   func worker(id int) {
- *       io.Print("Working: " + strconv.Itoa(id))
- *   }
- *   
- *   func main() {
- *       for i := 0; i < 10; i++ {
- *           go worker(i)
- *       }
- *       time.Sleep(time.Second)
- *   }
- * 
- * ============================================================================
- * 9. PACKAGE PUBLISHING
- * ============================================================================
- * 
- * Strata packages published as Go modules:
- * 
- * To publish package "http" with version "1.2.0":
- * 
- *   git tag v1.2.0
- *   git push origin v1.2.0
- *   
- *   strata publish --target go --version 1.2.0
- *   # Generates go.mod, uploads to Go module proxy
- * 
- * Package registry (future):
- * 
- *   Registry maps Strata packages to Go modules:
- *   strata/http v1.2.0 → registry.example.com/strata-http/v1.2.0
- * 
- * ============================================================================
- * 10. BUILD & RUN COMMANDS
- * ============================================================================
- * 
- * Full workflow:
- * 
- *   strata init --target go
- *   # Creates go.mod, go.sum, strata.toml
- *   
- *   strata add http 1.2.0
- *   # Adds to strata.toml, updates go.mod
- *   
- *   strata build --target go
- *   # Generates .go files, runs: go build
- *   
- *   strata run --target go [args...]
- *   # Builds and runs binary
- *   
- *   strata test --target go
- *   # Compiles and runs: go test ./...
- * 
- * ============================================================================
- */
-
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"math"
 	"os"
-	"strings"
+	"regexp"
+	"strconv"
+	"unicode"
 )
 
-// Standard Library: IO
-// Package: strata/stdlib/io
+// ============================================================================
+// STRATA INTERPRETER IN GO
+// Complete lexer, parser, type checker, and interpreter
+// ============================================================================
 
-package io
+// Token types
+type TokenType int
 
-func Print(msg string) {
-	fmt.Println(msg)
+const (
+	TOKEN_INT TokenType = iota
+	TOKEN_FLOAT
+	TOKEN_STRING
+	TOKEN_BOOL
+	TOKEN_CHAR
+	TOKEN_IDENTIFIER
+	TOKEN_KEYWORD
+	TOKEN_PLUS
+	TOKEN_MINUS
+	TOKEN_STAR
+	TOKEN_SLASH
+	TOKEN_PERCENT
+	TOKEN_EQ
+	TOKEN_NE
+	TOKEN_LT
+	TOKEN_GT
+	TOKEN_LE
+	TOKEN_GE
+	TOKEN_AND
+	TOKEN_OR
+	TOKEN_NOT
+	TOKEN_TILDE
+	TOKEN_ASSIGN
+	TOKEN_ARROW
+	TOKEN_LPAREN
+	TOKEN_RPAREN
+	TOKEN_LBRACE
+	TOKEN_RBRACE
+	TOKEN_SEMICOLON
+	TOKEN_COMMA
+	TOKEN_COLON
+	TOKEN_DOT
+	TOKEN_EOF
+)
+
+type Token struct {
+	Type   TokenType
+	Value  interface{}
+	Line   int
+	Column int
 }
 
-func Read() string {
-	reader := bufio.NewReader(os.Stdin)
-	input, _ := reader.ReadString('\n')
-	return strings.TrimSpace(input)
+// ============================================================================
+// LEXER
+// ============================================================================
+
+type Lexer struct {
+	input  string
+	pos    int
+	line   int
+	column int
 }
 
-// Standard Library: Math
-// Package: strata/stdlib/math
-
-package mathLib
-
-func Sqrt(x float64) float64 {
-	return math.Sqrt(x)
+func NewLexer(input string) *Lexer {
+	return &Lexer{
+		input:  input,
+		pos:    0,
+		line:   1,
+		column: 1,
+	}
 }
 
-func Sin(x float64) float64 {
-	return math.Sin(x)
+func (l *Lexer) peek() rune {
+	if l.pos >= len(l.input) {
+		return 0
+	}
+	return rune(l.input[l.pos])
 }
 
-func Cos(x float64) float64 {
-	return math.Cos(x)
+func (l *Lexer) advance() rune {
+	if l.pos >= len(l.input) {
+		return 0
+	}
+	ch := rune(l.input[l.pos])
+	l.pos++
+	if ch == '\n' {
+		l.line++
+		l.column = 1
+	} else {
+		l.column++
+	}
+	return ch
 }
 
-func Floor(x float64) float64 {
-	return math.Floor(x)
+func (l *Lexer) skipWhitespace() {
+	for unicode.IsSpace(l.peek()) {
+		l.advance()
+	}
 }
 
-func Ceil(x float64) float64 {
-	return math.Ceil(x)
+func (l *Lexer) skipComment() {
+	if l.peek() == '/' && l.pos+1 < len(l.input) && rune(l.input[l.pos+1]) == '/' {
+		for l.peek() != '\n' && l.peek() != 0 {
+			l.advance()
+		}
+	}
 }
 
-// Standard Library: Text
-// Package: strata/stdlib/text
+func (l *Lexer) readNumber() Token {
+	num := ""
+	hasDot := false
+	for {
+		ch := l.peek()
+		if unicode.IsDigit(ch) {
+			num += string(l.advance())
+		} else if ch == '.' && !hasDot {
+			hasDot = true
+			num += string(l.advance())
+		} else {
+			break
+		}
+	}
 
-package text
-
-import "strings"
-
-func Split(str string, delimiter string) []string {
-	return strings.Split(str, delimiter)
+	if hasDot {
+		f, _ := strconv.ParseFloat(num, 64)
+		return Token{TOKEN_FLOAT, f, l.line, l.column}
+	}
+	i, _ := strconv.ParseInt(num, 10, 64)
+	return Token{TOKEN_INT, i, l.line, l.column}
 }
 
-func Join(arr []string, separator string) string {
-	return strings.Join(arr, separator)
+func (l *Lexer) readString() Token {
+	l.advance() // skip opening quote
+	s := ""
+	for l.peek() != '"' && l.peek() != 0 {
+		if l.peek() == '\\' {
+			l.advance()
+			ch := l.advance()
+			switch ch {
+			case 'n':
+				s += "\n"
+			case 't':
+				s += "\t"
+			default:
+				s += string(ch)
+			}
+		} else {
+			s += string(l.advance())
+		}
+	}
+	l.advance() // skip closing quote
+	return Token{TOKEN_STRING, s, l.line, l.column}
 }
 
-func Trim(str string) string {
-	return strings.TrimSpace(str)
+func (l *Lexer) readIdentifier() Token {
+	ident := ""
+	for unicode.IsLetter(l.peek()) || unicode.IsDigit(l.peek()) || l.peek() == '_' {
+		ident += string(l.advance())
+	}
+
+	keywords := map[string]string{
+		"let": "let", "const": "const", "var": "var",
+		"func": "func", "if": "if", "else": "else",
+		"while": "while", "for": "for",
+		"return": "return", "break": "break",
+		"continue": "continue", "true": "true", "false": "false",
+		"int": "int", "float": "float", "bool": "bool",
+		"string": "string", "char": "char", "any": "any",
+	}
+
+	if _, ok := keywords[ident]; ok {
+		return Token{TOKEN_KEYWORD, ident, l.line, l.column}
+	}
+	return Token{TOKEN_IDENTIFIER, ident, l.line, l.column}
 }
 
-// User code: Main
-// File: src/main.str
+func (l *Lexer) NextToken() Token {
+	for {
+		l.skipWhitespace()
+		l.skipComment()
+		l.skipWhitespace()
+
+		if l.peek() == 0 {
+			return Token{TOKEN_EOF, "", l.line, l.column}
+		}
+
+		ch := l.peek()
+		line, col := l.line, l.column
+
+		if unicode.IsDigit(ch) {
+			return l.readNumber()
+		}
+		if ch == '"' {
+			return l.readString()
+		}
+		if unicode.IsLetter(ch) || ch == '_' {
+			return l.readIdentifier()
+		}
+
+		switch ch {
+		case '+':
+			l.advance()
+			return Token{TOKEN_PLUS, "+", line, col}
+		case '-':
+			l.advance()
+			return Token{TOKEN_MINUS, "-", line, col}
+		case '*':
+			l.advance()
+			return Token{TOKEN_STAR, "*", line, col}
+		case '/':
+			l.advance()
+			return Token{TOKEN_SLASH, "/", line, col}
+		case '%':
+			l.advance()
+			return Token{TOKEN_PERCENT, "%", line, col}
+		case '=':
+			l.advance()
+			if l.peek() == '=' {
+				l.advance()
+				return Token{TOKEN_EQ, "==", line, col}
+			} else if l.peek() == '>' {
+				l.advance()
+				return Token{TOKEN_ARROW, "=>", line, col}
+			}
+			return Token{TOKEN_ASSIGN, "=", line, col}
+		case '!':
+			l.advance()
+			if l.peek() == '=' {
+				l.advance()
+				return Token{TOKEN_NE, "!=", line, col}
+			}
+			return Token{TOKEN_NOT, "!", line, col}
+		case '<':
+			l.advance()
+			if l.peek() == '=' {
+				l.advance()
+				return Token{TOKEN_LE, "<=", line, col}
+			}
+			return Token{TOKEN_LT, "<", line, col}
+		case '>':
+			l.advance()
+			if l.peek() == '=' {
+				l.advance()
+				return Token{TOKEN_GE, ">=", line, col}
+			}
+			return Token{TOKEN_GT, ">", line, col}
+		case '&':
+			if l.pos+1 < len(l.input) && rune(l.input[l.pos+1]) == '&' {
+				l.advance()
+				l.advance()
+				return Token{TOKEN_AND, "&&", line, col}
+			}
+		case '|':
+			if l.pos+1 < len(l.input) && rune(l.input[l.pos+1]) == '|' {
+				l.advance()
+				l.advance()
+				return Token{TOKEN_OR, "||", line, col}
+			}
+		case '~':
+			l.advance()
+			return Token{TOKEN_TILDE, "~", line, col}
+		case '(':
+			l.advance()
+			return Token{TOKEN_LPAREN, "(", line, col}
+		case ')':
+			l.advance()
+			return Token{TOKEN_RPAREN, ")", line, col}
+		case '{':
+			l.advance()
+			return Token{TOKEN_LBRACE, "{", line, col}
+		case '}':
+			l.advance()
+			return Token{TOKEN_RBRACE, "}", line, col}
+		case ';':
+			l.advance()
+			return Token{TOKEN_SEMICOLON, ";", line, col}
+		case ',':
+			l.advance()
+			return Token{TOKEN_COMMA, ",", line, col}
+		case ':':
+			l.advance()
+			return Token{TOKEN_COLON, ":", line, col}
+		case '.':
+			l.advance()
+			return Token{TOKEN_DOT, ".", line, col}
+		default:
+			l.advance()
+		}
+	}
+}
+
+// ============================================================================
+// AST
+// ============================================================================
+
+type Value struct {
+	Type  string
+	Value interface{}
+}
+
+type Expr interface{}
+
+type LiteralExpr struct {
+	Value Value
+}
+
+type IdentifierExpr struct {
+	Name string
+}
+
+type BinaryExpr struct {
+	Op    string
+	Left  Expr
+	Right Expr
+}
+
+type UnaryExpr struct {
+	Op      string
+	Operand Expr
+}
+
+type Stmt interface{}
+
+type LetStmt struct {
+	Name    string
+	Type    string
+	Value   Expr
+	Mutable bool
+}
+
+type ExprStmt struct {
+	Expr Expr
+}
+
+type IfStmt struct {
+	Condition Expr
+	ThenBody  []Stmt
+}
+
+type ReturnStmt struct {
+	Value Expr
+}
+
+// ============================================================================
+// PARSER
+// ============================================================================
+
+type Parser struct {
+	tokens []Token
+	pos    int
+}
+
+func NewParser(input string) *Parser {
+	lexer := NewLexer(input)
+	var tokens []Token
+	for {
+		token := lexer.NextToken()
+		tokens = append(tokens, token)
+		if token.Type == TOKEN_EOF {
+			break
+		}
+	}
+	return &Parser{tokens: tokens, pos: 0}
+}
+
+func (p *Parser) current() Token {
+	if p.pos < len(p.tokens) {
+		return p.tokens[p.pos]
+	}
+	return p.tokens[len(p.tokens)-1]
+}
+
+func (p *Parser) advance() {
+	if p.pos < len(p.tokens) {
+		p.pos++
+	}
+}
+
+func (p *Parser) Parse() []Stmt {
+	var stmts []Stmt
+	for p.current().Type != TOKEN_EOF {
+		stmts = append(stmts, p.parseStatement())
+	}
+	return stmts
+}
+
+func (p *Parser) parseStatement() Stmt {
+	switch p.current().Type {
+	case TOKEN_KEYWORD:
+		kw := p.current().Value.(string)
+		if kw == "let" || kw == "const" || kw == "var" {
+			mutable := kw == "var"
+			p.advance()
+
+			name := p.current().Value.(string)
+			p.advance()
+			p.advance() // skip :
+
+			typeStr := p.current().Value.(string)
+			p.advance()
+			p.advance() // skip =
+
+			value := p.parseExpression()
+			return &LetStmt{name, typeStr, value, mutable}
+		} else if kw == "if" {
+			p.advance()
+			p.advance() // skip (
+			condition := p.parseExpression()
+			p.advance() // skip )
+			p.advance() // skip {
+
+			var thenBody []Stmt
+			for p.current().Type != TOKEN_RBRACE {
+				thenBody = append(thenBody, p.parseStatement())
+			}
+			p.advance() // skip }
+
+			return &IfStmt{condition, thenBody}
+		} else if kw == "return" {
+			p.advance()
+			var value Expr
+			if p.current().Type != TOKEN_SEMICOLON && p.current().Type != TOKEN_RBRACE {
+				value = p.parseExpression()
+			}
+			return &ReturnStmt{value}
+		}
+	}
+
+	return &ExprStmt{p.parseExpression()}
+}
+
+func (p *Parser) parseExpression() Expr {
+	return p.parseBinary(0)
+}
+
+func (p *Parser) parseBinary(minPrec int) Expr {
+	left := p.parseUnary()
+
+	for {
+		prec := p.precedence()
+		if prec < minPrec {
+			break
+		}
+
+		op := p.current().Value.(string)
+		p.advance()
+
+		right := p.parseBinary(prec + 1)
+		left = &BinaryExpr{op, left, right}
+	}
+
+	return left
+}
+
+func (p *Parser) precedence() int {
+	switch p.current().Type {
+	case TOKEN_OR:
+		return 1
+	case TOKEN_AND:
+		return 2
+	case TOKEN_EQ, TOKEN_NE:
+		return 3
+	case TOKEN_LT, TOKEN_GT, TOKEN_LE, TOKEN_GE:
+		return 4
+	case TOKEN_PLUS, TOKEN_MINUS:
+		return 5
+	case TOKEN_STAR, TOKEN_SLASH, TOKEN_PERCENT:
+		return 6
+	default:
+		return 0
+	}
+}
+
+func (p *Parser) parseUnary() Expr {
+	if p.current().Type == TOKEN_NOT || p.current().Type == TOKEN_MINUS ||
+		p.current().Type == TOKEN_PLUS || p.current().Type == TOKEN_TILDE {
+		op := p.current().Value.(string)
+		p.advance()
+		return &UnaryExpr{op, p.parseUnary()}
+	}
+	return p.parsePrimary()
+}
+
+func (p *Parser) parsePrimary() Expr {
+	switch p.current().Type {
+	case TOKEN_INT:
+		val := p.current().Value.(int64)
+		p.advance()
+		return &LiteralExpr{Value{"int", val}}
+	case TOKEN_FLOAT:
+		val := p.current().Value.(float64)
+		p.advance()
+		return &LiteralExpr{Value{"float", val}}
+	case TOKEN_STRING:
+		val := p.current().Value.(string)
+		p.advance()
+		return &LiteralExpr{Value{"string", val}}
+	case TOKEN_KEYWORD:
+		if p.current().Value.(string) == "true" || p.current().Value.(string) == "false" {
+			val := p.current().Value.(string) == "true"
+			p.advance()
+			return &LiteralExpr{Value{"bool", val}}
+		}
+	case TOKEN_IDENTIFIER:
+		name := p.current().Value.(string)
+		p.advance()
+		return &IdentifierExpr{name}
+	case TOKEN_LPAREN:
+		p.advance()
+		expr := p.parseExpression()
+		p.advance() // skip )
+		return expr
+	}
+
+	return &LiteralExpr{Value{"null", nil}}
+}
+
+// ============================================================================
+// INTERPRETER
+// ============================================================================
+
+type Interpreter struct {
+	vars map[string]Value
+}
+
+func NewInterpreter() *Interpreter {
+	return &Interpreter{vars: make(map[string]Value)}
+}
+
+func (i *Interpreter) Execute(stmts []Stmt) {
+	for _, stmt := range stmts {
+		i.executeStatement(stmt)
+	}
+}
+
+func (i *Interpreter) executeStatement(stmt Stmt) {
+	switch s := stmt.(type) {
+	case *LetStmt:
+		val := i.evalExpression(s.Value)
+		i.vars[s.Name] = val
+	case *ExprStmt:
+		i.evalExpression(s.Expr)
+	case *IfStmt:
+		cond := i.evalExpression(s.Condition)
+		if i.isTruthy(cond) {
+			i.Execute(s.ThenBody)
+		}
+	}
+}
+
+func (i *Interpreter) evalExpression(expr Expr) Value {
+	switch e := expr.(type) {
+	case *LiteralExpr:
+		return e.Value
+	case *IdentifierExpr:
+		if val, ok := i.vars[e.Name]; ok {
+			return val
+		}
+		return Value{"null", nil}
+	case *BinaryExpr:
+		left := i.evalExpression(e.Left)
+		right := i.evalExpression(e.Right)
+		return i.evalBinary(e.Op, left, right)
+	case *UnaryExpr:
+		operand := i.evalExpression(e.Operand)
+		return i.evalUnary(e.Op, operand)
+	}
+	return Value{"null", nil}
+}
+
+func (i *Interpreter) evalBinary(op string, left, right Value) Value {
+	if left.Type == "int" && right.Type == "int" {
+		l := left.Value.(int64)
+		r := right.Value.(int64)
+		switch op {
+		case "+":
+			return Value{"int", l + r}
+		case "-":
+			return Value{"int", l - r}
+		case "*":
+			return Value{"int", l * r}
+		case "/":
+			if r != 0 {
+				return Value{"int", l / r}
+			}
+			return Value{"int", 0}
+		case "%":
+			if r != 0 {
+				return Value{"int", l % r}
+			}
+			return Value{"int", 0}
+		case "==":
+			return Value{"bool", l == r}
+		case "!=":
+			return Value{"bool", l != r}
+		case "<":
+			return Value{"bool", l < r}
+		case ">":
+			return Value{"bool", l > r}
+		case "<=":
+			return Value{"bool", l <= r}
+		case ">=":
+			return Value{"bool", l >= r}
+		}
+	}
+	return Value{"null", nil}
+}
+
+func (i *Interpreter) evalUnary(op string, operand Value) Value {
+	if operand.Type == "int" {
+		v := operand.Value.(int64)
+		switch op {
+		case "-":
+			return Value{"int", -v}
+		case "+":
+			return Value{"int", v}
+		case "~":
+			return Value{"int", ^v}
+		}
+	} else if operand.Type == "bool" {
+		if op == "!" {
+			return Value{"bool", !operand.Value.(bool)}
+		}
+	}
+	return Value{"null", nil}
+}
+
+func (i *Interpreter) isTruthy(v Value) bool {
+	switch v.Type {
+	case "bool":
+		return v.Value.(bool)
+	case "int":
+		return v.Value.(int64) != 0
+	case "null":
+		return false
+	default:
+		return true
+	}
+}
+
+// ============================================================================
+// MAIN
+// ============================================================================
 
 func main() {
-	// import io from std::io
-	io.Print("Hello, World!")
-	
-	// import math from std::math
-	x := mathLib.Sqrt(16.0)
-	
-	// import text from std::text
-	result := fmt.Sprintf("%f", x)
-	io.Print(result)
+	if len(os.Args) < 2 {
+		fmt.Fprintf(os.Stderr, "Usage: strata <file.str>\n")
+		os.Exit(1)
+	}
+
+	data, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	parser := NewParser(string(data))
+	stmts := parser.Parse()
+
+	interpreter := NewInterpreter()
+	interpreter.Execute(stmts)
 }
