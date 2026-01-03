@@ -3,7 +3,7 @@
   "displayName": "Strata Language",
   "description": "Syntax highlighting + autocomplete for Strata programming language",
   "version": "0.0.1",
-  "publisher": "yourname",
+  "publisher": "VSS-CO",
   "engines": {
     "vscode": "^1.85.0"
   },
