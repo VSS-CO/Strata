@@ -12,8 +12,10 @@ test_*.str linguist-detectable=true
 *_test.str linguist-detectable=true
 
 
+
+
 # Mark generated C output as C
 out.c linguist-language=C
 
-*.bat linguist-vendored
-*.sh linguist-vendored
+*.bat linguist-detectable=false
+*.sh linguist-detectable=false
