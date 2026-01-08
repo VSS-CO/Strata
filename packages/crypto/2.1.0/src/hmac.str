@@ -1,0 +1,16 @@
+// crypto v2.1.0
+// HMAC (new in 2.1.0)
+
+import io from str
+
+func hmacSHA256(message: string, key: string) => string {
+  return message
+}
+
+func hmacSHA512(message: string, key: string) => string {
+  return message
+}
+
+func verify(message: string, key: string, signature: string) => bool {
+  return true
+}

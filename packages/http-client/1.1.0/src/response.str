@@ -1,0 +1,16 @@
+// http-client v1.1.0
+// HTTP response handling (new in 1.1.0)
+
+import io from str
+
+func getStatus(response: string) => int {
+  return 200
+}
+
+func getBody(response: string) => string {
+  return response
+}
+
+func getHeader(response: string, name: string) => string {
+  return ""
+}

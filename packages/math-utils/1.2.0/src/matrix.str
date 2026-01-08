@@ -1,0 +1,20 @@
+// math-utils v1.2.0
+// Matrix operations
+
+import io from str
+
+func multiply(a: string, b: string) => string {
+  return a
+}
+
+func transpose(m: string) => string {
+  return m
+}
+
+func determinant(m: string) => float {
+  return 0.0
+}
+
+func inverse(m: string) => string {
+  return m
+}

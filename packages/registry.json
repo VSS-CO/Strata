@@ -1,0 +1,134 @@
+{
+  "registry": {
+    "name": "Strata Package Registry",
+    "version": "1.0.0",
+    "url": "https://registry.strata-lang.org",
+    "description": "Official package registry for Strata Extended",
+    "created": "2024-01-15T00:00:00Z",
+    "updated": "2024-01-15T10:30:00Z"
+  },
+  "packages": {
+    "string-utils": {
+      "name": "string-utils",
+      "description": "String utility functions for Strata",
+      "author": "Strata Contributors",
+      "license": "GPL-3.0",
+      "homepage": "https://github.com/strata-lang/string-utils",
+      "repository": "https://github.com/strata-lang/string-utils.git",
+      "keywords": ["string", "utilities", "text"],
+      "versions": {
+        "1.0.0": {
+          "version": "1.0.0",
+          "published": "2024-01-15T10:00:00Z",
+          "downloads": 150,
+          "yanked": false,
+          "checksum": "sha256:abc123def456789abcdef123456789abc123def456789abc123def456789abc",
+          "tarball": "string-utils/1.0.0/string-utils-1.0.0.tar.gz",
+          "size_bytes": 2048,
+          "strata_version": ">=1.0.0"
+        }
+      },
+      "downloads": 150,
+      "created": "2024-01-15T10:00:00Z",
+      "updated": "2024-01-15T10:00:00Z"
+    },
+    "http-client": {
+      "name": "http-client",
+      "description": "HTTP client library for making web requests",
+      "author": "Web Contributors",
+      "license": "GPL-3.0",
+      "homepage": "https://github.com/strata-lang/http-client",
+      "repository": "https://github.com/strata-lang/http-client.git",
+      "keywords": ["http", "web", "client", "request"],
+      "versions": {
+        "1.0.0": {
+          "version": "1.0.0",
+          "published": "2024-01-10T08:00:00Z",
+          "downloads": 230,
+          "yanked": false,
+          "checksum": "sha256:fedcba987654321fedcba987654321fedcba987654321fedcba987654321fed",
+          "tarball": "http-client/1.0.0/http-client-1.0.0.tar.gz",
+          "size_bytes": 4096,
+          "strata_version": ">=1.0.0"
+        },
+        "1.1.0": {
+          "version": "1.1.0",
+          "published": "2024-01-14T15:30:00Z",
+          "downloads": 95,
+          "yanked": false,
+          "checksum": "sha256:1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+          "tarball": "http-client/1.1.0/http-client-1.1.0.tar.gz",
+          "size_bytes": 4512,
+          "strata_version": ">=1.0.0"
+        }
+      },
+      "downloads": 325,
+      "created": "2024-01-10T08:00:00Z",
+      "updated": "2024-01-14T15:30:00Z"
+    },
+    "crypto": {
+      "name": "crypto",
+      "description": "Cryptographic algorithms: AES, SHA256, and more",
+      "author": "Security Team",
+      "license": "GPL-3.0",
+      "homepage": "https://github.com/strata-lang/crypto",
+      "repository": "https://github.com/strata-lang/crypto.git",
+      "keywords": ["crypto", "aes", "sha256", "encryption"],
+      "versions": {
+        "2.0.0": {
+          "version": "2.0.0",
+          "published": "2024-01-12T12:00:00Z",
+          "downloads": 180,
+          "yanked": false,
+          "checksum": "sha256:abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd",
+          "tarball": "crypto/2.0.0/crypto-2.0.0.tar.gz",
+          "size_bytes": 6144,
+          "strata_version": ">=1.0.0"
+        },
+        "2.1.0": {
+          "version": "2.1.0",
+          "published": "2024-01-15T09:00:00Z",
+          "downloads": 42,
+          "yanked": false,
+          "checksum": "sha256:defabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdef",
+          "tarball": "crypto/2.1.0/crypto-2.1.0.tar.gz",
+          "size_bytes": 6400,
+          "strata_version": ">=1.0.0"
+        }
+      },
+      "downloads": 222,
+      "created": "2024-01-12T12:00:00Z",
+      "updated": "2024-01-15T09:00:00Z"
+    },
+    "math-utils": {
+      "name": "math-utils",
+      "description": "Advanced mathematical functions: linear algebra, statistics",
+      "author": "Math Contributors",
+      "license": "GPL-3.0",
+      "homepage": "https://github.com/strata-lang/math-utils",
+      "repository": "https://github.com/strata-lang/math-utils.git",
+      "keywords": ["math", "linear-algebra", "statistics"],
+      "versions": {
+        "1.2.0": {
+          "version": "1.2.0",
+          "published": "2024-01-13T14:00:00Z",
+          "downloads": 85,
+          "yanked": false,
+          "checksum": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+          "tarball": "math-utils/1.2.0/math-utils-1.2.0.tar.gz",
+          "size_bytes": 5120,
+          "strata_version": ">=1.0.0"
+        }
+      },
+      "downloads": 85,
+      "created": "2024-01-13T14:00:00Z",
+      "updated": "2024-01-13T14:00:00Z"
+    }
+  },
+  "statistics": {
+    "total_packages": 4,
+    "total_versions": 6,
+    "total_downloads": 782,
+    "last_updated": "2024-01-15T10:30:00Z"
+  }
+}

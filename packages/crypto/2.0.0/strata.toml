@@ -1,0 +1,16 @@
+[project]
+name = "crypto"
+version = "2.0.0"
+description = "Cryptographic algorithms: AES, SHA256, and more"
+author = "Security Team"
+license = "GPL-3.0"
+repository = "https://github.com/strata-lang/crypto"
+homepage = "https://github.com/strata-lang/crypto"
+strata = ">=1.0.0"
+
+[exports]
+aes = "./src/aes.str"
+sha = "./src/sha.str"
+random = "./src/random.str"
+
+[dependencies]

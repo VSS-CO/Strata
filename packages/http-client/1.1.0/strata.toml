@@ -1,0 +1,16 @@
+[project]
+name = "http-client"
+version = "1.1.0"
+description = "HTTP client library for making web requests"
+author = "Web Contributors"
+license = "GPL-3.0"
+repository = "https://github.com/strata-lang/http-client"
+homepage = "https://github.com/strata-lang/http-client"
+strata = ">=1.0.0"
+
+[exports]
+client = "./src/client.str"
+request = "./src/request.str"
+response = "./src/response.str"
+
+[dependencies]

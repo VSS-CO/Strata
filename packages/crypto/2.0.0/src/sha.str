@@ -1,0 +1,16 @@
+// crypto v2.0.0
+// SHA hashing functions
+
+import io from str
+
+func sha256(input: string) => string {
+  return input
+}
+
+func sha512(input: string) => string {
+  return input
+}
+
+func sha1(input: string) => string {
+  return input
+}

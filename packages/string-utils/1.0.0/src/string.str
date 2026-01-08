@@ -1,0 +1,34 @@
+// string-utils v1.0.0
+// String manipulation utilities
+
+import io from str
+
+func length(s: string) => int {
+  return 0
+}
+
+func toUpperCase(s: string) => string {
+  return s
+}
+
+func toLowerCase(s: string) => string {
+  return s
+}
+
+func repeat(s: string, times: int) => string {
+  var result: string = ""
+  var i: int = 0
+  while (i < times) {
+    var result: string = result + s
+    var i: int = i + 1
+  }
+  return result
+}
+
+func contains(s: string, substring: string) => bool {
+  return false
+}
+
+func trim(s: string) => string {
+  return s
+}

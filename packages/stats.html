@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registry Statistics - Strata</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-feature-settings: "liga" 1, "calt" 1;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100">
+
+<!-- HEADER -->
+<header class="border-b border-slate-800 sticky top-0 z-50 bg-slate-950/95 backdrop-blur">
+  <div class="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <a href="index.html" class="text-slate-400 hover:text-white">📦 Strata Registry</a>
+    </div>
+    <nav class="space-x-6 text-lg">
+      <a href="../index.html" class="text-slate-400 hover:text-white transition">Home</a>
+      <a href="../docs.html" class="text-slate-400 hover:text-white transition">Docs</a>
+      <a href="index.html" class="text-white font-semibold">Registry</a>
+    </nav>
+  </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-8 py-16">
+  <div class="mb-12">
+    <a href="index.html" class="text-blue-400 hover:text-blue-300 mb-4 inline-block">&larr; Back to Registry</a>
+    <h1 class="text-5xl font-bold mb-4">Registry Statistics</h1>
+    <p class="text-xl text-slate-400">Analytics and insights about the Strata package registry.</p>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+    <div class="p-6 bg-slate-900 rounded-lg border border-slate-800">
+      <div class="text-sm text-slate-400 mb-2">Total Packages</div>
+      <div class="text-4xl font-bold mb-1">4</div>
+      <div class="text-xs text-green-400">All active</div>
+    </div>
+    <div class="p-6 bg-slate-900 rounded-lg border border-slate-800">
+      <div class="text-sm text-slate-400 mb-2">Total Versions</div>
+      <div class="text-4xl font-bold mb-1">6</div>
+      <div class="text-xs text-slate-400">Across packages</div>
+    </div>
+    <div class="p-6 bg-slate-900 rounded-lg border border-slate-800">
+      <div class="text-sm text-slate-400 mb-2">Total Downloads</div>
+      <div class="text-4xl font-bold mb-1">782</div>
+      <div class="text-xs text-blue-400">All time</div>
+    </div>
+    <div class="p-6 bg-slate-900 rounded-lg border border-slate-800">
+      <div class="text-sm text-slate-400 mb-2">Avg. Quality</div>
+      <div class="text-4xl font-bold mb-1">90%</div>
+      <div class="text-xs text-yellow-400">Registry average</div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+    <!-- Downloads by Package -->
+    <div class="p-6 bg-slate-900 rounded-lg border border-slate-800">
+      <h2 class="text-xl font-bold mb-6">Downloads by Package</h2>
+      <canvas id="downloadsChart" height="300"></canvas>
+    </div>
+
+    <!-- Versions Distribution -->
+    <div class="p-6 bg-slate-900 rounded-lg border border-slate-800">
+      <h2 class="text-xl font-bold mb-6">Versions Distribution</h2>
+      <canvas id="versionsChart" height="300"></canvas>
+    </div>
+  </div>
+
+  <!-- PACKAGE TABLE -->
+  <div class="p-6 bg-slate-900 rounded-lg border border-slate-800 mb-12">
+    <h2 class="text-2xl font-bold mb-6">Package Rankings</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-slate-800">
+            <th class="px-6 py-4 text-left font-semibold">Rank</th>
+            <th class="px-6 py-4 text-left font-semibold">Package</th>
+            <th class="px-6 py-4 text-left font-semibold">Downloads</th>
+            <th class="px-6 py-4 text-left font-semibold">Versions</th>
+            <th class="px-6 py-4 text-left font-semibold">Latest</th>
+            <th class="px-6 py-4 text-left font-semibold">Quality</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
+            <td class="px-6 py-4 font-semibold">1</td>
+            <td class="px-6 py-4 font-semibold">http-client</td>
+            <td class="px-6 py-4">325</td>
+            <td class="px-6 py-4">2</td>
+            <td class="px-6 py-4"><span class="bg-blue-600/20 text-blue-400 px-2 py-1 rounded text-sm">1.1.0</span></td>
+            <td class="px-6 py-4"><span class="text-green-400">92%</span></td>
+          </tr>
+          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
+            <td class="px-6 py-4 font-semibold">2</td>
+            <td class="px-6 py-4 font-semibold">crypto</td>
+            <td class="px-6 py-4">222</td>
+            <td class="px-6 py-4">2</td>
+            <td class="px-6 py-4"><span class="bg-purple-600/20 text-purple-400 px-2 py-1 rounded text-sm">2.1.0</span></td>
+            <td class="px-6 py-4"><span class="text-green-400">95%</span></td>
+          </tr>
+          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
+            <td class="px-6 py-4 font-semibold">3</td>
+            <td class="px-6 py-4 font-semibold">string-utils</td>
+            <td class="px-6 py-4">150</td>
+            <td class="px-6 py-4">1</td>
+            <td class="px-6 py-4"><span class="bg-green-600/20 text-green-400 px-2 py-1 rounded text-sm">1.0.0</span></td>
+            <td class="px-6 py-4"><span class="text-green-400">88%</span></td>
+          </tr>
+          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
+            <td class="px-6 py-4 font-semibold">4</td>
+            <td class="px-6 py-4 font-semibold">math-utils</td>
+            <td class="px-6 py-4">85</td>
+            <td class="px-6 py-4">1</td>
+            <td class="px-6 py-4"><span class="bg-orange-600/20 text-orange-400 px-2 py-1 rounded text-sm">1.2.0</span></td>
+            <td class="px-6 py-4"><span class="text-green-400">85%</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="p-6 bg-slate-900 rounded-lg border border-slate-800">
+      <h3 class="text-xl font-bold mb-4">Most Downloaded Version</h3>
+      <div class="text-lg">
+        <div class="font-semibold mb-2">http-client@1.0.0</div>
+        <div class="text-slate-400 mb-4">230 downloads</div>
+        <div class="w-full bg-slate-800 rounded-full h-2">
+          <div class="bg-blue-600 h-2 rounded-full" style="width: 29%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-6 bg-slate-900 rounded-lg border border-slate-800">
+      <h3 class="text-xl font-bold mb-4">Registry Health</h3>
+      <div class="space-y-3">
+        <div>
+          <div class="flex justify-between mb-1">
+            <span class="text-sm">Code Quality</span>
+            <span class="text-sm font-semibold text-green-400">92%</span>
+          </div>
+          <div class="w-full bg-slate-800 rounded-full h-2">
+            <div class="bg-green-600 h-2 rounded-full" style="width: 92%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between mb-1">
+            <span class="text-sm">Documentation</span>
+            <span class="text-sm font-semibold text-blue-400">88%</span>
+          </div>
+          <div class="w-full bg-slate-800 rounded-full h-2">
+            <div class="bg-blue-600 h-2 rounded-full" style="width: 88%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between mb-1">
+            <span class="text-sm">Maintenance</span>
+            <span class="text-sm font-semibold text-purple-400">85%</span>
+          </div>
+          <div class="w-full bg-slate-800 rounded-full h-2">
+            <div class="bg-purple-600 h-2 rounded-full" style="width: 85%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Downloads by Package Chart
+  const downloadsCtx = document.getElementById('downloadsChart').getContext('2d');
+  new Chart(downloadsCtx, {
+    type: 'bar',
+    data: {
+      labels: ['http-client', 'crypto', 'string-utils', 'math-utils'],
+      datasets: [{
+        label: 'Downloads',
+        data: [325, 222, 150, 85],
+        backgroundColor: [
+          'rgba(59, 130, 246, 0.8)',
+          'rgba(168, 85, 247, 0.8)',
+          'rgba(34, 197, 94, 0.8)',
+          'rgba(251, 146, 60, 0.8)'
+        ],
+        borderColor: [
+          'rgb(59, 130, 246)',
+          'rgb(168, 85, 247)',
+          'rgb(34, 197, 94)',
+          'rgb(251, 146, 60)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      indexAxis: 'x',
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: 'rgba(148, 163, 184, 0.1)'
+          },
+          ticks: {
+            color: 'rgba(148, 163, 184, 0.8)'
+          }
+        },
+        x: {
+          grid: {
+            display: false
+          },
+          ticks: {
+            color: 'rgba(148, 163, 184, 0.8)'
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: false
+        }
+      }
+    }
+  });
+
+  // Versions Distribution Chart
+  const versionsCtx = document.getElementById('versionsChart').getContext('2d');
+  new Chart(versionsCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['http-client v1.0.0', 'http-client v1.1.0', 'crypto v2.0.0', 'crypto v2.1.0', 'string-utils', 'math-utils'],
+      datasets: [{
+        data: [230, 95, 180, 42, 150, 85],
+        backgroundColor: [
+          'rgba(59, 130, 246, 0.8)',
+          'rgba(29, 185, 255, 0.8)',
+          'rgba(168, 85, 247, 0.8)',
+          'rgba(196, 105, 255, 0.8)',
+          'rgba(34, 197, 94, 0.8)',
+          'rgba(251, 146, 60, 0.8)'
+        ],
+        borderColor: 'rgb(15, 23, 42)',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: 'rgba(148, 163, 184, 0.8)',
+            padding: 15,
+            font: {
+              size: 12
+            }
+          }
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

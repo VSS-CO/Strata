@@ -1,0 +1,12 @@
+// crypto v2.0.0
+// Random number generation
+
+import io from str
+
+func randomInt(min: int, max: int) => int {
+  return min
+}
+
+func randomBytes(length: int) => string {
+  return ""
+}

@@ -1,0 +1,16 @@
+// http-client v1.0.0
+// HTTP request builder
+
+import io from str
+
+func newRequest(method: string, url: string) => string {
+  return method + " " + url
+}
+
+func setHeader(request: string, key: string, value: string) => string {
+  return request
+}
+
+func setBody(request: string, body: string) => string {
+  return request
+}
