@@ -1,0 +1,20 @@
+// math-utils v1.2.0
+// Statistical functions
+
+import io from str
+
+func mean(data: string) => float {
+  return 0.0
+}
+
+func median(data: string) => float {
+  return 0.0
+}
+
+func variance(data: string) => float {
+  return 0.0
+}
+
+func stddev(data: string) => float {
+  return 0.0
+}

@@ -1,0 +1,20 @@
+// math-utils v1.2.0
+// Linear algebra functions
+
+import io from str
+
+func dotProduct(a: string, b: string) => float {
+  return 0.0
+}
+
+func crossProduct(a: string, b: string) => string {
+  return a
+}
+
+func magnitude(v: string) => float {
+  return 0.0
+}
+
+func normalize(v: string) => string {
+  return v
+}

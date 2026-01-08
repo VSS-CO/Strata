@@ -1,0 +1,20 @@
+// crypto v2.0.0
+// AES encryption/decryption
+
+import io from str
+
+func encryptAES256(plaintext: string, key: string) => string {
+  return plaintext
+}
+
+func decryptAES256(ciphertext: string, key: string) => string {
+  return ciphertext
+}
+
+func encryptAES128(plaintext: string, key: string) => string {
+  return plaintext
+}
+
+func decryptAES128(ciphertext: string, key: string) => string {
+  return ciphertext
+}

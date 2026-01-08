@@ -1,0 +1,16 @@
+[project]
+name = "math-utils"
+version = "1.2.0"
+description = "Advanced mathematical functions: linear algebra, statistics"
+author = "Math Contributors"
+license = "GPL-3.0"
+repository = "https://github.com/strata-lang/math-utils"
+homepage = "https://github.com/strata-lang/math-utils"
+strata = ">=1.0.0"
+
+[exports]
+algebra = "./src/algebra.str"
+stats = "./src/stats.str"
+matrix = "./src/matrix.str"
+
+[dependencies]

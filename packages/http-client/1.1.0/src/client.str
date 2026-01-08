@@ -1,0 +1,34 @@
+// http-client v1.1.0 (improved)
+// HTTP client implementation
+
+import io from str
+
+func get(url: string) => string {
+  io.print("GET " + url)
+  return ""
+}
+
+func post(url: string, body: string) => string {
+  io.print("POST " + url)
+  return ""
+}
+
+func put(url: string, body: string) => string {
+  io.print("PUT " + url)
+  return ""
+}
+
+func patch(url: string, body: string) => string {
+  io.print("PATCH " + url)
+  return ""
+}
+
+func delete(url: string) => string {
+  io.print("DELETE " + url)
+  return ""
+}
+
+func head(url: string) => string {
+  io.print("HEAD " + url)
+  return ""
+}
