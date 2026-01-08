@@ -1,0 +1,41 @@
+// Working Feature Tests for Extended Strata
+
+// ===== Test 1: Variable Declaration with New Types =====
+let i32_val: i32 = 2147483647
+let u16_val: u16 = 65535
+let f64_val: f64 = 2.71828
+
+// ===== Test 2: Simple Integer Operations =====
+let a: int = 10
+let b: int = 5
+let sum: int = a + b
+
+// ===== Test 3: Boolean Operations =====
+let flag: bool = true
+if flag {
+  let result: int = 42
+}
+
+// ===== Test 4: String Type =====
+let greeting: string = "Hello Strata"
+
+// ===== Test 5: Collection Types (Type Definitions) =====
+let my_array: array = [1, 2, 3]
+let my_list: list = [4, 5, 6]
+let my_dict: dict = {}
+let my_map: map = {}
+
+// ===== Test 6: Advanced Types (Definitions) =====
+let optional_val: option = Some(100)
+let result_val: result = Ok(200)
+let promise_val: promise = Promise()
+
+// ===== Test 7: Functional Types =====
+let add: callable = func(x: int, y: int) => int {
+  return x + y
+}
+
+// ===== Test 8: Type Aliases =====
+let u: int = 42
+let s: int = -42
+let r: string = "test"

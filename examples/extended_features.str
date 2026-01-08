@@ -1,0 +1,62 @@
+// Extended Strata Language Features Demo
+// Shows features from: Python, Go, Rust, JavaScript, TypeScript, C, C++, C#, R, Ruby
+
+// String operations (Python, Ruby, JavaScript)
+let msg: string = "hello world"
+let upper: string = msg.toUpperCase()
+let length: int = strlen(msg)
+
+// Math operations (R, Python, C++)
+let num: float = 25.0
+let root: float = sqrt(num)
+let power: float = pow(2.0, 3.0)
+let rounded: int = floor(root)
+
+// Array/List operations (Python, Go, Rust, JavaScript)
+let arr: array = [1, 2, 3]
+let doubled: array = map(arr, func(x: int) => int { return x * 2 })
+
+// Type checking (Python, JavaScript, TypeScript)
+let val: int = 42
+let isNum: bool = isInteger(val)
+
+// Error handling (Go, Rust)
+let result: result = Ok(100)
+let isValid: bool = isOk(result)
+
+// Optional types (Rust, TypeScript, Go)
+let maybe: option = Some(5)
+let unwrapped: int = unwrap(maybe)
+
+// Range/iteration (Python, Go)
+let range_list: array = range(1, 5)
+
+// File operations (Python, Go, C++)
+let content: string = readFile("test.txt")
+writeFile("output.txt", "Hello!")
+
+// Set operations (Python, Go, Rust)
+let s1: set = create()
+add(s1, 1)
+add(s1, 2)
+
+// Bitwise operations (C, C++, Rust, Go)
+let bits: int = bitwiseAnd(12, 10)
+let shifted: int = leftShift(4, 2)
+
+// Functional programming (JavaScript, Python, Rust)
+let add_fn: callable = func(a: int, b: int) => int { return a + b }
+
+// Regex (Python, Ruby, JavaScript, Go)
+let pattern: pattern = test("hello123", "[0-9]+")
+
+// DateTime (Python, Go, JavaScript, Ruby)
+let timestamp: int = timestamp()
+
+// Complex operations
+let clone_arr: array = clone(arr)
+let deep_eq: bool = deepEqual(arr, clone_arr)
+
+// Introspection (Python, JavaScript, TypeScript)
+let type_of: string = typeof(msg)
+let has_prop: bool = hasProperty(result, "value")

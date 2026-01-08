@@ -1,0 +1,16 @@
+// Test 11: Bitwise Operations
+// Features from C, C++, Rust, Go
+
+let a: int = 12
+let b: int = 10
+
+// Bitwise operations
+let and_result: int = bitwiseAnd(a, b)
+let or_result: int = bitwiseOr(a, b)
+let xor_result: int = bitwiseXor(a, b)
+let not_result: int = bitwiseNot(a)
+
+// Bit shifting
+let left_shift: int = leftShift(a, 2)
+let right_shift: int = rightShift(a, 1)
+let unsigned_right: int = unsignedRightShift(a, 1)

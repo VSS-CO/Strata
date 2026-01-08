@@ -1,0 +1,27 @@
+// Test 10: Set Operations
+// Features from Python, Go, Rust
+
+let s1: set = {}
+let s2: set = {}
+
+// Set operations
+let s1_with_1: set = add(s1, 1)
+let s1_with_2: set = add(s1, 2)
+let s1_with_3: set = add(s1, 3)
+
+let s2_with_2: set = add(s2, 2)
+let s2_with_3: set = add(s2, 3)
+let s2_with_4: set = add(s2, 4)
+
+// Set checks
+let has_two: bool = has(s1, 2)
+let set_size: int = size(s1)
+
+// Set operations
+let union_set: set = union(s1, s2)
+let inter_set: set = intersection(s1, s2)
+let diff_set: set = difference(s1, s2)
+
+// Set mutations
+let s1_removed: set = remove(s1, 1)
+let s1_cleared: set = clear(s1)

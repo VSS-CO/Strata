@@ -1,0 +1,17 @@
+// Test 15: File Operations
+// Features from Python, Go, C, C++
+
+// File read/write operations
+let content: string = readFile("test.txt")
+let write_ok: bool = writeFile("output.txt", "Hello, World!")
+let append_ok: bool = appendFile("output.txt", "\nSecond line")
+let delete_ok: bool = deleteFile("temp.txt")
+
+// File checks
+let file_exists: bool = exists("test.txt")
+let is_file: bool = isFile("test.txt")
+let is_dir: bool = isDirectory("./folder")
+
+// Directory operations
+let mkdir_ok: bool = mkdir("new_folder")
+let mkdir_recursive: bool = mkdir("deep/nested/folder")

@@ -1,0 +1,21 @@
+// Test 12: Functional Programming
+// Features from JavaScript, Python, Rust
+
+// Function composition and piping
+let double: callable = func(x: int) => int { return x * 2 }
+let add_ten: callable = func(x: int) => int { return x + 10 }
+let subtract_one: callable = func(x: int) => int { return x - 1 }
+
+// Currying
+let add: callable = func(a: int, b: int) => int { return a + b }
+let curried: callable = curry(add, 2)
+
+// Partial application
+let partial_add: callable = partial(add, 5)
+
+// Memoization
+let expensive_op: callable = func(n: int) => int { return n * n }
+let memoized: callable = memoize(expensive_op)
+
+// Higher-order functions
+let apply: callable = func(f: callable, x: int) => int { return f(x) }

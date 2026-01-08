@@ -1,0 +1,42 @@
+// Test 4: Math Operations
+// Features from Python, R, C, C++, Go
+
+// Basic math
+let abs_val: int = abs(-42)
+let sqrt_val: float = sqrt(16.0)
+let pow_val: float = pow(2.0, 3.0)
+let mod_val: int = 10 % 3
+
+// Trigonometry
+let sin_val: float = sin(0.0)
+let cos_val: float = cos(0.0)
+let tan_val: float = tan(0.0)
+let asin_val: float = asin(0.5)
+let acos_val: float = acos(0.5)
+let atan_val: float = atan(1.0)
+let atan2_val: float = atan2(1.0, 1.0)
+
+// Logarithms and exponentials
+let exp_val: float = exp(1.0)
+let ln_val: float = log(2.71828)
+let log10_val: float = log10(100.0)
+let log2_val: float = log2(8.0)
+
+// Rounding
+let ceil_val: int = ceil(3.2)
+let floor_val: int = floor(3.8)
+let round_val: int = round(3.5)
+let trunc_val: int = trunc(3.9)
+
+// Min/Max
+let max_val: int = max(10, 20, 30, 5)
+let min_val: int = min(10, 20, 30, 5)
+
+// GCD/LCM
+let gcd_val: int = gcd(48, 18)
+let lcm_val: int = lcm(12, 18)
+
+// Random
+let random_val: float = random()
+let random_int_val: int = randomInt(1, 10)
+let random_float_val: float = randomFloat(0.0, 1.0)

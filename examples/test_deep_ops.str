@@ -1,0 +1,29 @@
+// Test 14: Deep Operations and Reflection
+// Features from Python, JavaScript, TypeScript
+
+// Deep clone
+let original_arr: array = [1, [2, 3], [4, [5, 6]]]
+let cloned_arr: array = clone(original_arr)
+
+// Deep equality
+let arr1: array = [1, 2, 3]
+let arr2: array = [1, 2, 3]
+let arr3: array = [1, 2, 4]
+let are_equal: bool = deepEqual(arr1, arr2)
+let not_equal: bool = deepEqual(arr1, arr3)
+
+// Object assignment (shallow merge)
+let obj1: dict = {}
+let obj2: dict = {}
+let obj3: dict = {}
+let merged: dict = assign(obj1, obj2, obj3)
+
+// Reflection/Introspection
+let has_key: bool = hasProperty(obj1, "name")
+let prop: any = getProperty(obj1, "name")
+let with_prop: dict = setProperty(obj1, "name", "John")
+let without_prop: dict = deleteProperty(obj1, "name")
+
+// Hash code generation
+let hash_val: int = hash("hello")
+let hash_obj: int = hash(obj1)

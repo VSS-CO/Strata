@@ -1,0 +1,23 @@
+// Test 7: Optional and Result Types
+// Features from Rust, TypeScript, Go
+
+// Optional/Some/None (like Rust Option<T>)
+let opt_some: option = Some(42)
+let opt_none: option = None()
+
+let is_some: bool = isSome(opt_some)
+let is_none: bool = isNone(opt_none)
+
+let unwrapped: int = unwrap(opt_some)
+let unwrapped_or: int = unwrapOr(opt_none, 0)
+
+// Result/Ok/Err (like Rust Result<T, E>)
+let res_ok: result = Ok(100)
+let res_err: result = Err("Something went wrong")
+
+let is_ok: bool = isOk(res_ok)
+let is_err: bool = isErr(res_err)
+
+// Tuple (fixed-size, immutable sequence)
+let tpl: tuple = tuple(1, "two", 3.0)
+let untpl: array = untuple(tpl)

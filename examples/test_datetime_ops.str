@@ -1,0 +1,14 @@
+// Test 9: DateTime Operations
+// Features from Python, Go, JavaScript, Ruby
+
+// Current time
+let now_ms: int = now()
+let timestamp_sec: int = timestamp()
+
+// Date extraction (from milliseconds)
+let day: int = getDate(now_ms)
+let month: int = getMonth(now_ms)
+let year: int = getYear(now_ms)
+let hours: int = getHours(now_ms)
+let minutes: int = getMinutes(now_ms)
+let seconds: int = getSeconds(now_ms)

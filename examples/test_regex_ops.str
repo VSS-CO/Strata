@@ -1,0 +1,17 @@
+// Test 8: Regex Operations
+// Features from Python, Ruby, JavaScript, Go
+
+let text: string = "Hello123World456"
+
+// Pattern matching
+let matched: array = match(text, "[0-9]+")
+let is_match: bool = test(text, "[0-9]+")
+let search_idx: int = search(text, "[0-9]+")
+let all_matches: array = matchAll(text, "[0-9]+")
+
+// Pattern replacement (in std::regex)
+let replaced: string = replace(text, "[0-9]", "X")
+
+// More complex patterns
+let email: string = "user@example.com"
+let is_email: bool = test(email, "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")

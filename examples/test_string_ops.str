@@ -1,0 +1,24 @@
+// Test 2: String Operations
+// Features from Python, Ruby, JavaScript, Go
+
+let msg: string = "Hello World"
+
+// String queries
+let len: int = strlen(msg)
+let has_world: bool = includes(msg, "World")
+let starts_h: bool = startsWith(msg, "Hello")
+let ends_d: bool = endsWith(msg, "d")
+let idx: int = indexOf(msg, "World")
+
+// String transformations
+let upper: string = toUpperCase(msg)
+let lower: string = toLowerCase(msg)
+let trimmed: string = trim("  spaces  ")
+let replaced: string = replace(msg, "World", "Strata")
+let repeated: string = repeat("Ha", 3)
+let sliced: string = slice(msg, 0, 5)
+let subbed: string = substr(msg, 6, 5)
+
+// Array-like string operations
+let parts: array = split(msg, " ")
+let rejoined: string = join(parts, "-")

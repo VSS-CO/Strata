@@ -1,0 +1,6 @@
+// Test: Only Original Types
+let x: int = 42
+let y: float = 3.14
+let z: bool = true
+let s: string = "hello"
+let w: any = 999

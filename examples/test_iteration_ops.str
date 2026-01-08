@@ -1,0 +1,24 @@
+// Test 13: Iterator and Generator Operations
+// Features from Python, JavaScript, Go
+
+// Range generation
+let range_list: array = range(1, 6)
+let range_extended: array = range(0, 10)
+
+// Enumeration
+let items: array = [10, 20, 30]
+let enumerated: array = enumerate(items)
+
+// Zipping
+let names: array = ["Alice", "Bob", "Charlie"]
+let ages: array = [25, 30, 35]
+let zipped: array = zip(names, ages)
+
+// Reversing and sorting
+let original: array = [3, 1, 4, 1, 5]
+let reversed_list: array = reversed(original)
+let sorted_list: array = sorted(original)
+
+// Iterator protocol
+let iter_obj: any = iter([1, 2, 3])
+let next_val: any = next(iter_obj)
