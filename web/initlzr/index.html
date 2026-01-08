@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strata Initializer - Generate your Strata Project</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        .strata-blue { color: #0066cc; }
+        .strata-bg { background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%); }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="strata-bg text-white py-12">
+        <div class="container mx-auto px-6">
+            <h1 class="text-4xl font-bold mb-2">Strata Initializer</h1>
+            <p class="text-blue-100 text-lg">Generate a new Strata project with custom dependencies</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Form Section -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <form id="initForm" class="space-y-6">
+                        <!-- Project Metadata -->
+                        <fieldset class="space-y-4">
+                            <legend class="text-xl font-bold text-gray-800 mb-4">Project Details</legend>
+                            
+                            <div>
+                                <label for="projectName" class="block text-sm font-medium text-gray-700 mb-2">Project Name</label>
+                                <input type="text" id="projectName" name="projectName" placeholder="my-awesome-project" 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    required>
+                                <p class="text-xs text-gray-500 mt-1">kebab-case, alphanumeric and hyphens</p>
+                            </div>
+
+                            <div>
+                                <label for="version" class="block text-sm font-medium text-gray-700 mb-2">Version</label>
+                                <input type="text" id="version" name="version" value="0.1.0" 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="0.1.0">
+                                <p class="text-xs text-gray-500 mt-1">Semantic versioning (MAJOR.MINOR.PATCH)</p>
+                            </div>
+
+                            <div>
+                                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                                <input type="text" id="description" name="description" placeholder="A brief description of your project"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+
+                            <div>
+                                <label for="author" class="block text-sm font-medium text-gray-700 mb-2">Author</label>
+                                <input type="text" id="author" name="author" placeholder="Your Name"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                        </fieldset>
+
+                        <!-- Project Type -->
+                        <fieldset class="space-y-4 border-t pt-6">
+                            <legend class="text-xl font-bold text-gray-800 mb-4">Project Type</legend>
+                            
+                            <div class="space-y-3">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="projectType" value="application" checked class="w-4 h-4">
+                                    <span class="ml-3 text-gray-700">
+                                        <span class="font-medium">Application</span>
+                                        <span class="text-gray-500 text-sm block">Executable Strata program</span>
+                                    </span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="projectType" value="package" class="w-4 h-4">
+                                    <span class="ml-3 text-gray-700">
+                                        <span class="font-medium">Package</span>
+                                        <span class="text-gray-500 text-sm block">Reusable library for other projects</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </fieldset>
+
+                        <!-- Features/Dependencies -->
+                        <fieldset class="space-y-4 border-t pt-6">
+                            <legend class="text-xl font-bold text-gray-800 mb-4">Include Features</legend>
+                            
+                            <div class="space-y-3">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="checkbox" name="features" value="math" class="w-4 h-4">
+                                    <span class="ml-3 text-gray-700">
+                                        <span class="font-medium">Math Module</span>
+                                        <span class="text-gray-500 text-sm block">Advanced math functions (sin, cos, sqrt, etc.)</span>
+                                    </span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="checkbox" name="features" value="text" class="w-4 h-4">
+                                    <span class="ml-3 text-gray-700">
+                                        <span class="font-medium">Text Module</span>
+                                        <span class="text-gray-500 text-sm block">String manipulation and formatting</span>
+                                    </span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="checkbox" name="features" value="util" class="w-4 h-4">
+                                    <span class="ml-3 text-gray-700">
+                                        <span class="font-medium">Util Module</span>
+                                        <span class="text-gray-500 text-sm block">Common utilities (arrays, collections)</span>
+                                    </span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="checkbox" name="features" value="time" class="w-4 h-4">
+                                    <span class="ml-3 text-gray-700">
+                                        <span class="font-medium">Time Module</span>
+                                        <span class="text-gray-500 text-sm block">Date and time operations</span>
+                                    </span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="checkbox" name="features" value="file" class="w-4 h-4">
+                                    <span class="ml-3 text-gray-700">
+                                        <span class="font-medium">File I/O</span>
+                                        <span class="text-gray-500 text-sm block">File reading and writing</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </fieldset>
+
+                        <!-- Build Options -->
+                        <fieldset class="space-y-4 border-t pt-6">
+                            <legend class="text-xl font-bold text-gray-800 mb-4">Build Configuration</legend>
+                            
+                            <div>
+                                <label for="target" class="block text-sm font-medium text-gray-700 mb-2">Compilation Target</label>
+                                <select id="target" name="target" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="c">C (Default)</option>
+                                    <option value="js">JavaScript</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="optimization" class="block text-sm font-medium text-gray-700 mb-2">Optimization Level</label>
+                                <select id="optimization" name="optimization" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="O0">None (O0) - Fastest Compile</option>
+                                    <option value="O1">Light (O1)</option>
+                                    <option value="O2" selected>Standard (O2)</option>
+                                    <option value="O3">Aggressive (O3) - Slowest Compile</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="license" class="block text-sm font-medium text-gray-700 mb-2">License</label>
+                                <select id="license" name="license" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="MIT">MIT</option>
+                                    <option value="Apache-2.0">Apache-2.0</option>
+                                    <option value="GPL-3.0">GPL-3.0</option>
+                                    <option value="BSD-3-Clause">BSD-3-Clause</option>
+                                    <option value="Unlicense">Unlicense</option>
+                                </select>
+                            </div>
+                        </fieldset>
+
+                        <!-- Submit -->
+                        <div class="border-t pt-6">
+                            <button type="submit" class="w-full strata-bg text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition duration-200">
+                                Generate Project
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Preview Section -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-lg p-8 sticky top-8">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6">Project Preview</h2>
+                    
+                    <div class="space-y-4 text-sm">
+                        <div id="preview" class="bg-gray-100 p-4 rounded font-mono text-xs overflow-auto max-h-96">
+                            <div class="text-gray-600 mb-2"># strata.toml</div>
+                            <pre id="previewContent" class="text-gray-800"></pre>
+                        </div>
+
+                        <div class="space-y-2 text-xs text-gray-600">
+                            <div class="flex justify-between">
+                                <span>Project Structure:</span>
+                                <code class="text-gray-800 font-semibold" id="structureInfo">application</code>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Total Features:</span>
+                                <code class="text-gray-800 font-semibold" id="featureCount">0</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <h3 class="font-bold text-blue-900 mb-2">Files Created:</h3>
+                        <ul class="text-xs text-blue-800 space-y-1 font-mono">
+                            <li>✓ strata.toml</li>
+                            <li>✓ src/main.str</li>
+                            <li>✓ README.md</li>
+                            <li>✓ .gitignore</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Download Modal -->
+    <div id="downloadModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl p-8 max-w-md w-full mx-4 fade-in">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Project Ready!</h3>
+            <p class="text-gray-600 mb-6">Your Strata project has been generated. Download and extract it to get started.</p>
+            
+            <div class="space-y-3">
+                <button id="downloadBtn" class="w-full strata-bg text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">
+                    Download ZIP
+                </button>
+                <button id="closeModal" class="w-full bg-gray-200 text-gray-800 font-bold py-3 rounded-lg hover:bg-gray-300 transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-8 mt-16">
+        <div class="container mx-auto px-6 text-center">
+            <p>Strata Initializer v1.0 - <a href="https://github.com/VSS-CO/Strata" class="text-blue-400 hover:underline">GitHub</a></p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
