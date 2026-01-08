@@ -1,3 +1,16 @@
+import { createRequire as __WEBPACK_EXTERNAL_createRequire } from "module";
+/******/ /* webpack/runtime/compat */
+/******/ 
+/******/ if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = new URL('.', import.meta.url).pathname.slice(import.meta.url.match(/^file:\/\/\/\w:/) ? 1 : 0, -1) + "/";
+/******/ 
+/************************************************************************/
+var __webpack_exports__ = {};
+
+;// CONCATENATED MODULE: external "fs"
+const external_fs_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("fs");
+;// CONCATENATED MODULE: external "process"
+const external_process_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("process");
+;// CONCATENATED MODULE: ./dist/main.js
 // ============================================================================
 // STRATA ARCHITECTURE & MODULE SYSTEM SPECIFICATION
 // ============================================================================
@@ -478,8 +491,8 @@
 //   → Instead: packages must be pre-built, fully portable
 //
 // ============================================================================
-import * as fs from "fs";
-import * as process from "process";
+
+
 const TYPE_REGISTRY = {
     // Core Primitive Types
     int: { kind: "primitive", primitive: "int" },
@@ -644,47 +657,47 @@ const BUILTIN_FUNCTIONS = {
     defer: (args) => { /* deferred execution placeholder */ return args[0]; },
     // FILE OPERATIONS (Python, Go, C, C++)
     readFile: (args) => { try {
-        return fs.readFileSync(args[0], "utf-8");
+        return external_fs_namespaceObject.readFileSync(args[0], "utf-8");
     }
     catch {
         return null;
     } },
     writeFile: (args) => { try {
-        fs.writeFileSync(args[0], args[1]);
+        external_fs_namespaceObject.writeFileSync(args[0], args[1]);
         return true;
     }
     catch {
         return false;
     } },
     appendFile: (args) => { try {
-        fs.appendFileSync(args[0], args[1]);
+        external_fs_namespaceObject.appendFileSync(args[0], args[1]);
         return true;
     }
     catch {
         return false;
     } },
     deleteFile: (args) => { try {
-        fs.unlinkSync(args[0]);
+        external_fs_namespaceObject.unlinkSync(args[0]);
         return true;
     }
     catch {
         return false;
     } },
-    exists: (args) => fs.existsSync(args[0]),
+    exists: (args) => external_fs_namespaceObject.existsSync(args[0]),
     isFile: (args) => { try {
-        return fs.statSync(args[0]).isFile();
+        return external_fs_namespaceObject.statSync(args[0]).isFile();
     }
     catch {
         return false;
     } },
     isDirectory: (args) => { try {
-        return fs.statSync(args[0]).isDirectory();
+        return external_fs_namespaceObject.statSync(args[0]).isDirectory();
     }
     catch {
         return false;
     } },
     mkdir: (args) => { try {
-        fs.mkdirSync(args[0], { recursive: true });
+        external_fs_namespaceObject.mkdirSync(args[0], { recursive: true });
         return true;
     }
     catch {
@@ -1436,47 +1449,47 @@ class Interpreter {
         // File Module (Python, Go, C, C++)
         this.env.setModule("std::file", {
             read: (path) => { try {
-                return fs.readFileSync(path, "utf-8");
+                return external_fs_namespaceObject.readFileSync(path, "utf-8");
             }
             catch {
                 return null;
             } },
             write: (path, content) => { try {
-                fs.writeFileSync(path, content);
+                external_fs_namespaceObject.writeFileSync(path, content);
                 return true;
             }
             catch {
                 return false;
             } },
             append: (path, content) => { try {
-                fs.appendFileSync(path, content);
+                external_fs_namespaceObject.appendFileSync(path, content);
                 return true;
             }
             catch {
                 return false;
             } },
-            exists: (path) => fs.existsSync(path),
+            exists: (path) => external_fs_namespaceObject.existsSync(path),
             delete: (path) => { try {
-                fs.unlinkSync(path);
+                external_fs_namespaceObject.unlinkSync(path);
                 return true;
             }
             catch {
                 return false;
             } },
             isFile: (path) => { try {
-                return fs.statSync(path).isFile();
+                return external_fs_namespaceObject.statSync(path).isFile();
             }
             catch {
                 return false;
             } },
             isDirectory: (path) => { try {
-                return fs.statSync(path).isDirectory();
+                return external_fs_namespaceObject.statSync(path).isDirectory();
             }
             catch {
                 return false;
             } },
             mkdir: (path) => { try {
-                fs.mkdirSync(path, { recursive: true });
+                external_fs_namespaceObject.mkdirSync(path, { recursive: true });
                 return true;
             }
             catch {
@@ -1795,13 +1808,13 @@ class CGenerator {
 // ============================================================================
 // MAIN
 // ============================================================================
-const args = process.argv.slice(2);
+const args = external_process_namespaceObject.argv.slice(2);
 if (args.length === 0) {
     console.error("Usage: strata <file.str>");
-    process.exit(1);
+    external_process_namespaceObject.exit(1);
 }
 const filePath = args[0];
-const source = fs.readFileSync(filePath, "utf-8");
+const source = external_fs_namespaceObject.readFileSync(filePath, "utf-8");
 try {
     const parser = new Parser(source);
     const statements = parser.parse();
@@ -1811,9 +1824,10 @@ try {
     interpreter.interpret(statements);
     const generator = new CGenerator();
     const cCode = generator.generate(statements);
-    fs.writeFileSync("out.c", cCode);
+    external_fs_namespaceObject.writeFileSync("out.c", cCode);
 }
 catch (error) {
     console.error("Error:", error instanceof Error ? error.message : String(error));
-    process.exit(1);
+    external_process_namespaceObject.exit(1);
 }
+
