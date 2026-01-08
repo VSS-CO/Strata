@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strata Language - Official Website</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        :root { --strata-blue: #0066cc; --strata-dark: #0052a3; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; }
+        .bg-blue { background: linear-gradient(135deg, var(--strata-blue) 0%, var(--strata-dark) 100%); }
+        a { color: var(--strata-blue); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div style="color: var(--strata-blue); font-size: 24px; font-weight: bold;">⟨Strata⟩</div>
+            <div>
+                <a href="main/landing.html" class="mr-6">Website</a>
+                <a href="main/index.html" class="mr-6">Playground</a>
+                <a href="main/docs/index.html" class="mr-6">Documentation</a>
+                <a href="initlzr/index.html">Initializer</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="bg-blue text-white py-16">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <h1 style="font-size: 48px; font-weight: 700; margin-bottom: 16px;">Welcome to Strata</h1>
+            <p style="font-size: 18px; margin-bottom: 32px;">A type-safe scripting language that combines the best of C, Go, Rust, and TypeScript</p>
+            <div>
+                <a href="main/landing.html" style="background: white; color: var(--strata-blue); padding: 12px 24px; border-radius: 6px; display: inline-block; font-weight: 600; margin: 8px;"><i class="bi bi-arrow-right"></i> Learn More</a>
+                <a href="main/index.html" style="background: transparent; border: 2px solid white; color: white; padding: 12px 24px; border-radius: 6px; display: inline-block; font-weight: 600; margin: 8px;"><i class="bi bi-play-fill"></i> Try Now</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-6 py-16">
+        <h2 style="font-size: 36px; font-weight: 700; margin-bottom: 24px;">Quick Links</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px;">
+            <!-- Landing Page -->
+            <div style="background: white; padding: 24px; border-radius: 8px; border-left: 4px solid var(--strata-blue); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: var(--strata-blue);"><i class="bi bi-globe"></i> Website</h3>
+                <p style="color: #666; margin-bottom: 16px;">Beautiful landing page with features, examples, and call-to-action buttons.</p>
+                <a href="main/landing.html" style="font-weight: 600;"><i class="bi bi-arrow-right"></i> Visit Website</a>
+            </div>
+
+            <!-- Playground -->
+            <div style="background: white; padding: 24px; border-radius: 8px; border-left: 4px solid var(--strata-blue); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: var(--strata-blue);"><i class="bi bi-play-btn"></i> Playground</h3>
+                <p style="color: #666; margin-bottom: 16px;">Interactive code editor with 10+ built-in examples. Try Strata in your browser right now.</p>
+                <a href="main/index.html" style="font-weight: 600;"><i class="bi bi-arrow-right"></i> Open Playground</a>
+            </div>
+
+            <!-- Documentation -->
+            <div style="background: white; padding: 24px; border-radius: 8px; border-left: 4px solid var(--strata-blue); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: var(--strata-blue);"><i class="bi bi-book"></i> Documentation</h3>
+                <p style="color: #666; margin-bottom: 16px;">Comprehensive guide covering types, variables, functions, standard library, and more.</p>
+                <a href="main/docs/index.html" style="font-weight: 600;"><i class="bi bi-arrow-right"></i> Read Documentation</a>
+            </div>
+
+            <!-- Project Initializer -->
+            <div style="background: white; padding: 24px; border-radius: 8px; border-left: 4px solid var(--strata-blue); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: var(--strata-blue);"><i class="bi bi-lightning"></i> Project Generator</h3>
+                <p style="color: #666; margin-bottom: 16px;">Spring Boot-style project initializer. Configure your project and download as ZIP.</p>
+                <a href="initlzr/index.html" style="font-weight: 600;"><i class="bi bi-arrow-right"></i> Start New Project</a>
+            </div>
+
+            <!-- Examples -->
+            <div style="background: white; padding: 24px; border-radius: 8px; border-left: 4px solid var(--strata-blue); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: var(--strata-blue);"><i class="bi bi-code"></i> Code Examples</h3>
+                <p style="color: #666; margin-bottom: 16px;">15+ working examples covering all language features from basics to advanced topics.</p>
+                <a href="main/docs/examples.html" style="font-weight: 600;"><i class="bi bi-arrow-right"></i> View Examples</a>
+            </div>
+
+            <!-- FAQ -->
+            <div style="background: white; padding: 24px; border-radius: 8px; border-left: 4px solid var(--strata-blue); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: var(--strata-blue);"><i class="bi bi-question-circle"></i> FAQ</h3>
+                <p style="color: #666; margin-bottom: 16px;">Frequently asked questions about Strata, features, comparison with other languages.</p>
+                <a href="main/docs/faq.html" style="font-weight: 600;"><i class="bi bi-arrow-right"></i> Read FAQ</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-6 py-16">
+        <h2 style="font-size: 36px; font-weight: 700; margin-bottom: 24px;">Documentation Structure</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+            <div>
+                <h3 style="font-weight: 600; margin-bottom: 12px; color: var(--strata-blue);">Getting Started</h3>
+                <ul style="list-style: none; color: #666;">
+                    <li>• <a href="main/docs/index.html">Introduction</a></li>
+                    <li>• <a href="main/docs/getting-started.html">Installation</a></li>
+                    <li>• <a href="main/docs/playground.html">Try Online</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 style="font-weight: 600; margin-bottom: 12px; color: var(--strata-blue);">Language Guide</h3>
+                <ul style="list-style: none; color: #666;">
+                    <li>• <a href="main/docs/types.html">Types</a></li>
+                    <li>• <a href="main/docs/variables.html">Variables</a></li>
+                    <li>• <a href="main/docs/functions.html">Functions</a></li>
+                    <li>• <a href="main/docs/control-flow.html">Control Flow</a></li>
+                    <li>• <a href="main/docs/operators.html">Operators</a></li>
+                    <li>• <a href="main/docs/modules.html">Modules</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 style="font-weight: 600; margin-bottom: 12px; color: var(--strata-blue);">Standard Library</h3>
+                <ul style="list-style: none; color: #666;">
+                    <li>• <a href="main/docs/stdlib-io.html">IO Module</a></li>
+                    <li>• <a href="main/docs/stdlib-math.html">Math Module</a></li>
+                    <li>• <a href="main/docs/stdlib-text.html">Text Module</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 style="font-weight: 600; margin-bottom: 12px; color: var(--strata-blue);">Learn More</h3>
+                <ul style="list-style: none; color: #666;">
+                    <li>• <a href="main/docs/examples.html">Code Examples</a></li>
+                    <li>• <a href="main/docs/faq.html">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div style="background: #1a1a1a; color: #999; padding: 40px; text-align: center; margin-top: 40px;">
+        <p>© 2026 Strata Language | <a href="https://github.com/VSS-CO/Strata">GitHub</a> | <a href="https://github.com/VSS-CO/Strata/blob/main/LICENSE">License</a></p>
+        <p style="font-size: 12px; margin-top: 12px;">A type-safe scripting language combining C, Go, Rust, and TypeScript</p>
+    </div>
+</body>
+</html>

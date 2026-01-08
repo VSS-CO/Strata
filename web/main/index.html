@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strata - Programming Language</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --strata-blue: #0066cc;
+            --strata-dark: #0052a3;
+        }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .strata-bg { 
+            background: linear-gradient(135deg, var(--strata-blue) 0%, var(--strata-dark) 100%); 
+        }
+        
+        .code-editor {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #333;
+        }
+        
+        .output-panel {
+            background: #1a1a1a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            border: 1px solid #333;
+            overflow-y: auto;
+        }
+        
+        .output-line {
+            padding: 2px 8px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        
+        .output-error {
+            color: #ff6b6b;
+        }
+        
+        .output-success {
+            color: #51cf66;
+        }
+        
+        .output-warning {
+            color: #ffd43b;
+        }
+        
+        .hljs {
+            background: transparent !important;
+            padding: 0 !important;
+        }
+        
+        .hljs-string { color: #ce9178; }
+        .hljs-number { color: #b5cea8; }
+        .hljs-literal { color: #569cd6; }
+        .hljs-function { color: #dcdcaa; }
+        .hljs-keyword { color: #569cd6; }
+        .hljs-type { color: #4ec9b0; }
+        .hljs-attr { color: #9cdcfe; }
+        
+        .sidebar {
+            background: #f5f5f5;
+            border-right: 1px solid #ddd;
+            max-width: 280px;
+            overflow-y: auto;
+        }
+        
+        .example-item {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .example-item:hover {
+            background: #efefef;
+        }
+        
+        .example-item.active {
+            background: var(--strata-blue);
+            color: white;
+        }
+        
+        .example-item-title {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        
+        .example-item-desc {
+            font-size: 11px;
+            opacity: 0.7;
+        }
+        
+        .btn-primary {
+            background: var(--strata-blue);
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        
+        .btn-primary:hover {
+            background: var(--strata-dark);
+        }
+        
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+        
+        .status-bar {
+            background: #2a2a2a;
+            color: #888;
+            padding: 8px 16px;
+            font-size: 12px;
+            border-top: 1px solid #333;
+        }
+        
+        .status-ok {
+            color: #51cf66;
+        }
+        
+        .status-error {
+            color: #ff6b6b;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #333;
+            border-top: 2px solid var(--strata-blue);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .tab {
+            padding: 10px 16px;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            background: #f9f9f9;
+            border-right: 1px solid #ddd;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--strata-blue);
+            color: var(--strata-blue);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation -->
+    <nav class="strata-bg text-white py-4 shadow-lg">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="text-2xl font-bold">⟨Strata⟩</div>
+                <div class="text-sm opacity-80">A Type-Safe Language</div>
+            </div>
+            <div class="flex space-x-6 text-sm">
+                <a href="docs/index.html" class="hover:opacity-80"><i class="bi bi-book"></i> Docs</a>
+                <a href="https://github.com/VSS-CO/Strata" target="_blank" class="hover:opacity-80"><i class="bi bi-github"></i> GitHub</a>
+                <a href="../initlzr/index.html" class="hover:opacity-80"><i class="bi bi-lightning"></i> Initializer</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex h-[calc(100vh-70px)]">
+        <!-- Sidebar -->
+        <div class="sidebar w-72">
+            <div class="p-4 border-b">
+                <h3 class="font-bold text-sm mb-3">Examples</h3>
+                <input type="search" id="exampleSearch" placeholder="Search examples..." 
+                    class="w-full px-3 py-2 text-sm border border-ddd rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div id="examplesList"></div>
+        </div>
+
+        <!-- Editor & Output -->
+        <div class="flex-1 flex flex-col">
+            <!-- Tabs -->
+            <div class="flex bg-white border-b">
+                <div class="tab active" data-tab="editor"><i class="bi bi-code"></i> Editor</div>
+                <div class="tab" data-tab="output"><i class="bi bi-terminal"></i> Output</div>
+                <div class="flex-1"></div>
+                <button class="btn-primary mr-4 my-2" id="runBtn"><i class="bi bi-play-fill"></i> Run (Ctrl+Enter)</button>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex-1 flex overflow-hidden">
+                <!-- Code Editor -->
+                <div id="editorTab" class="tab-content flex-1 flex flex-col overflow-hidden">
+                    <textarea id="codeEditor" class="code-editor flex-1 p-4 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset" 
+                        spellcheck="false"></textarea>
+                </div>
+
+                <!-- Output Panel -->
+                <div id="outputTab" class="tab-content hidden flex-1 flex flex-col overflow-hidden">
+                    <div id="outputPanel" class="output-panel flex-1 overflow-y-auto"></div>
+                </div>
+            </div>
+
+            <!-- Status Bar -->
+            <div class="status-bar flex justify-between items-center">
+                <div id="statusMessage">Ready</div>
+                <div id="statusTime" class="text-xs"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Documentation Modal -->
+    <div id="docModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <h2 id="docTitle" class="text-2xl font-bold"></h2>
+                    <button id="closeDoc" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                </div>
+                <div id="docContent" class="text-gray-700 space-y-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load compiler from dist -->
+    <script>
+        // Strata Compiler will be loaded here
+        // For now, we'll simulate it
+    </script>
+    <script src="playground.js"></script>
+</body>
+</html>

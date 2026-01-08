@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variables - Strata Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root {
+            --strata-blue: #0066cc;
+            --strata-dark: #0052a3;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .sidebar {
+            background: #f8f9fa;
+            border-right: 1px solid #ddd;
+            max-width: 280px;
+            position: sticky;
+            top: 70px;
+            height: calc(100vh - 70px);
+            overflow-y: auto;
+        }
+        
+        .sidebar-item {
+            padding: 12px 16px;
+            color: #333;
+            text-decoration: none;
+            display: block;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        
+        .sidebar-item:hover {
+            background: #f0f0f0;
+        }
+        
+        .sidebar-item.active {
+            border-left-color: var(--strata-blue);
+            background: #e6f0ff;
+            color: var(--strata-blue);
+            font-weight: 600;
+        }
+        
+        .doc-content {
+            padding: 40px 60px;
+            max-width: 900px;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .doc-content h1 {
+            font-size: 36px;
+            margin-bottom: 24px;
+            color: var(--strata-dark);
+        }
+        
+        .doc-content h2 {
+            font-size: 28px;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            color: var(--strata-dark);
+        }
+        
+        .doc-content h3 {
+            font-size: 20px;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            color: var(--strata-blue);
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 16px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            border-left: 4px solid var(--strata-blue);
+        }
+        
+        .code-block .kw { color: #569cd6; }
+        .code-block .str { color: #ce9178; }
+        .code-block .num { color: #b5cea8; }
+        .code-block .com { color: #6a9955; }
+        .code-block .fn { color: #dcdcaa; }
+        
+        .code-inline {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            color: var(--strata-blue);
+            font-size: 13px;
+        }
+        
+        .info {
+            background: #e6f0ff;
+            border-left: 4px solid var(--strata-blue);
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 4px;
+        }
+        
+        .warning {
+            background: #ffe6e6;
+            border-left: 4px solid #ff6b6b;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 4px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+        
+        table th {
+            background: #f5f5f5;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        nav {
+            background: white;
+            border-bottom: 1px solid #ddd;
+            padding: 16px 24px;
+        }
+        
+        nav .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--strata-blue);
+        }
+        
+        nav a {
+            color: #333;
+            text-decoration: none;
+            margin-left: 24px;
+            font-size: 14px;
+        }
+        
+        nav a:hover {
+            color: var(--strata-blue);
+        }
+        
+        .breadcrumb {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 16px;
+        }
+        
+        .breadcrumb a {
+            color: var(--strata-blue);
+            text-decoration: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="flex flex-col">
+    <!-- Navigation -->
+    <nav class="flex items-center justify-between sticky top-0 z-50 bg-white border-b border-gray-200">
+        <div class="logo">⟨Strata⟩</div>
+        <div class="flex items-center">
+            <a href="../landing.html">Home</a>
+            <a href="index.html">Docs</a>
+            <a href="../index.html">Playground</a>
+            <a href="../initlzr/index.html">Get Started</a>
+        </div>
+    </nav>
+
+    <div class="flex flex-1">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="p-4 border-b border-gray-300">
+                <h3 class="font-bold text-sm mb-4">Getting Started</h3>
+                <a href="index.html" class="sidebar-item">Introduction</a>
+                <a href="getting-started.html" class="sidebar-item">Installation</a>
+                <a href="playground.html" class="sidebar-item">Try It Online</a>
+            </div>
+            
+            <div class="p-4 border-b border-gray-300">
+                <h3 class="font-bold text-sm mb-4">Language Guide</h3>
+                <a href="types.html" class="sidebar-item">Types</a>
+                <a href="variables.html" class="sidebar-item active">Variables</a>
+                <a href="functions.html" class="sidebar-item">Functions</a>
+                <a href="control-flow.html" class="sidebar-item">Control Flow</a>
+                <a href="operators.html" class="sidebar-item">Operators</a>
+                <a href="modules.html" class="sidebar-item">Modules</a>
+            </div>
+            
+            <div class="p-4 border-b border-gray-300">
+                <h3 class="font-bold text-sm mb-4">Standard Library</h3>
+                <a href="stdlib-io.html" class="sidebar-item">IO Module</a>
+                <a href="stdlib-math.html" class="sidebar-item">Math Module</a>
+                <a href="stdlib-text.html" class="sidebar-item">Text Module</a>
+            </div>
+            
+            <div class="p-4">
+                <h3 class="font-bold text-sm mb-4">More</h3>
+                <a href="examples.html" class="sidebar-item">Examples</a>
+                <a href="faq.html" class="sidebar-item">FAQ</a>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="doc-content flex-1">
+            <div class="breadcrumb"><a href="index.html">Docs</a> / Variables</div>
+            <h1>Variables</h1>
+            
+            <p>Strata has three keywords for binding values to names: <span class="code-inline">let</span>, <span class="code-inline">const</span>, and <span class="code-inline">var</span>. Each has different properties for immutability and scope.</p>
+
+            <h2>let - Immutable Binding</h2>
+            
+            <p>Use <span class="code-inline">let</span> to create an immutable binding. Once assigned, the value cannot be changed:</p>
+            
+            <div class="code-block"><span class="kw">let</span> name: string = <span class="str">"Alice"</span>
+<span class="kw">let</span> age: int = <span class="num">30</span>
+<span class="kw">let</span> score: float = <span class="num">95.5</span></div>
+
+            <p>Attempting to reassign a <span class="code-inline">let</span> binding is a compile-time error:</p>
+            
+            <div class="code-block"><span class="kw">let</span> x: int = <span class="num">10</span>
+<span class="kw">let</span> x: int = <span class="num">20</span>  <span class="com">// ERROR: cannot reassign immutable binding</span></div>
+
+            <h2>const - Compile-Time Constant</h2>
+            
+            <p>Use <span class="code-inline">const</span> for compile-time constants. These are optimized away and the value must be a literal:</p>
+            
+            <div class="code-block"><span class="kw">const</span> PI: float = <span class="num">3.14159</span>
+<span class="kw">const</span> MAX_SIZE: int = <span class="num">1000</span>
+<span class="kw">const</span> APP_NAME: string = <span class="str">"Strata"</span></div>
+
+            <div class="info">
+                <strong>const vs let:</strong> Use <span class="code-inline">const</span> for named values that are truly constant (magic numbers, configuration). Use <span class="code-inline">let</span> for regular immutable variables that may depend on computation.
+            </div>
+
+            <h2>var - Mutable Variable</h2>
+            
+            <p>Use <span class="code-inline">var</span> when you need to reassign a value. This is explicit about mutability:</p>
+            
+            <div class="code-block"><span class="kw">var</span> counter: int = <span class="num">0</span>
+<span class="kw">var</span> counter: int = counter + <span class="num">1</span>
+<span class="kw">var</span> counter: int = counter + <span class="num">1</span>
+io.<span class="fn">print</span>(counter)  <span class="com">// 2</span></div>
+
+            <div class="warning">
+                <strong>Reassignment Requires Shadowing:</strong> To change a var, you must use <span class="code-inline">var name: Type = new_value</span>. This makes mutations explicit in your code.
+            </div>
+
+            <h2>Scope</h2>
+            
+            <p>Variables are scoped to the block they're declared in. Blocks are created by function bodies and control flow statements:</p>
+            
+            <div class="code-block"><span class="kw">let</span> global: int = <span class="num">1</span>
+
+<span class="kw">func</span> <span class="fn">example</span>() =&gt; void {
+  <span class="kw">let</span> local: int = <span class="num">2</span>  <span class="com">// Only visible in this function</span>
+  io.<span class="fn">print</span>(global)  <span class="com">// OK: can access outer scope</span>
+  io.<span class="fn">print</span>(local)   <span class="com">// OK: can access own scope</span>
+}
+
+<span class="com">// io.print(local)  // ERROR: local is not defined here</span></div>
+
+            <h3>Block Scope with Control Flow</h3>
+            
+            <div class="code-block"><span class="kw">let</span> x: int = <span class="num">1</span>
+
+<span class="kw">if</span> (x > <span class="num">0</span>) {
+  <span class="kw">let</span> y: int = <span class="num">2</span>  <span class="com">// Only visible inside if block</span>
+  io.<span class="fn">print</span>(y)
+}
+
+<span class="com">// io.print(y)  // ERROR: y is not in scope</span></div>
+
+            <h2>Immutability by Default</h2>
+            
+            <p>Strata prefers immutability. The default is <span class="code-inline">let</span>, not <span class="code-inline">var</span>. This encourages you to think about when mutation is really needed:</p>
+            
+            <table>
+                <tr>
+                    <th>Binding</th>
+                    <th>Mutability</th>
+                    <th>Use Case</th>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">let</span></td>
+                    <td>Immutable</td>
+                    <td>Default choice for most variables</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">const</span></td>
+                    <td>Immutable</td>
+                    <td>Named constants and magic numbers</td>
+                </tr>
+                <tr>
+                    <td><span class="code-inline">var</span></td>
+                    <td>Mutable</td>
+                    <td>Only when you need to reassign</td>
+                </tr>
+            </table>
+
+            <div class="info">
+                <strong>Why Immutability by Default?</strong> Immutable variables are easier to reason about. They prevent accidental mutations and make code more predictable. Use var only when mutation is essential.
+            </div>
+
+            <h2>Type Annotations</h2>
+            
+            <p>All variable declarations require explicit type annotations. This makes your intent clear:</p>
+            
+            <div class="code-block"><span class="kw">let</span> age: int = <span class="num">25</span>           <span class="com">// Good: type is clear</span>
+<span class="com">// let age = 25              // ERROR: type annotation required</span></div>
+
+            <h2>Examples</h2>
+            
+            <h3>Counter with var</h3>
+            
+            <div class="code-block"><span class="kw">var</span> count: int = <span class="num">0</span>
+<span class="kw">var</span> count: int = count + <span class="num">1</span>
+<span class="kw">var</span> count: int = count + <span class="num">1</span>
+<span class="kw">var</span> count: int = count + <span class="num">1</span>
+io.<span class="fn">print</span>(count)  <span class="com">// 3</span></div>
+
+            <h3>Mixing let and var</h3>
+            
+            <div class="code-block"><span class="kw">let</span> name: string = <span class="str">"Alice"</span>    <span class="com">// Immutable</span>
+<span class="kw">var</span> balance: float = <span class="num">100.0</span>  <span class="com">// Mutable</span>
+
+<span class="kw">var</span> balance: float = balance - <span class="num">10.0</span>  <span class="com">// Can change balance</span>
+<span class="com">// var name: string = "Bob"       // ERROR: can't change immutable let</span></div>
+
+            <h2>Best Practices</h2>
+            
+            <ul>
+                <li>Use <span class="code-inline">let</span> by default for all variables</li>
+                <li>Use <span class="code-inline">const</span> for named constants (MAX_SIZE, PI, etc.)</li>
+                <li>Use <span class="code-inline">var</span> only when you need to reassign</li>
+                <li>Always include explicit type annotations</li>
+                <li>Choose descriptive variable names</li>
+                <li>Keep variables scoped as narrowly as possible</li>
+            </ul>
+
+            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd;">
+                <a href="functions.html" style="color: var(--strata-blue); text-decoration: none; font-weight: 600;">Next: Functions →</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
