@@ -1,0 +1,19 @@
+// Simple Extended Features Test - No Modules
+// Tests built-in functions from multiple languages
+
+// String operations
+let greeting: string = "Hello"
+let exclaim: string = "World"
+
+// Math operations  
+let a: int = 10
+let b: int = 3
+let sum: int = a + b
+
+// Type conversion
+let as_float: float = 10.5
+
+// Simple conditionals
+if sum > 5 {
+  let result: int = 15
+}

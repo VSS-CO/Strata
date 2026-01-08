@@ -1,0 +1,31 @@
+// Test 5: Type Checking and Conversion
+// Features from Python, JavaScript, TypeScript, Go
+
+// Type checking
+let type_int: string = typeof(42)
+let type_str: string = typeof("hello")
+let is_arr: bool = isArray([1, 2, 3])
+let is_obj: bool = isObject({})
+let is_null: bool = isNull(null)
+let is_undef: bool = isUndefined(undefined)
+let is_num: bool = isNumber(42)
+let is_str: bool = isString("test")
+let is_bool: bool = isBoolean(true)
+let is_nan_val: bool = isNaN(0.0 / 0.0)
+let is_finite: bool = isFinite(42.0)
+let is_int: bool = isInteger(42)
+
+// Type conversion
+let to_num: int = toNumber("42")
+let to_str: string = toString(42)
+let to_bool: bool = toBoolean(1)
+let parse_int: int = parseInt("42", 10)
+let parse_float: float = parseFloat("3.14")
+let to_int: int = toInt(3.9)
+let to_float: float = toFloat("2.71")
+
+// Type aliases for compatibility
+let u_val: int = uint(42)
+let s_val: int = sint(-42)
+let b_val: int = byte(255)
+let r_val: string = rune(65)

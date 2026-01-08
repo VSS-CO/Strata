@@ -1,0 +1,6 @@
+// Test 2: Math Built-in Functions
+let a: int = 10
+let b: int = -42
+let result1: int = abs(b)
+let result2: float = sqrt(16.0)
+let result3: float = pow(2.0, 3.0)

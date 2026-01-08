@@ -1,0 +1,30 @@
+// Test 6: Map/Dictionary Operations
+// Features from Python, JavaScript, Go, Rust
+
+let dict_obj: dict = {}
+
+// Map operations
+let key_list: array = keys(dict_obj)
+let val_list: array = values(dict_obj)
+let ent_list: array = entries(dict_obj)
+let has_key: bool = has(dict_obj, "name")
+let get_val: any = get(dict_obj, "name")
+let dict_with_val: dict = set(dict_obj, "name", "Alice")
+let dict_deleted: dict = delete(dict_obj, "name")
+let dict_cleared: dict = clear(dict_obj)
+let dict_len: int = length(dict_obj)
+
+// Object assignment
+let obj1: dict = {}
+let obj2: dict = {}
+let assigned: dict = assign(obj1, obj2)
+
+// Object property operations
+let has_prop: bool = hasProperty(obj1, "key")
+let prop_val: any = getProperty(obj1, "key")
+let with_prop: dict = setProperty(obj1, "key", 100)
+let del_prop: dict = deleteProperty(obj1, "key")
+
+// Prototype operations
+let proto: any = getPrototype(obj1)
+let with_proto: dict = setPrototype(obj1, proto)

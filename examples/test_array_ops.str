@@ -1,0 +1,35 @@
+// Test 3: Array/List Operations
+// Features from Python, JavaScript, Go, Rust
+
+let arr: array = [1, 2, 3, 4, 5]
+
+// Array queries
+let len_arr: int = length(arr)
+let first: int = arr[0]
+let has_three: bool = includes_arr(arr, 3)
+let idx_four: int = indexOf(arr, 4)
+
+// Array mutations
+let pushed: array = push(arr, 6)
+let popped: int = pop(arr)
+let shifted: int = shift(arr)
+let unshifted: array = unshift(arr, 0)
+
+// Array transformations
+let doubled: array = map(arr, func(x: int) => int { return x * 2 })
+let evens: array = filter(arr, func(x: int) => bool { return x % 2 == 0 })
+let sum: int = reduce(arr, func(a: int, b: int) => int { return a + b }, 0)
+
+// Array ordering
+let reversed_arr: array = reverse(arr)
+let sorted_arr: array = sort(arr)
+
+// Array expansion
+let concat_arr: array = concat(arr, [10, 11])
+let flattened: array = flat([1, [2, 3], [4, [5, 6]]], 2)
+
+// Array search
+let found: int = find(arr, func(x: int) => bool { return x > 3 })
+let found_idx: int = findIndex(arr, func(x: int) => bool { return x > 3 })
+let has_any: bool = some(arr, func(x: int) => bool { return x > 4 })
+let all_positive: bool = every(arr, func(x: int) => bool { return x > 0 })

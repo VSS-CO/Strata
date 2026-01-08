@@ -1,0 +1,2 @@
+// Test: abs() built-in function
+let result: int = abs(-42)

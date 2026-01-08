@@ -1,0 +1,5 @@
+// Test 1: Basic Types (simplified, no char literals)
+let x: int = 42
+let y: float = 3.14
+let z: bool = true
+let s: string = "hello"
