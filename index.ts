@@ -1094,9 +1094,38 @@ class Parser {
         }
 
         if (/[a-zA-Z_]/.test(token)) {
-            const name = token;
+            let expr: Expr = { kind: "identifier", name: token };
             this.advance();
-            return { kind: "identifier", name };
+
+            // Handle member access and calls: io.print(...), obj.method(...), etc.
+            while (this.current()?.token === ".") {
+                this.advance();
+                const property = this.current()?.token;
+                if (!property) throw new Error("Expected property name after .");
+                this.advance();
+
+                // Check for function call
+                if (this.current()?.token === "(") {
+                    this.advance();
+                    const args: Expr[] = [];
+                    while (this.current()?.token !== ")") {
+                        args.push(this.parseUnary());
+                        if (this.current()?.token === ",") this.advance();
+                    }
+                    this.expect(")");
+                    
+                    expr = {
+                        kind: "call",
+                        func: { kind: "member", object: expr, property },
+                        args,
+                    } as any;
+                } else {
+                    // Property access without call
+                    expr = { kind: "member", object: expr, property } as any;
+                }
+            }
+
+            return expr;
         }
 
         if (token === "(") {
@@ -1248,6 +1277,15 @@ class Parser {
         }
 
         const expr = this.parseBinary();
+        
+        // Check for assignment: identifier = value
+        if (this.current()?.token === "=" && (expr as any).kind === "identifier") {
+            const target = (expr as any).name;
+            this.advance();
+            const value = this.parseBinary();
+            return { kind: "assignment", target, value } as any;
+        }
+
         return { kind: "expression", expr };
     }
 }
@@ -1434,10 +1472,12 @@ class Interpreter {
 
     private setupStdlib(): void {
         // I/O Module
-        this.env.setModule("std::io", {
+        const ioModule = {
             print: (value: any) => { console.log(value); return null; },
             println: (value: any) => { console.log(value); return null; },
-        });
+        };
+        this.env.setModule("std::io", ioModule);
+        this.env.setModule("str", ioModule); // Alias for std::io
 
         // Math Module (Python, R, C, C++)
         this.env.setModule("std::math", {
@@ -1670,12 +1710,18 @@ class Interpreter {
                 this.controlFlow.type = "continue";
                 break;
             case "function":
-                this.env.setFunction(stmt.name, [
-                    ...stmt.params.map((p) => p.name),
-                ], stmt.body);
-                break;
+               this.env.setFunction(stmt.name, [
+                   ...stmt.params.map((p) => p.name),
+               ], stmt.body);
+               break;
             case "import":
-                break;
+               // Bind module to variable name
+               const module = this.env.getModule(stmt.module);
+               if (!module) {
+                   throw new Error(`Module not found: ${stmt.module}`);
+               }
+               this.env.set(stmt.name, module, false);
+               break;
         }
     }
 
@@ -1866,6 +1912,8 @@ if (args.length === 0) {
     process.exit(1);
 }
 
+const startTime = performance.now();
+
 const filePath = args[0];
 const source = fs.readFileSync(filePath, "utf-8");
 
@@ -1882,6 +1930,10 @@ try {
     const generator = new CGenerator();
     const cCode = generator.generate(statements);
     fs.writeFileSync("out.c", cCode);
+
+    const endTime = performance.now();
+    const elapsed = (endTime - startTime).toFixed(2);
+    console.error(`Executed in ${elapsed}ms`);
 } catch (error) {
     console.error(
         "Error:",

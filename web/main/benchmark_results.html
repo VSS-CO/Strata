@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strata Benchmark Results</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 0.95em;
+            opacity: 0.9;
+        }
+        
+        .chart-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+            border: 1px solid #e9ecef;
+            margin-bottom: 30px;
+        }
+        
+        .chart-card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        
+        .results-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .results-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .results-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .duration {
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Strata Benchmark Results</h1>
+        <p class="subtitle">Performance metrics for 22 example programs</p>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value">6</div>
+                <div class="stat-label">Successful Runs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">212.4ms</div>
+                <div class="stat-label">Average Execution Time</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">175.3ms</div>
+                <div class="stat-label">Fastest Execution</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">264.1ms</div>
+                <div class="stat-label">Slowest Execution</div>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h2>Execution Time by Example</h2>
+            <div class="chart-container">
+                <canvas id="executionChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h2>Success Rate Distribution</h2>
+            <div class="chart-container">
+                <canvas id="successChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h2>Execution Time Statistics</h2>
+            <div class="chart-container">
+                <canvas id="statsChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h2>Detailed Results</h2>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Program</th>
+                        <th>Status</th>
+                        <th>Duration (ms)</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsBody">
+                    <!-- Populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Sample benchmark data
+        const benchmarkResults = [
+            { file: "00_hello_world.str", success: true, duration: 198.23 },
+            { file: "01_basic_types.str", success: true, duration: 175.30 },
+            { file: "02_arithmetic.str", success: true, duration: 184.40 },
+            { file: "03_comparison.str", success: true, duration: 240.98 },
+            { file: "04_logical.str", success: true, duration: 211.61 },
+            { file: "05_unary.str", success: true, duration: 264.14 },
+            { file: "06_if_else.str", success: false, duration: null },
+            { file: "07_while_loop.str", success: false, duration: null },
+            { file: "08_for_loop.str", success: false, duration: null },
+            { file: "09_break_continue.str", success: false, duration: null },
+            { file: "10_functions.str", success: false, duration: null },
+            { file: "11_math_module.str", success: false, duration: null },
+            { file: "12_text_module.str", success: false, duration: null },
+            { file: "13_util_module.str", success: false, duration: null },
+            { file: "14_time_module.str", success: false, duration: null },
+            { file: "15_type_safety.str", success: false, duration: null },
+            { file: "16_immutability.str", success: false, duration: null },
+            { file: "17_nested_control.str", success: false, duration: null },
+            { file: "18_algorithms.str", success: false, duration: null },
+            { file: "19_operators_precedence.str", success: false, duration: null },
+            { file: "20_extended_features_simple.str", success: false, duration: null },
+            { file: "extended_features.str", success: false, duration: null }
+        ];
+
+        // Populate table
+        const tableBody = document.getElementById('resultsBody');
+        benchmarkResults.forEach((result, index) => {
+            const row = tableBody.insertRow();
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td><code>${result.file}</code></td>
+                <td class="${result.success ? 'success' : 'error'}">
+                    ${result.success ? '✓ Pass' : '✗ Fail'}
+                </td>
+                <td>${result.success ? `<span class="duration">${result.duration.toFixed(2)}</span>` : '—'}</td>
+            `;
+        });
+
+        // Chart 1: Execution Time
+        const successResults = benchmarkResults.filter(r => r.success);
+        const ctx1 = document.getElementById('executionChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: successResults.map(r => r.file.replace('.str', '')),
+                datasets: [{
+                    label: 'Execution Time (ms)',
+                    data: successResults.map(r => r.duration),
+                    backgroundColor: '#667eea',
+                    borderColor: '#667eea',
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // Chart 2: Success Rate
+        const ctx2 = document.getElementById('successChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Successful', 'Failed'],
+                datasets: [{
+                    data: [6, 16],
+                    backgroundColor: ['#28a745', '#dc3545'],
+                    borderColor: '#fff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+
+        // Chart 3: Statistics
+        const durations = successResults.map(r => r.duration);
+        const avg = durations.reduce((a, b) => a + b, 0) / durations.length;
+        const min = Math.min(...durations);
+        const max = Math.max(...durations);
+
+        const ctx3 = document.getElementById('statsChart').getContext('2d');
+        new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: ['Minimum', 'Average', 'Maximum'],
+                datasets: [{
+                    label: 'Time (ms)',
+                    data: [min, avg, max],
+                    backgroundColor: ['#45B7D1', '#667eea', '#96CEB4'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+    </script>
+</body>
+</html>

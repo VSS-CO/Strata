@@ -1,0 +1,5 @@
+// Hello World Example - The simplest Strata program
+
+import io from str
+
+io.print("Hello, World!")

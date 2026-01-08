@@ -1,0 +1,3 @@
+import io from str
+let sum: int = 10 + 5
+io.print(sum)
