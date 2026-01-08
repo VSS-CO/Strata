@@ -1,0 +1,118 @@
+[
+  {
+    "file": "00_hello_world.str",
+    "success": true,
+    "duration": 198.2349,
+    "output": "Hello, World!\n"
+  },
+  {
+    "file": "01_basic_types.str",
+    "success": true,
+    "duration": 175.296,
+    "output": ""
+  },
+  {
+    "file": "02_arithmetic.str",
+    "success": true,
+    "duration": 184.4048,
+    "output": ""
+  },
+  {
+    "file": "03_comparison.str",
+    "success": true,
+    "duration": 240.9751,
+    "output": ""
+  },
+  {
+    "file": "04_logical.str",
+    "success": true,
+    "duration": 211.6059,
+    "output": ""
+  },
+  {
+    "file": "05_unary.str",
+    "success": true,
+    "duration": 264.1438,
+    "output": ""
+  },
+  {
+    "file": "06_if_else.str",
+    "success": false,
+    "error": "Command failed: node dist/index.js \"examples\\06_if_else.str\"\nError: Unexpected token: .\n"
+  },
+  {
+    "file": "07_while_loop.str",
+    "success": false,
+    "error": "Command failed: node dist/index.js \"examples\\07_while_loop.str\"\nError: Unexpected token: {\n"
+  },
+  {
+    "file": "08_for_loop.str",
+    "success": false,
+    "error": "Command failed: node dist/index.js \"examples\\08_for_loop.str\"\nError: Unexpected token: :\n"
+  },
+  {
+    "file": "09_break_continue.str",
+    "success": false,
+    "error": "Command failed: node dist/index.js \"examples\\09_break_continue.str\"\nError: Unexpected token: :\n"
+  },
+  {
+    "file": "10_functions.str",
+    "success": false,
+    "error": "Command failed: node dist/index.js \"examples\\10_functions.str\"\nError: Unexpected token: .\n"
+  },
+  {
+    "file": "11_math_module.str",
+    "success": false,
+    "error": "Command failed: node dist/index.js \"examples\\11_math_module.str\"\nError: Unexpected token: .\n"
+  },
+  {
+    "file": "12_text_module.str",
+    "success": false,
+    "error": "Command failed: node dist/index.js \"examples\\12_text_module.str\"\nError: Unexpected token: .\n"
+  },
+  {
+    "file": "13_util_module.str",
+    "success": false,
+    "error": "Command failed: node dist/index.js \"examples\\13_util_module.str\"\nError: Unexpected token: .\n"
+  },
+  {
+    "file": "14_time_module.str",
+    "success": false,
+    "error": "Command failed: node dist/index.js \"examples\\14_time_module.str\"\nError: Unexpected token: .\n"
+  },
+  {
+    "file": "15_type_safety.str",
+    "success": false,
+    "error": "Command failed: node dist/index.js \"examples\\15_type_safety.str\"\nError: Unexpected token: .\n"
+  },
+  {
+    "file": "16_immutability.str",
+    "success": false,
+    "error": "Command failed: node dist/index.js \"examples\\16_immutability.str\"\nError: Unexpected token: .\n"
+  },
+  {
+    "file": "17_nested_control.str",
+    "success": false,
+    "error": "Command failed: node dist/index.js \"examples\\17_nested_control.str\"\nError: Unexpected token: {\n"
+  },
+  {
+    "file": "18_algorithms.str",
+    "success": false,
+    "error": "Command failed: node dist/index.js \"examples\\18_algorithms.str\"\nError: Unexpected token: :\n"
+  },
+  {
+    "file": "19_operators_precedence.str",
+    "success": false,
+    "error": "Command failed: node dist/index.js \"examples\\19_operators_precedence.str\"\nError: Unexpected token: ."
+  },
+  {
+    "file": "20_extended_features_simple.str",
+    "success": false,
+    "error": "Command failed: node dist/index.js \"examples\\20_extended_features_simple.str\"\nError: Unexpected toke"
+  },
+  {
+    "file": "extended_features.str",
+    "success": false,
+    "error": "Command failed: node dist/index.js \"examples\\extended_features.str\"\nError: Unexpected token: :\n"
+  }
+]
