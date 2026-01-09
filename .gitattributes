@@ -1,7 +1,8 @@
 ## GitHub Linguist Configuration for Strata Language
 
 # Define Strata language for .str files
-*.str linguist-language=Strata
+*.mdx linguist-language=Vue
+*.astro linguist-language=Vue
 
 # Mark example files as documentation
 examples/** linguist-documentation
