@@ -1,0 +1,13 @@
+import io from std::io
+import http from std::http
+
+func handleRequest(req: any, res: any) {
+  io.println("Request: " + req.method + " " + req.path)
+  res.send("Hello from Strata web server!")
+}
+
+func main() {
+  const port: int = 3000
+  io.println("Starting server on port " + port)
+  // http.createServer(handleRequest).listen(port)
+}

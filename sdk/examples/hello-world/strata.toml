@@ -1,0 +1,9 @@
+[project]
+name = "hello-world"
+version = "0.1.0"
+description = "Simple Hello World example"
+
+[build]
+target = "c"
+optimization = "O2"
+output = "./dist"

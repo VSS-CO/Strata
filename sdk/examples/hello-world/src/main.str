@@ -1,0 +1,11 @@
+import io from std::io
+import math from std::math
+
+func greet(name: string) => string {
+  return "Hello, " + name + "!"
+}
+
+func main() {
+  io.println(greet("Strata"))
+  io.println("Math example: sqrt(16) = " + math.sqrt(16))
+}
