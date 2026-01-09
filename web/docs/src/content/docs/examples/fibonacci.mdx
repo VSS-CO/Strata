@@ -1,0 +1,237 @@
+---
+title: Fibonacci Sequence
+description: Calculate Fibonacci numbers using recursion and loops
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Aside } from '@astrojs/starlight/components';
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+# Fibonacci Sequence
+
+Learn to use functions, loops, and recursion with this classic algorithm.
+
+## Iterative Version (Recommended)
+
+Using a loop (fast and simple):
+
+```strata
+import io from str
+
+func fibonacci(n: int) => int {
+  if (n <= 1) {
+    return n
+  }
+  
+  var prev: int = 0
+  var curr: int = 1
+  
+  for (var i: int = 2; i <= n; var i: int = i + 1) {
+    let next: int = prev + curr
+    var prev: int = curr
+    var curr: int = next
+  }
+  
+  return curr
+}
+
+// Print first 10 Fibonacci numbers
+for (var i: int = 0; i < 10; var i: int = i + 1) {
+  let fib: int = fibonacci(i)
+  io.print(fib)
+}
+```
+
+**Output:**
+```
+0
+1
+1
+2
+3
+5
+8
+13
+21
+34
+```
+
+## Recursive Version
+
+Using recursion (elegant but slower):
+
+```strata
+import io from str
+
+func fibonacci(n: int) => int {
+  if (n <= 1) {
+    return n
+  }
+  return fibonacci(n - 1) + fibonacci(n - 2)
+}
+
+// Print first 10 Fibonacci numbers
+for (var i: int = 0; i < 10; var i: int = i + 1) {
+  let fib: int = fibonacci(i)
+  io.print(fib)
+}
+```
+
+## Understanding the Algorithm
+
+The Fibonacci sequence: `0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ...`
+
+Each number is the sum of the two previous numbers:
+- Position 0: `0`
+- Position 1: `1`
+- Position 2: `0 + 1 = 1`
+- Position 3: `1 + 1 = 2`
+- Position 4: `1 + 2 = 3`
+- Position 5: `2 + 3 = 5`
+- And so on...
+
+## Breakdown: Iterative Version
+
+<Tabs syncKey="versions">
+  <TabItem label="Step-by-step">
+    ```strata
+    func fibonacci(n: int) => int {
+      // Base case: first two Fibonacci numbers
+      if (n <= 1) {
+        return n  // returns 0 if n=0, 1 if n=1
+      }
+      
+      // Start with first two numbers
+      var prev: int = 0      // F(0)
+      var curr: int = 1      // F(1)
+      
+      // Calculate each subsequent number
+      for (var i: int = 2; i <= n; var i: int = i + 1) {
+        // New number is sum of previous two
+        let next: int = prev + curr
+        
+        // Shift values forward
+        var prev: int = curr
+        var curr: int = next
+      }
+      
+      // Return the final calculated number
+      return curr
+    }
+    ```
+  </TabItem>
+
+  <TabItem label="Recursive">
+    ```strata
+    func fibonacci(n: int) => int {
+      // Base case: first two numbers
+      if (n <= 1) {
+        return n
+      }
+      
+      // Recursive case: sum of two previous numbers
+      return fibonacci(n - 1) + fibonacci(n - 2)
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+## Performance Comparison
+
+<CardGrid>
+  <Card title="Iterative ✅">
+    - ✅ Fast: O(n) time complexity
+    - ✅ Memory efficient: O(1) space
+    - ✅ No stack overflow risk
+    - Best choice for large n
+  </Card>
+
+  <Card title="Recursive ❌">
+    - ❌ Very slow for large n
+    - ❌ Recalculates same values
+    - ❌ Uses more memory
+    - ✅ More elegant code
+  </Card>
+</CardGrid>
+
+<Aside type="caution">
+For fibonacci(40), recursive takes several seconds while iterative is nearly instant!
+</Aside>
+
+## Practical Example: Sum of First N Fibonacci Numbers
+
+```strata
+import io from str
+
+func fibonacci(n: int) => int {
+  if (n <= 1) {
+    return n
+  }
+  
+  var prev: int = 0
+  var curr: int = 1
+  
+  for (var i: int = 2; i <= n; var i: int = i + 1) {
+    let next: int = prev + curr
+    var prev: int = curr
+    var curr: int = next
+  }
+  
+  return curr
+}
+
+// Calculate sum of first 10 Fibonacci numbers
+var sum: int = 0
+for (var i: int = 0; i < 10; var i: int = i + 1) {
+  var sum: int = sum + fibonacci(i)
+}
+
+io.print(sum)  // 88
+```
+
+## Practice Exercises
+
+<Aside type="tip" title="Try These">
+1. **Print first 20 Fibonacci numbers**
+2. **Find the first Fibonacci number greater than 1000**
+3. **Calculate the sum of first 15 Fibonacci numbers**
+4. **Print only the even Fibonacci numbers less than 100**
+</Aside>
+
+### Example Solution (#2)
+
+Find the first Fibonacci number greater than 1000:
+
+```strata
+import io from str
+
+func fibonacci(n: int) => int {
+  if (n <= 1) {
+    return n
+  }
+  var prev: int = 0
+  var curr: int = 1
+  for (var i: int = 2; i <= n; var i: int = i + 1) {
+    let next: int = prev + curr
+    var prev: int = curr
+    var curr: int = next
+  }
+  return curr
+}
+
+var i: int = 0
+while (true) {
+  let fib: int = fibonacci(i)
+  if (fib > 1000) {
+    io.print(fib)  // 1597
+    break
+  }
+  var i: int = i + 1
+}
+```
+
+## Next Steps
+
+- **[Functions](../guide/functions)** — Learn more about function definitions
+- **[Loops](../guide/control-flow)** — Master for and while loops
+- **[Type System](../guide/type-system)** — Understand Strata's types

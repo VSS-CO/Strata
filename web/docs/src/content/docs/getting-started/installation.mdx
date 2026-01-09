@@ -1,0 +1,193 @@
+---
+title: Installation
+description: Install Strata on your system
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+import { Aside } from '@astrojs/starlight/components';
+
+# Installation
+
+Get Strata up and running on your machine.
+
+## System Requirements
+
+- **Operating Systems**: Linux, macOS, or Windows
+- **Architecture**: x86_64 or ARM64
+- **Memory**: 256MB minimum (1GB recommended)
+- **Disk**: 100MB for compiler and dependencies
+
+## Install from Binary Release
+
+The easiest way to get started.
+
+<Tabs syncKey="os">
+  <TabItem label="Linux">
+    <Steps>
+      1. Visit [GitHub Releases](https://github.com/VSS-CO/Strata/releases)
+      2. Download the Linux binary for your architecture
+      3. Extract the archive:
+         ```bash
+         tar xzf strata-linux-x86_64.tar.gz
+         ```
+      4. Add to PATH:
+         ```bash
+         export PATH="$PATH:$(pwd)/strata/bin"
+         ```
+      5. Verify installation:
+         ```bash
+         strata --version
+         ```
+    </Steps>
+  </TabItem>
+
+  <TabItem label="macOS">
+    <Steps>
+      1. Visit [GitHub Releases](https://github.com/VSS-CO/Strata/releases)
+      2. Download the appropriate binary (Intel or Apple Silicon)
+      3. Extract the archive:
+         ```bash
+         tar xzf strata-macos-arm64.tar.gz
+         ```
+      4. Add to PATH:
+         ```bash
+         export PATH="$PATH:$(pwd)/strata/bin"
+         ```
+      5. Verify installation:
+         ```bash
+         strata --version
+         ```
+    </Steps>
+  </TabItem>
+
+  <TabItem label="Windows">
+    <Steps>
+      1. Visit [GitHub Releases](https://github.com/VSS-CO/Strata/releases)
+      2. Download `strata-windows-x86_64.zip`
+      3. Extract the archive using Windows Explorer
+      4. Add `strata\bin` to your PATH:
+         - Right-click "This PC" → Properties
+         - Click "Advanced system settings"
+         - Click "Environment Variables"
+         - Under "User variables", click "New"
+         - Variable name: `PATH`
+         - Variable value: `C:\path\to\strata\bin`
+      5. Open new Command Prompt and verify:
+         ```cmd
+         strata --version
+         ```
+    </Steps>
+  </TabItem>
+</Tabs>
+
+## Build from Source
+
+If you want to build Strata yourself.
+
+<Aside type="note">
+Building requires Node.js 18+ and Git installed on your system.
+</Aside>
+
+<Steps>
+  1. Clone the repository:
+     ```bash
+     git clone https://github.com/VSS-CO/Strata.git
+     cd Strata
+     ```
+
+  2. Install dependencies:
+     ```bash
+     npm install
+     ```
+
+  3. Build the compiler:
+     ```bash
+     npm run build
+     ```
+
+  4. The executable is now in `dist/`. Add it to your PATH or use the full path.
+</Steps>
+
+## Verify Installation
+
+<Steps>
+  1. Open a terminal or command prompt
+  2. Run:
+     ```bash
+     strata --version
+     ```
+  3. You should see:
+     ```
+     Strata 1.0.0
+     ```
+</Steps>
+
+<Aside type="tip">
+If you get "command not found", make sure the `bin` directory is in your PATH.
+</Aside>
+
+## Your First Program
+
+<Steps>
+  1. Create a file called `hello.str`:
+     ```strata
+     import io from str
+
+     io.print("Hello, Strata!")
+     ```
+
+  2. Run it:
+     ```bash
+     strata hello.str
+     ```
+
+  3. You should see:
+     ```
+     Hello, Strata!
+     ```
+</Steps>
+
+Congratulations! Strata is installed and working. 🎉
+
+## Troubleshooting
+
+### Command Not Found
+
+<Aside type="caution">
+If you get "command not found: strata"
+</Aside>
+
+1. **Verify extraction** — Make sure the archive was extracted completely
+2. **Check PATH** — Ensure the `bin` directory is in your PATH:
+   ```bash
+   echo $PATH  # Check current PATH
+   export PATH="$PATH:/path/to/strata/bin"  # Add to PATH
+   ```
+3. **Use full path** — Try running with the full path:
+   ```bash
+   /path/to/strata/bin/strata --version
+   ```
+
+### Build Errors
+
+<Aside type="caution">
+If building from source fails
+</Aside>
+
+1. **Update Node.js**: `npm install -g npm`
+2. **Clear cache**: `npm cache clean --force`
+3. **Reinstall deps**: `rm -rf node_modules && npm install`
+4. **Check Node version**: `node --version` (should be 18+)
+
+## Next Steps
+
+- **[Quick Start](./quick-start)** — Write your first program
+- **[Language Guide](../guide/variables-and-types)** — Learn Strata
+- **[Examples](../examples)** — See working code
+
+## Getting Help
+
+- **Documentation**: [strata-lang.dev/docs](https://docs.strata-lang.dev)
+- **GitHub Issues**: [Report problems](https://github.com/VSS-CO/Strata/issues)
+- **GitHub Discussions**: [Ask questions](https://github.com/VSS-CO/Strata/discussions)

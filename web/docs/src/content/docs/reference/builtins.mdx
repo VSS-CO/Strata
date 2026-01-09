@@ -1,0 +1,371 @@
+---
+title: Standard Library Reference
+description: Built-in functions and modules in Strata
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Aside } from '@astrojs/starlight/components';
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+# Standard Library Reference
+
+Strata provides several standard library modules accessible via `import ... from str`.
+
+## I/O Module
+
+### io.print(value: any) → any
+
+Print a value to the console (no newline).
+
+```strata
+import io from str
+
+io.print("Hello")
+io.print(42)
+io.print(3.14)
+```
+
+Output:
+```
+Hello423.14
+```
+
+### io.read() → string
+
+Read a line of text from user input.
+
+```strata
+import io from str
+
+io.print("Enter your name:")
+let name: string = io.read()
+io.print("Hello, " + name)
+```
+
+### io.len(arr: any) → int
+
+Get the length of an array or string.
+
+```strata
+import io from str
+
+let arr: any = [1, 2, 3, 4, 5]
+let length: int = io.len(arr)
+io.print(length)  // 5
+```
+
+### io.toInt(str: string) → int
+
+Convert a string to an integer.
+
+```strata
+import io from str
+
+let input: string = "42"
+let num: int = io.toInt(input)
+io.print(num)  // 42
+```
+
+### io.toFloat(str: string) → float
+
+Convert a string to a float.
+
+```strata
+import io from str
+
+let input: string = "3.14"
+let pi: float = io.toFloat(input)
+io.print(pi)  // 3.14
+```
+
+## Math Module
+
+### math.sqrt(x: float) → float
+
+Square root.
+
+```strata
+import math from str
+
+let result: float = math.sqrt(16.0)
+io.print(result)  // 4.0
+```
+
+### math.pow(base: float, exp: float) → float
+
+Power function (base^exp).
+
+```strata
+import math from str
+
+let result: float = math.pow(2.0, 3.0)
+io.print(result)  // 8.0
+```
+
+### math.abs(x: int) → int or math.abs(x: float) → float
+
+Absolute value.
+
+```strata
+import math from str
+
+let a: int = math.abs(-5)
+io.print(a)  // 5
+
+let b: float = math.abs(-3.14)
+io.print(b)  // 3.14
+```
+
+### math.floor(x: float) → int
+
+Round down to nearest integer.
+
+```strata
+import math from str
+
+let result: int = math.floor(3.7)
+io.print(result)  // 3
+```
+
+### math.ceil(x: float) → int
+
+Round up to nearest integer.
+
+```strata
+import math from str
+
+let result: int = math.ceil(3.2)
+io.print(result)  // 4
+```
+
+### math.round(x: float) → int
+
+Round to nearest integer.
+
+```strata
+import math from str
+
+let a: int = math.round(3.4)
+io.print(a)  // 3
+
+let b: int = math.round(3.6)
+io.print(b)  // 4
+```
+
+### math.min(a: int, b: int) → int
+
+Minimum of two integers.
+
+```strata
+import math from str
+
+let smaller: int = math.min(5, 3)
+io.print(smaller)  // 3
+```
+
+### math.max(a: int, b: int) → int
+
+Maximum of two integers.
+
+```strata
+import math from str
+
+let larger: int = math.max(5, 3)
+io.print(larger)  // 5
+```
+
+## Text Module
+
+### text.len(str: string) → int
+
+Get string length.
+
+```strata
+import text from str
+
+let length: int = text.len("hello")
+io.print(length)  // 5
+```
+
+### text.charAt(str: string, index: int) → string
+
+Get character at index.
+
+```strata
+import text from str
+
+let char: string = text.charAt("hello", 0)
+io.print(char)  // h
+```
+
+### text.substring(str: string, start: int, end: int) → string
+
+Extract substring.
+
+```strata
+import text from str
+
+let sub: string = text.substring("hello", 1, 4)
+io.print(sub)  // ell
+```
+
+### text.indexOf(str: string, search: string) → int
+
+Find index of substring (-1 if not found).
+
+```strata
+import text from str
+
+let index: int = text.indexOf("hello", "ll")
+io.print(index)  // 2
+```
+
+### text.toUpper(str: string) → string
+
+Convert to uppercase.
+
+```strata
+import text from str
+
+let upper: string = text.toUpper("hello")
+io.print(upper)  // HELLO
+```
+
+### text.toLower(str: string) → string
+
+Convert to lowercase.
+
+```strata
+import text from str
+
+let lower: string = text.toLower("HELLO")
+io.print(lower)  // hello
+```
+
+### text.trim(str: string) → string
+
+Remove leading/trailing whitespace.
+
+```strata
+import text from str
+
+let trimmed: string = text.trim("  hello  ")
+io.print(trimmed)  // hello
+```
+
+### text.split(str: string, delimiter: string) → any
+
+Split string by delimiter.
+
+```strata
+import text from str
+
+let parts: any = text.split("a,b,c", ",")
+io.print(parts[0])  // a
+io.print(parts[1])  // b
+io.print(parts[2])  // c
+```
+
+### text.join(arr: any, delimiter: string) → string
+
+Join array elements with delimiter.
+
+```strata
+import text from str
+
+let arr: any = ["a", "b", "c"]
+let result: string = text.join(arr, ",")
+io.print(result)  // a,b,c
+```
+
+### text.intToString(num: int) → string
+
+Convert integer to string.
+
+```strata
+import text from str
+
+let str: string = text.intToString(42)
+io.print(str)  // "42"
+```
+
+### text.floatToString(num: float) → string
+
+Convert float to string.
+
+```strata
+import text from str
+
+let str: string = text.floatToString(3.14)
+io.print(str)  // "3.14"
+```
+
+## Util Module
+
+The util module provides miscellaneous utilities.
+
+### util.sleep(milliseconds: int) → any
+
+Sleep for specified milliseconds.
+
+```strata
+import util from str
+
+io.print("Wait...")
+util.sleep(2000)  // Wait 2 seconds
+io.print("Done!")
+```
+
+## Quick Reference by Task
+
+<CardGrid>
+  <Card title="Read & Convert Input">
+    ```strata
+    let input: string = io.read()
+    let num: int = io.toInt(input)
+    let value: float = io.toFloat(input)
+    ```
+  </Card>
+
+  <Card title="Work with Strings">
+    ```strata
+    let upper: string = text.toUpper(s)
+    let lower: string = text.toLower(s)
+    let length: int = text.len(s)
+    let parts: any = text.split(s, ",")
+    ```
+  </Card>
+
+  <Card title="Math Operations">
+    ```strata
+    let sqrt: float = math.sqrt(16.0)
+    let power: float = math.pow(2.0, 3.0)
+    let abs: float = math.abs(-5.0)
+    ```
+  </Card>
+
+  <Card title="Array Operations">
+    ```strata
+    let length: int = io.len(arr)
+    let first: any = arr[0]
+    let last: any = arr[io.len(arr) - 1]
+    ```
+  </Card>
+</CardGrid>
+
+<Aside type="tip" title="Always Import">
+Remember to import the modules you need:
+
+```strata
+import io from str
+import math from str
+import text from str
+import util from str
+```
+</Aside>
+
+## Next Steps
+
+- **[Quick Start](../getting-started/quick-start)** — Use the standard library
+- **[Examples](../examples)** — See standard library in action
+- **[Language Guide](../guide)** — Learn more about Strata

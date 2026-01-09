@@ -1,0 +1,62 @@
+---
+---
+
+<section style="padding: 6rem 1.5rem;">
+  <div style="max-width: 1280px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 4rem;">
+      <h2 style="
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+        font-family: Georgia, serif;
+      ">
+        Why Choose Strata?
+      </h2>
+      <p style="
+        font-size: 1rem;
+        color: var(--text-secondary);
+        max-width: 500px;
+        margin: 0 auto;
+        font-family: Georgia, serif;
+      ">
+        Strata combines the best features of modern programming languages
+      </p>
+    </div>
+
+    <div style="
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    ">
+      {[
+        { icon: '⚡', title: 'High Performance', desc: 'Compiled directly to C for maximum speed.' },
+        { icon: '✓', title: 'Type Safety', desc: 'Catch errors at compile time, not runtime.' },
+        { icon: '✨', title: 'Clean Syntax', desc: 'Simple, expressive syntax that feels natural.' },
+        { icon: '📦', title: 'Multi-Target', desc: 'Compile to C, JavaScript, or bytecode.' },
+        { icon: '🔧', title: 'Developer Experience', desc: 'Fast compilation and helpful error messages.' },
+        { icon: '🌍', title: 'Cross-Platform', desc: 'Write once, run everywhere.' },
+      ].map((feature) => (
+        <div style="
+          padding: 2rem;
+          border-radius: 8px;
+          border: 2px solid var(--border-color);
+          transition: all 0.2s;
+        " onmouseenter="this.style.borderColor='var(--strata-blue)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.1)'" onmouseleave="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'">
+          <div style="font-size: 2.5rem; margin-bottom: 1rem;">{feature.icon}</div>
+          <h3 style="
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+          ">
+            {feature.title}
+          </h3>
+          <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            {feature.desc}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

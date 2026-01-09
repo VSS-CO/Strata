@@ -1,0 +1,243 @@
+---
+title: Quick Start
+description: Write your first Strata program in 5 minutes
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+import { Aside } from '@astrojs/starlight/components';
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+# Quick Start
+
+Get your first Strata program running right now.
+
+## 1. Install Strata
+
+Follow the [installation guide](./installation) to set up Strata on your system.
+
+Verify it's working:
+```bash
+strata --version
+```
+
+<Aside type="tip">
+Stuck? Check the [installation troubleshooting section](./installation#troubleshooting).
+</Aside>
+
+## 2. Hello, World!
+
+<Steps>
+  1. Create a file called `hello.str`:
+     ```strata
+     import io from str
+
+     io.print("Hello, Strata!")
+     ```
+
+  2. Run it:
+     ```bash
+     strata hello.str
+     ```
+
+  3. You should see:
+     ```
+     Hello, Strata!
+     ```
+</Steps>
+
+Congratulations! 🎉
+
+## 3. The Basics
+
+### Variables and Types
+
+Strata is statically typed. Every variable has a type:
+
+<Tabs syncKey="vartype">
+  <TabItem label="Immutable">
+    ```strata
+    let x: int = 42
+    let name: string = "Alice"
+    let value: float = 3.14
+    let flag: bool = true
+    ```
+
+    Use `let` for variables that never change.
+  </TabItem>
+
+  <TabItem label="Mutable">
+    ```strata
+    var count: int = 0
+    var count: int = count + 1
+    var count: int = count + 1
+    ```
+
+    Use `var` when you need to reassign. Redeclare with `var` each time!
+  </TabItem>
+</Tabs>
+
+<Aside type="note">
+In Strata, you must redeclare with `var` each time you reassign. This is intentional for clarity!
+</Aside>
+
+### Functions
+
+Define functions with `func`:
+
+```strata
+func greet(name: string) => string {
+  return "Hello, " + name + "!"
+}
+
+import io from str
+io.print(greet("World"))  // Hello, World!
+```
+
+The `=> type` is the return type.
+
+### Control Flow
+
+<CardGrid>
+  <Card title="If Statements">
+    ```strata
+    if (age >= 18) {
+      io.print("Adult")
+    } else {
+      io.print("Minor")
+    }
+    ```
+  </Card>
+
+  <Card title="For Loops">
+    ```strata
+    for (var i: int = 0; i < 5; var i: int = i + 1) {
+      io.print(i)
+    }
+    ```
+  </Card>
+
+  <Card title="While Loops">
+    ```strata
+    var count: int = 0
+    while (count < 5) {
+      io.print(count)
+      var count: int = count + 1
+    }
+    ```
+  </Card>
+</CardGrid>
+
+### Using the Standard Library
+
+Strata comes with useful modules:
+
+<Tabs syncKey="modules">
+  <TabItem label="I/O">
+    ```strata
+    import io from str
+
+    io.print("Hello")
+    let input: string = io.read()
+    let length: int = io.len("text")
+    ```
+  </TabItem>
+
+  <TabItem label="Math">
+    ```strata
+    import math from str
+
+    let sqrt: float = math.sqrt(16.0)
+    let power: float = math.pow(2.0, 3.0)
+    let abs: float = math.abs(-5.0)
+    ```
+  </TabItem>
+
+  <TabItem label="Text">
+    ```strata
+    import text from str
+
+    let upper: string = text.toUpper("hello")
+    let length: int = text.len("hello")
+    let parts: any = text.split("a,b,c", ",")
+    ```
+  </TabItem>
+</Tabs>
+
+## 4. A Complete Example
+
+Let's write a more substantial program:
+
+```strata
+import io from str
+
+// Define a function
+func factorial(n: int) => int {
+  var result: int = 1
+  for (var i: int = 1; i <= n; var i: int = i + 1) {
+    var result: int = result * i
+  }
+  return result
+}
+
+// Use it
+let num: int = 5
+let fact: int = factorial(num)
+io.print(fact)  // 120
+```
+
+<Aside type="note">
+Notice how:
+- Types are explicit: `func name(param: type) => returnType`
+- Variables use `let` or `var`
+- `var` is redeclared each time you reassign
+- Functions have clear signatures
+</Aside>
+
+## 5. Next Steps
+
+Now that you understand the basics, explore these guides:
+
+<CardGrid>
+  <Card title="Variables & Types" href="../guide/variables-and-types">
+    Explore the type system in depth
+  </Card>
+
+  <Card title="Functions" href="../guide/functions">
+    Master function definitions and scoping
+  </Card>
+
+  <Card title="Control Flow" href="../guide/control-flow">
+    Learn loops and conditionals thoroughly
+  </Card>
+
+  <Card title="Examples" href="../examples/hello-world">
+    See more practical code samples
+  </Card>
+
+  <Card title="API Reference" href="../reference/builtins">
+    Explore the standard library
+  </Card>
+
+  <Card title="Type System" href="../guide/type-system">
+    Understand Strata's type safety
+  </Card>
+</CardGrid>
+
+## Tips
+
+<Aside type="tip" title="Best Practices">
+- Use `let` by default, only use `var` when you need to reassign
+- Always declare types explicitly
+- Check the standard library first — most functionality comes from the `str` module
+- Read error messages carefully — they're designed to be helpful
+</Aside>
+
+## Getting Help
+
+- 📖 **Read the docs** — [Full language guide](../guide/variables-and-types)
+- 💡 **See examples** — [Code samples](../examples)
+- 🐛 **Report issues** — [GitHub Issues](https://github.com/VSS-CO/Strata/issues)
+- 💬 **Ask questions** — [GitHub Discussions](https://github.com/VSS-CO/Strata/discussions)
+
+Happy coding! 🚀

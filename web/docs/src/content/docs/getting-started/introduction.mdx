@@ -1,0 +1,189 @@
+---
+title: Introduction to Strata
+description: Learn what Strata is and why you should use it
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+# Introduction to Strata
+
+Strata is a statically-typed programming language that compiles to multiple targets: C, JavaScript, and bytecode. It's designed to be expressive, safe, and fast.
+
+## What Makes Strata Different?
+
+### Static Typing with Safety
+
+Every variable has a type that's checked at compile time. This catches entire classes of bugs before your code runs:
+
+```strata
+let x: int = 42
+let message: string = x  // Error at compile time!
+```
+
+### Clean, Expressive Syntax
+
+Strata prioritizes clarity. Your code is readable and intent is explicit:
+
+```strata
+func greet(name: string) => string {
+  return "Hello, " + name + "!"
+}
+```
+
+### Multiple Compilation Targets
+
+Compile the same code to different outputs:
+
+```bash
+strata --target c       # Optimized C code
+strata --target js      # JavaScript
+strata --target bytecode # Portable bytecode
+```
+
+## Core Language Features
+
+<CardGrid>
+  <Card title="Variables with Types">
+    ```strata
+    let x: int = 42           // Immutable
+    var count: int = 0        // Mutable
+    var count: int = count + 1
+    ```
+  </Card>
+
+  <Card title="Functions">
+    ```strata
+    func factorial(n: int) => int {
+      var result: int = 1
+      for (var i: int = 1; i <= n; var i: int = i + 1) {
+        var result: int = result * i
+      }
+      return result
+    }
+    ```
+  </Card>
+
+  <Card title="Control Flow">
+    ```strata
+    if (age >= 18) {
+      io.print("Adult")
+    }
+
+    for (var i: int = 0; i < 10; var i: int = i + 1) {
+      io.print(i)
+    }
+    ```
+  </Card>
+
+  <Card title="Modules & Imports">
+    ```strata
+    import io from str
+    import math from str
+    import util from ./util
+
+    io.print("Hello")
+    ```
+  </Card>
+</CardGrid>
+
+## Primitive Types
+
+Strata has a simple, clear type system:
+
+- **`int`** — 32-bit signed integer
+- **`float`** — 64-bit floating-point number
+- **`string`** — Text
+- **`bool`** — `true` or `false`
+- **`any`** — Universal type
+
+## Design Philosophy
+
+<CardGrid>
+  <Card title="Explicit Over Implicit">
+    No hidden type conversions, implicit returns, or magic. You control everything.
+  </Card>
+
+  <Card title="Safety First">
+    Static typing prevents entire categories of runtime errors. The compiler is your ally, not your adversary.
+  </Card>
+
+  <Card title="Performance Matters">
+    Strata compiles to efficient C or optimized bytecode. You control performance without sacrificing expressiveness.
+  </Card>
+
+  <Card title="Simplicity">
+    The language is minimal and focused. No unnecessary features. No bloat.
+  </Card>
+</CardGrid>
+
+## What Can You Build?
+
+<CardGrid>
+  <Card title="CLI Tools">
+    Fast, portable command-line applications
+  </Card>
+
+  <Card title="Systems Programs">
+    Low-level programming with type safety
+  </Card>
+
+  <Card title="Algorithms & Math">
+    Perfect for algorithm implementation
+  </Card>
+
+  <Card title="Data Processing">
+    Transform and analyze data efficiently
+  </Card>
+</CardGrid>
+
+## Getting Started
+
+<Aside type="tip">
+Ready to dive in? Follow these steps:
+</Aside>
+
+1. **[Install Strata](./installation)** — Set up the compiler
+2. **[Quick Start](./quick-start)** — Write your first program
+3. **[Language Guide](../guide/variables-and-types)** — Learn the fundamentals
+4. **[Examples](../examples)** — See real code in action
+
+## The Strata Community
+
+- **GitHub**: [VSS-CO/Strata](https://github.com/VSS-CO/Strata)
+- **Issues & Discussions**: Report bugs or discuss features
+- **Contributing**: Help build Strata!
+
+## Why Choose Strata?
+
+<CardGrid>
+  <Card title="✅ Type Safety">
+    Catch errors at compile time
+  </Card>
+
+  <Card title="✅ Fast">
+    Compiles to efficient code
+  </Card>
+
+  <Card title="✅ Clear">
+    Expressive syntax that's easy to understand
+  </Card>
+
+  <Card title="✅ Modern">
+    Contemporary language design
+  </Card>
+
+  <Card title="✅ Flexible">
+    Multiple compilation targets
+  </Card>
+
+  <Card title="✅ Simple">
+    No unnecessary complexity
+  </Card>
+</CardGrid>
+
+## Next Steps
+
+- **[Installation](./installation)** — Get Strata running
+- **[Quick Start](./quick-start)** — Your first program
+- **[Variables & Types](../guide/variables-and-types)** — Learn the type system

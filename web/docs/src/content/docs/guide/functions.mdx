@@ -1,0 +1,265 @@
+---
+title: Functions
+description: Define and use functions in Strata
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Aside } from '@astrojs/starlight/components';
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+# Functions
+
+Functions are reusable blocks of code that perform specific tasks.
+
+## Basic Function Definition
+
+Define functions with the `func` keyword:
+
+```strata
+func greet(name: string) => string {
+  return "Hello, " + name + "!"
+}
+```
+
+**Syntax breakdown:**
+- `func` — Function keyword
+- `greet` — Function name
+- `(name: string)` — Parameters with types
+- `=> string` — Return type
+- `{ ... }` — Function body
+
+## Calling Functions
+
+Call functions by name with arguments:
+
+```strata
+import io from str
+
+func add(a: int, b: int) => int {
+  return a + b
+}
+
+let result: int = add(5, 3)
+io.print(result)  // 8
+```
+
+## Parameters
+
+<Tabs syncKey="params">
+  <TabItem label="No parameters">
+    ```strata
+    func getMessage() => string {
+      return "Hello"
+    }
+    ```
+  </TabItem>
+
+  <TabItem label="One parameter">
+    ```strata
+    func double(x: int) => int {
+      return x * 2
+    }
+    ```
+  </TabItem>
+
+  <TabItem label="Multiple parameters">
+    ```strata
+    func multiply(x: int, y: int) => int {
+      return x * y
+    }
+
+    let result: int = multiply(6, 7)  // 42
+    ```
+  </TabItem>
+</Tabs>
+
+<Aside type="note">
+Each parameter must have an explicit type.
+</Aside>
+
+## Return Types
+
+Every function must declare what type it returns with `=> type`:
+
+```strata
+func getAge() => int {
+  return 25
+}
+
+func getName() => string {
+  return "Alice"
+}
+
+func isValid(x: int) => bool {
+  return x > 0
+}
+```
+
+The `return` statement immediately exits the function.
+
+## Functions with Loops
+
+Functions can contain loops and complex logic:
+
+```strata
+func factorial(n: int) => int {
+  var result: int = 1
+  for (var i: int = 1; i <= n; var i: int = i + 1) {
+    var result: int = result * i
+  }
+  return result
+}
+```
+
+**Usage:**
+```strata
+import io from str
+
+let fac: int = factorial(5)  // 120
+io.print(fac)
+```
+
+## Functions with Conditionals
+
+Functions can use if/else:
+
+```strata
+func getGrade(score: int) => string {
+  if (score >= 90) {
+    return "A"
+  } else if (score >= 80) {
+    return "B"
+  } else if (score >= 70) {
+    return "C"
+  } else {
+    return "F"
+  }
+}
+```
+
+## Functions Using Other Functions
+
+Functions can call other functions:
+
+<Card title="Function Composition">
+```strata
+func add(a: int, b: int) => int {
+  return a + b
+}
+
+func addAndDouble(x: int, y: int) => int {
+  let sum: int = add(x, y)
+  return sum * 2
+}
+
+let result: int = addAndDouble(5, 3)  // 16
+```
+</Card>
+
+## Practical Examples
+
+<CardGrid>
+  <Card title="Average Calculator">
+    ```strata
+    func average(a: float, b: float) => float {
+      return (a + b) / 2.0
+    }
+
+    import io from str
+    let avg: float = average(10.5, 20.5)
+    io.print(avg)  // 15.5
+    ```
+  </Card>
+
+  <Card title="String Processor">
+    ```strata
+    import text from str
+
+    func repeatString(s: string, times: int) => string {
+      var result: string = ""
+      for (var i: int = 0; i < times; var i: int = i + 1) {
+        var result: string = result + s
+      }
+      return result
+    }
+
+    let repeated: string = repeatString("Ha", 3)
+    ```
+  </Card>
+
+  <Card title="Number Checker">
+    ```strata
+    func isEven(n: int) => bool {
+      return n % 2 == 0
+    }
+
+    import io from str
+    io.print(isEven(4))   // true
+    io.print(isEven(7))   // false
+    ```
+  </Card>
+</CardGrid>
+
+## Scope and Variables
+
+Variables defined inside a function are local to that function:
+
+```strata
+func example() => int {
+  let x: int = 10
+  return x
+}
+
+// x is not accessible here - it's local to example()
+```
+
+<Aside type="tip" title="Local Scope">
+Each function has its own scope. Variables inside a function cannot be accessed outside of it.
+</Aside>
+
+## Function Naming
+
+Use camelCase for function names:
+
+```strata
+func calculateTotal() => int { ... }
+func getUserName() => string { ... }
+func isValidEmail() => bool { ... }
+func processData() => any { ... }
+```
+
+## Return Type: `any`
+
+Use `any` when a function doesn't return a meaningful value:
+
+```strata
+func printNumber(n: int) => any {
+  io.print(n)
+}
+```
+
+## Tips and Best Practices
+
+<CardGrid>
+  <Card title="✅ Be explicit about types">
+    Always declare parameter and return types. This documents your function.
+  </Card>
+
+  <Card title="✅ Keep functions focused">
+    Each function should do one thing well. This makes code easier to understand and test.
+  </Card>
+
+  <Card title="✅ Use meaningful names">
+    Function names should clearly describe what they do. `calculateTotal` is better than `calc`.
+  </Card>
+
+  <Card title="✅ Return early">
+    You can return multiple times. Use this for error cases.
+  </Card>
+</CardGrid>
+
+## Next Steps
+
+- **[Variables & Types](./variables-and-types)** — Understand Strata's type system
+- **[Control Flow](./control-flow)** — Learn loops and conditionals
+- **[Examples](../examples)** — See functions in action

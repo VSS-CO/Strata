@@ -1,0 +1,280 @@
+---
+title: Variables and Types
+description: Master variables, types, and declarations in Strata
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Aside } from '@astrojs/starlight/components';
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+# Variables and Types
+
+Strata is a statically typed language. Every value has a type that's checked at compile time.
+
+## Declaring Variables
+
+### Immutable Variables (`let`)
+
+Use `let` for values that never change:
+
+```strata
+let x: int = 42
+let name: string = "Alice"
+let value: float = 3.14
+```
+
+Once assigned, you cannot reassign a `let` variable:
+
+```strata
+let x: int = 10
+var x: int = 20  // Error: x already defined
+```
+
+### Mutable Variables (`var`)
+
+Use `var` when you need to reassign:
+
+```strata
+var count: int = 0
+var count: int = count + 1  // OK
+var count: int = count + 1  // OK again
+```
+
+<Aside type="danger" title="Important: Redeclaration">
+In Strata, you must redeclare with `var` each time you reassign. This is intentional for clarity:
+
+```strata
+var x: int = 5
+var x: int = x + 1  // ✅ Correct - redeclare
+x = x + 1           // ❌ Error - cannot use assignment without var
+```
+</Aside>
+
+### Best Practice
+
+<Card title="Use `let` by default">
+Only use `var` when you need to reassign:
+
+```strata
+// Good
+let items: int = 10
+let name: string = "Product"
+
+// Use var only when necessary
+var total: int = 0
+var total: int = total + items
+```
+</Card>
+
+## Primitive Types
+
+<Tabs syncKey="types">
+  <TabItem label="int">
+    32-bit signed integer:
+    ```strata
+    let age: int = 25
+    let temperature: int = -10
+    let count: int = 0
+    ```
+
+    **Operations:**
+    ```strata
+    let sum: int = 5 + 3         // 8
+    let diff: int = 10 - 3       // 7
+    let product: int = 4 * 5     // 20
+    let quotient: int = 20 / 4   // 5
+    let remainder: int = 10 % 3  // 1
+    ```
+  </TabItem>
+
+  <TabItem label="float">
+    64-bit floating-point number:
+    ```strata
+    let pi: float = 3.14159
+    let temperature: float = 98.6
+    let price: float = 19.99
+    ```
+
+    **Operations:**
+    ```strata
+    let result: float = 10.5 + 2.5     // 13.0
+    let average: float = (5.0 + 10.0) / 2.0  // 7.5
+    ```
+  </TabItem>
+
+  <TabItem label="string">
+    Text values:
+    ```strata
+    let greeting: string = "Hello, Strata!"
+    let empty: string = ""
+    let multiline: string = "Line 1\nLine 2"
+    ```
+
+    **Concatenation:**
+    ```strata
+    let first: string = "Hello"
+    let second: string = "World"
+    let result: string = first + ", " + second  // "Hello, World"
+    ```
+  </TabItem>
+
+  <TabItem label="bool">
+    Boolean values - `true` or `false`:
+    ```strata
+    let active: bool = true
+    let completed: bool = false
+    let isAdult: bool = age >= 18
+    ```
+
+    **Operators:**
+    ```strata
+    let a: bool = true
+    let b: bool = false
+
+    if (a && b) { ... }  // AND → false
+    if (a || b) { ... }  // OR → true
+    if (!a) { ... }      // NOT → false
+    ```
+  </TabItem>
+</Tabs>
+
+## Type Annotations
+
+All variables require explicit type annotations:
+
+<CardGrid>
+  <Card title="✅ Correct">
+    ```strata
+    let x: int = 42
+    let name: string = "Alice"
+    let pi: float = 3.14
+    ```
+  </Card>
+
+  <Card title="❌ Error">
+    ```strata
+    let y = 42  // Error: type required
+    let z = "hello"  // Error: type required
+    ```
+  </Card>
+</CardGrid>
+
+## Arrays
+
+Arrays store multiple values of the same type:
+
+```strata
+let numbers: any = [1, 2, 3, 4, 5]
+let colors: any = ["red", "green", "blue"]
+let empty: any = []
+```
+
+**Access elements by index (0-based):**
+```strata
+let first: any = numbers[0]   // 1
+let second: any = numbers[1]  // 2
+```
+
+**Get array length:**
+```strata
+import io from str
+let length: any = io.len(numbers)  // 5
+```
+
+## Type Conversions
+
+Convert between types explicitly:
+
+<Tabs syncKey="conversions">
+  <TabItem label="int to string">
+    ```strata
+    import text from str
+
+    let num: int = 42
+    let str: string = text.intToString(num)
+    ```
+  </TabItem>
+
+  <TabItem label="string to int">
+    ```strata
+    import io from str
+
+    let input: string = "123"
+    let value: int = io.toInt(input)
+    ```
+  </TabItem>
+
+  <TabItem label="string to float">
+    ```strata
+    import io from str
+
+    let input: string = "3.14"
+    let value: float = io.toFloat(input)
+    ```
+  </TabItem>
+</Tabs>
+
+## Type Safety in Functions
+
+Functions must declare their types:
+
+```strata
+func add(a: int, b: int) => int {
+  return a + b
+}
+
+func greet(name: string) => string {
+  return "Hello, " + name
+}
+
+func isEmpty(s: string) => bool {
+  return s == ""
+}
+```
+
+<Aside type="note" title="Type Checking">
+Strata checks types at compile time. This prevents many bugs:
+
+```strata
+let result: string = add(5, 3)  // Error: int cannot be assigned to string
+```
+</Aside>
+
+## Common Type Patterns
+
+<CardGrid>
+  <Card title="Reading Input">
+    ```strata
+    import io from str
+
+    let input: string = io.read()
+    let number: int = io.toInt(input)
+    ```
+  </Card>
+
+  <Card title="String Operations">
+    ```strata
+    import text from str
+
+    let name: string = "Strata"
+    let length: int = text.len(name)
+    let upper: string = text.toUpper(name)
+    ```
+  </Card>
+
+  <Card title="Math Operations">
+    ```strata
+    import math from str
+
+    let sqrt: float = math.sqrt(16.0)
+    let power: float = math.pow(2.0, 3.0)
+    let abs: float = math.abs(-5.0)
+    ```
+  </Card>
+</CardGrid>
+
+## Next Steps
+
+- **[Functions](./functions)** — Define and use functions
+- **[Control Flow](./control-flow)** — Master conditionals and loops
+- **[Type System](./type-system)** — Deep dive into types

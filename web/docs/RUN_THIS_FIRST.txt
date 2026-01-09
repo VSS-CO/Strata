@@ -1,0 +1,112 @@
+================================================================================
+  STRATA DOCUMENTATION - QUICK START
+================================================================================
+
+The cache is corrupted. This is normal when switching between .md and .mdx.
+
+CHOOSE ONE OPTION BELOW:
+
+================================================================================
+OPTION 1: Windows (Easiest - Just Double Click)
+================================================================================
+
+1. Open File Explorer
+2. Navigate to: web\docs\
+3. Double-click: CLEAN_AND_RUN.bat
+4. Wait for it to finish (2-3 minutes)
+5. Browser opens to http://localhost:3000
+6. Enjoy! 🎉
+
+If that doesn't work, try:
+3. Double-click: NUCLEAR_CLEAN.bat (more thorough)
+
+================================================================================
+OPTION 2: Windows (Command Prompt)
+================================================================================
+
+Open Command Prompt and paste:
+
+cd web\docs
+rmdir /s /q .astro
+rmdir /s /q node_modules
+npm install
+npm run dev
+
+Then open: http://localhost:3000
+
+================================================================================
+OPTION 3: Windows (PowerShell)
+================================================================================
+
+Open PowerShell and paste:
+
+cd web\docs
+Remove-Item -Path '.astro' -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path 'node_modules' -Recurse -Force -ErrorAction SilentlyContinue
+npm install
+npm run dev
+
+Then open: http://localhost:3000
+
+================================================================================
+OPTION 4: Linux / macOS
+================================================================================
+
+Open Terminal and paste:
+
+cd web/docs
+rm -rf .astro node_modules
+npm install
+npm run dev
+
+Then open: http://localhost:3000
+
+================================================================================
+WHAT YOU'LL SEE
+================================================================================
+
+After the commands finish, you should see:
+
+  ✔ build complete
+  Local: http://localhost:3000
+
+Your browser will automatically open to the docs site, or you can manually
+visit: http://localhost:3000
+
+You'll see:
+  ✓ Beautiful documentation site
+  ✓ Tabs you can click
+  ✓ Numbered steps
+  ✓ Colored callout boxes
+  ✓ Feature cards
+  ✓ Dark mode toggle
+  ✓ Search functionality
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+If it still doesn't work:
+
+1. Make sure you're in the right directory: cd web/docs
+
+2. Check Node.js is installed:
+   node --version
+   npm --version
+
+3. Try the NUCLEAR_CLEAN option (complete rebuild)
+
+4. Read TROUBLESHOOTING.md for more help
+
+5. Report issue: https://github.com/VSS-CO/Strata/issues
+
+================================================================================
+THAT'S IT!
+================================================================================
+
+Pick ONE option above and run it. The documentation will be live on your
+computer in a few minutes!
+
+Questions? See: START_HERE.md or TROUBLESHOOTING.md
+
+================================================================================
