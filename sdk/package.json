@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "commander": "^14.0.2",
-    "electron": "^29.0.0",
+    "electron": "^35.7.5",
     "express": "^4.18.2",
     "socket.io": "^4.7.0",
     "ws": "^8.15.0"
