@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="License - Strata" description="Strata programming language license information">
+  <Header />
+  
+  <main class="py-20 min-h-[calc(100vh-200px)]">
+    <div class="container max-w-3xl">
+      <h1 class="text-4xl font-bold mb-8 text-gray-900">License</h1>
+      
+      <div class="bg-blue-50 border-l-4 border-strata-blue p-6 mb-8 rounded">
+        <p class="text-gray-900 font-semibold mb-2">Strata is open source and free to use</p>
+        <p class="text-gray-700">
+          Check the <a href="https://github.com/VSS-CO/Strata/blob/main/LICENSE" class="text-strata-blue hover:underline">LICENSE</a> file in the GitHub repository for full license details.
+        </p>
+      </div>
+
+      <div class="prose prose-lg text-gray-700 space-y-6">
+        <section>
+          <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">License Information</h2>
+          <p>
+            Strata is released under an open source license. You are free to:
+          </p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Use Strata for any purpose</li>
+            <li>Modify the source code</li>
+            <li>Distribute your own versions</li>
+            <li>Use in commercial projects</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Contributing</h2>
+          <p>
+            We welcome contributions from the community! Please see the <a href="https://github.com/VSS-CO/Strata/blob/main/CONTRIBUTING.md" class="text-strata-blue hover:underline">CONTRIBUTING.md</a> file for guidelines.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Acknowledgments</h2>
+          <p>
+            Strata was inspired by many great languages and projects. We thank the community for their support and contributions.
+          </p>
+        </section>
+      </div>
+    </div>
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
+<style>
+  .text-strata-blue {
+    color: var(--strata-blue);
+  }
+
+  .border-strata-blue {
+    --tw-border-opacity: 1;
+    border-color: var(--strata-blue);
+  }
+
+  .bg-blue-50 {
+    background-color: var(--strata-light);
+  }
+</style>

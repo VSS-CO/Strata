@@ -1,0 +1,76 @@
+---
+title: Welcome to Strata
+description: The modern programming language for everyone
+---
+
+# Welcome to Strata
+
+Strata is a statically-typed programming language designed for clarity, performance, and developer experience. It compiles to C, JavaScript, or bytecode and works seamlessly across platforms.
+
+## Why Strata?
+
+- **Strong Types**: Static typing with clear error messages caught at compile time
+- **Simple Syntax**: Expressive and easy to understand code
+- **Multiple Targets**: Compile to C for performance, JavaScript for web, or bytecode
+- **Module System**: Clean imports with deterministic builds
+- **Developer Friendly**: Fast compilation, helpful error messages, modern tooling
+
+## Your First Program
+
+```strata
+import io from str
+
+io.print("Hello, Strata!")
+```
+
+That's it! Save it as `hello.str` and run it with `strata hello.str`.
+
+## Core Language Features
+
+### Static Typing
+```strata
+let x: int = 42
+let name: string = "Strata"
+let pi: float = 3.14159
+let active: bool = true
+```
+
+### Functions
+```strata
+func add(a: int, b: int) => int {
+  return a + b
+}
+```
+
+### Control Flow
+```strata
+if (age >= 18) {
+  io.print("Adult")
+} else {
+  io.print("Minor")
+}
+
+for (var i: int = 0; i < 10; var i: int = i + 1) {
+  io.print(i)
+}
+```
+
+### Modules & Imports
+```strata
+import io from str        // Standard library
+import util from ./util   // Relative import
+import http from myapp::http  // Package import
+```
+
+## What's Next?
+
+- **[Quick Start](./getting-started/quick-start)** — Get up and running in 5 minutes
+- **[Language Guide](./guide/variables-and-types)** — Learn the fundamentals
+- **[Examples](./examples/hello-world)** — Practical code samples
+- **[API Reference](./reference/builtins)** — Standard library documentation
+
+## Quick Links
+
+- [Installation Guide](./getting-started/installation)
+- [Full Language Tour](./guide/variables-and-types)
+- [GitHub Repository](https://github.com/VSS-CO/Strata)

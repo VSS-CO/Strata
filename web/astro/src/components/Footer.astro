@@ -1,0 +1,71 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer style="
+  background: #111827;
+  color: white;
+  border-top: 4px solid var(--strata-blue);
+  padding: 4rem 1.5rem 2rem;
+">
+  <div style="max-width: 1280px; margin: 0 auto;">
+    <div style="
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3rem;
+      margin-bottom: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    ">
+      <div>
+        <h4 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 1rem;">Strata</h4>
+        <p style="color: #9ca3af; font-size: 0.875rem;">
+          A type-safe, high-performance programming language.
+        </p>
+      </div>
+
+      <div>
+        <h4 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 1rem;">Resources</h4>
+        <ul style="list-style: none;">
+          <li style="margin-bottom: 0.75rem;"><a href="https://docs.strata-lang.dev" style="color: #9ca3af; font-size: 0.875rem;">Documentation</a></li>
+          <li style="margin-bottom: 0.75rem;"><a href="https://docs.strata-lang.dev/examples" style="color: #9ca3af; font-size: 0.875rem;">Examples</a></li>
+          <li style="margin-bottom: 0.75rem;"><a href="/playground" style="color: #9ca3af; font-size: 0.875rem;">Playground</a></li>
+          <li><a href="https://github.com/VSS-CO/Strata" style="color: #9ca3af; font-size: 0.875rem;">GitHub</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 1rem;">Community</h4>
+        <ul style="list-style: none;">
+          <li style="margin-bottom: 0.75rem;"><a href="https://github.com/VSS-CO/Strata/issues" style="color: #9ca3af; font-size: 0.875rem;">Issues</a></li>
+          <li style="margin-bottom: 0.75rem;"><a href="https://github.com/VSS-CO/Strata/discussions" style="color: #9ca3af; font-size: 0.875rem;">Discussions</a></li>
+          <li style="margin-bottom: 0.75rem;"><a href="https://github.com/VSS-CO/Strata/pulls" style="color: #9ca3af; font-size: 0.875rem;">Contribute</a></li>
+          <li><a href="https://github.com/VSS-CO" style="color: #9ca3af; font-size: 0.875rem;">Organization</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 1rem;">Legal</h4>
+        <ul style="list-style: none;">
+          <li style="margin-bottom: 0.75rem;"><a href="/privacy" style="color: #9ca3af; font-size: 0.875rem;">Privacy</a></li>
+          <li style="margin-bottom: 0.75rem;"><a href="/license" style="color: #9ca3af; font-size: 0.875rem;">License</a></li>
+          <li><a href="/terms" style="color: #9ca3af; font-size: 0.875rem;">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #9ca3af;
+      font-size: 0.875rem;
+    ">
+      <div>© {currentYear} Strata Contributors. All rights reserved.</div>
+      <div style="display: flex; gap: 1.5rem;">
+        <a href="https://github.com/VSS-CO/Strata" style="color: #9ca3af;">GitHub</a>
+        <a href="https://github.com/VSS-CO" style="color: #9ca3af;">Organization</a>
+      </div>
+    </div>
+  </div>
+</footer>

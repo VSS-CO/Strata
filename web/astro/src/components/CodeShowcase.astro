@@ -1,0 +1,119 @@
+---
+---
+
+<section style="
+  background: var(--strata-light);
+  padding: 6rem 1.5rem;
+">
+  <div style="max-width: 1280px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 4rem;">
+      <h2 style="
+        font-size: 2.25rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+      ">
+        Clean, Expressive Code
+      </h2>
+    </div>
+
+    <div style="
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    ">
+      <div style="
+        background: #1a1a1a;
+        border-radius: 8px;
+        padding: 2rem;
+        overflow-x: auto;
+      ">
+        <pre style="
+          font-size: 0.875rem;
+          color: #d4d4d4;
+          font-family: 'Courier New', monospace;
+          margin: 0;
+        "><code>{`// Define a function
+func fibonacci(n: int) => int {
+  if (n <= 1) {
+    return n
+  }
+  var prev: int = 0
+  var curr: int = 1
+  
+  for (var i: int = 2; i <= n; var i: int = i + 1) {
+    let next: int = prev + curr
+    var prev: int = curr
+    var curr: int = next
+  }
+  
+  return curr
+}
+
+let result: int = fibonacci(10)
+import io from str
+io.print(result)`}</code></pre>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div>
+          <h3 style="
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+          ">
+            1. Strong Types
+          </h3>
+          <p style="color: var(--text-secondary);">
+            Every variable has an explicit type. Catch errors at compile time.
+          </p>
+        </div>
+
+        <div>
+          <h3 style="
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+          ">
+            2. Modern Syntax
+          </h3>
+          <p style="color: var(--text-secondary);">
+            Clean, readable code that's easy to understand and maintain.
+          </p>
+        </div>
+
+        <div>
+          <h3 style="
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+          ">
+            3. Built-in Library
+          </h3>
+          <p style="color: var(--text-secondary);">
+            Standard library with I/O, math, text, and utility functions.
+          </p>
+        </div>
+
+        <a href="https://docs.strata-lang.dev/getting-started/quick-start" style="
+          background: var(--strata-blue);
+          color: white;
+          padding: 0.75rem 1.5rem;
+          border-radius: 6px;
+          font-weight: 600;
+          text-decoration: none;
+          display: inline-block;
+          margin-top: 1rem;
+          transition: background 0.2s;
+          width: fit-content;
+        " onmouseenter="this.style.background='var(--strata-dark)'" onmouseleave="this.style.background='var(--strata-blue)'">
+          Learn More →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

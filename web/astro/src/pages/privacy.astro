@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="Privacy Policy - Strata" description="Privacy policy for Strata programming language">
+  <Header />
+  
+  <main class="py-20 min-h-[calc(100vh-200px)]">
+    <div class="container max-w-3xl">
+      <h1 class="text-4xl font-bold mb-8 text-gray-900">Privacy Policy</h1>
+      
+      <div class="prose prose-lg text-gray-700 space-y-6">
+        <p class="text-sm text-gray-500">Last Updated: January 2024</p>
+
+        <section>
+          <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">1. Introduction</h2>
+          <p>
+            Strata respects your privacy. This privacy policy explains how we collect, use, and protect your information.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">2. Information We Collect</h2>
+          <p>We collect minimal information. When you visit our website, we may collect:</p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Your IP address</li>
+            <li>Browser type and version</li>
+            <li>Pages visited and time spent</li>
+            <li>Referrer information</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">3. How We Use Information</h2>
+          <p>
+            We use this information to:
+          </p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Improve our website and documentation</li>
+            <li>Analyze usage patterns</li>
+            <li>Ensure security and prevent abuse</li>
+            <li>Provide better user experience</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">4. Third Parties</h2>
+          <p>
+            We do not sell your information to third parties. Our website is hosted on GitHub Pages and may use analytics services.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">5. Your Rights</h2>
+          <p>
+            You have the right to access, update, or delete your information. Contact us for any concerns.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">6. Contact</h2>
+          <p>
+            For privacy questions, please open an issue on <a href="https://github.com/VSS-CO/Strata" class="text-strata-blue hover:underline">GitHub</a>.
+          </p>
+        </section>
+      </div>
+    </div>
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
+<style>
+  .text-strata-blue {
+    color: var(--strata-blue);
+  }
+</style>

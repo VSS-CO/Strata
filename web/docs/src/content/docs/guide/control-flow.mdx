@@ -1,0 +1,318 @@
+---
+title: Control Flow
+description: Master conditionals and loops in Strata
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Aside } from '@astrojs/starlight/components';
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+# Control Flow
+
+Control flow statements let you execute code conditionally and repeat operations.
+
+## If Statements
+
+### Basic If
+
+Execute code only if a condition is true:
+
+```strata
+let age: int = 20
+
+if (age >= 18) {
+  io.print("You are an adult")
+}
+```
+
+<Aside type="note">
+Conditions must be in parentheses and evaluate to `bool`.
+</Aside>
+
+### If-Else
+
+Provide an alternative when the condition is false:
+
+```strata
+let age: int = 15
+
+if (age >= 18) {
+  io.print("You are an adult")
+} else {
+  io.print("You are a minor")
+}
+```
+
+### If-Else If-Else
+
+Chain multiple conditions:
+
+```strata
+let score: int = 85
+
+if (score >= 90) {
+  io.print("Grade: A")
+} else if (score >= 80) {
+  io.print("Grade: B")
+} else if (score >= 70) {
+  io.print("Grade: C")
+} else {
+  io.print("Grade: F")
+}
+```
+
+Strata evaluates from top to bottom and stops at the first `true` condition.
+
+## Common Conditions
+
+<CardGrid>
+  <Card title="Comparison">
+    ```strata
+    x > 10      // Greater than
+    x < 10      // Less than
+    x >= 10     // Greater than or equal
+    x <= 10     // Less than or equal
+    x == 10     // Equal to
+    x != 10     // Not equal
+    ```
+  </Card>
+
+  <Card title="Logical">
+    ```strata
+    x > 5 && y < 10  // AND
+    x > 5 || y < 10  // OR
+    !flag            // NOT (negation)
+    ```
+  </Card>
+</CardGrid>
+
+## For Loops
+
+Repeat code a specific number of times:
+
+```strata
+for (var i: int = 0; i < 5; var i: int = i + 1) {
+  io.print(i)
+}
+```
+
+**Output:**
+```
+0
+1
+2
+3
+4
+```
+
+### For Loop Anatomy
+
+```strata
+for (var i: int = 0;     // Initialize counter
+     i < 5;              // Condition (run while true)
+     var i: int = i + 1) // Update counter after each iteration
+{
+  // Loop body
+}
+```
+
+### Common Patterns
+
+<Tabs syncKey="loops">
+  <TabItem label="Count up by 1">
+    ```strata
+    for (var i: int = 0; i < 10; var i: int = i + 1) {
+      io.print(i)
+    }
+    ```
+  </TabItem>
+
+  <TabItem label="Count up by 2">
+    ```strata
+    for (var i: int = 0; i < 10; var i: int = i + 2) {
+      io.print(i)  // 0, 2, 4, 6, 8
+    }
+    ```
+  </TabItem>
+
+  <TabItem label="Count down">
+    ```strata
+    for (var i: int = 10; i > 0; var i: int = i - 1) {
+      io.print(i)  // 10, 9, 8, ..., 1
+    }
+    ```
+  </TabItem>
+
+  <TabItem label="Sum numbers">
+    ```strata
+    var sum: int = 0
+    for (var i: int = 1; i <= 10; var i: int = i + 1) {
+      var sum: int = sum + i
+    }
+    io.print(sum)  // 55
+    ```
+  </TabItem>
+</Tabs>
+
+## While Loops
+
+Repeat code while a condition is true:
+
+```strata
+var count: int = 0
+
+while (count < 5) {
+  io.print(count)
+  var count: int = count + 1
+}
+```
+
+**Output:**
+```
+0
+1
+2
+3
+4
+```
+
+### While vs For
+
+<CardGrid>
+  <Card title="Use `while` when...">
+    You don't know how many iterations you need:
+
+    ```strata
+    var n: int = 1000
+    while (n > 1) {
+      io.print(n)
+      var n: int = n / 2
+    }
+    ```
+  </Card>
+
+  <Card title="Use `for` when...">
+    You know the iteration count:
+
+    ```strata
+    for (var i: int = 0; i < 10; var i: int = i + 1) {
+      io.print(i)
+    }
+    ```
+  </Card>
+</CardGrid>
+
+## Break and Continue
+
+### Break
+
+Exit a loop early:
+
+```strata
+for (var i: int = 0; i < 10; var i: int = i + 1) {
+  if (i == 5) {
+    break  // Exit loop when i reaches 5
+  }
+  io.print(i)
+}
+
+// Output: 0, 1, 2, 3, 4
+```
+
+### Continue
+
+Skip to the next iteration:
+
+```strata
+for (var i: int = 0; i < 5; var i: int = i + 1) {
+  if (i == 2) {
+    continue  // Skip i=2
+  }
+  io.print(i)
+}
+
+// Output: 0, 1, 3, 4
+```
+
+## Practical Examples
+
+### Find Even Numbers
+
+```strata
+import io from str
+
+for (var i: int = 1; i <= 10; var i: int = i + 1) {
+  if (i % 2 == 0) {  // i is even
+    io.print(i)
+  }
+}
+
+// Output: 2, 4, 6, 8, 10
+```
+
+### Sum Odd Numbers
+
+```strata
+import io from str
+
+var sum: int = 0
+for (var i: int = 1; i <= 20; var i: int = i + 1) {
+  if (i % 2 != 0) {  // i is odd
+    var sum: int = sum + i
+  }
+}
+io.print(sum)  // 100
+```
+
+### Find First Matching Value
+
+```strata
+import io from str
+
+var found: bool = false
+for (var i: int = 0; i < 100; var i: int = i + 1) {
+  if (i * i == 81) {  // Found 9
+    io.print(i)
+    var found: bool = true
+    break
+  }
+}
+```
+
+### Countdown Timer
+
+```strata
+import io from str
+
+var seconds: int = 10
+
+while (seconds > 0) {
+  io.print(seconds)
+  var seconds: int = seconds - 1
+}
+
+io.print("Blast off!")
+```
+
+## Nesting
+
+You can nest control structures:
+
+```strata
+import io from str
+
+for (var i: int = 1; i <= 3; var i: int = i + 1) {
+  for (var j: int = 1; j <= 3; var j: int = j + 1) {
+    let product: int = i * j
+    io.print(product)
+  }
+}
+
+// Prints 9 values: 1, 2, 3, 2, 4, 6, 3, 6, 9
+```
+
+## Next Steps
+
+- **[Functions](./functions)** — Use control flow in functions
+- **[Variables & Types](./variables-and-types)** — Understand Strata's types
+- **[Examples](../examples)** — See control flow in practice
