@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strata IDE</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #1e1e1e;
+      color: #d4d4d4;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .topbar {
+      background: #252526;
+      border-bottom: 1px solid #3e3e42;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: bold;
+      color: #4ec9b0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo::before {
+      content: "⚙";
+      font-size: 20px;
+    }
+
+    .menu {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      background: #0e639c;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: #1177bb;
+      transform: translateY(-1px);
+    }
+
+    .btn.primary {
+      background: #1976d2;
+    }
+
+    .btn.success {
+      background: #107c10;
+    }
+
+    .btn-sm {
+      background: #3e3e42;
+      color: #cccccc;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 2px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .btn-sm:hover {
+      background: #464647;
+    }
+
+    .main {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: #252526;
+      border-right: 1px solid #3e3e42;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    .sidebar-section {
+      margin-bottom: 20px;
+    }
+
+    .sidebar-section h3 {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #858585;
+      margin-bottom: 8px;
+      padding: 0 6px;
+    }
+
+    .projects-list,
+    .files-list {
+      list-style: none;
+    }
+
+    .projects-list li,
+    .files-list li {
+      padding: 6px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 13px;
+      margin-bottom: 4px;
+      transition: background 0.2s;
+    }
+
+    .projects-list li:hover,
+    .files-list li:hover {
+      background: #3e3e42;
+    }
+
+    .projects-list li.active,
+    .files-list li.active {
+      background: #0e639c;
+      color: white;
+    }
+
+    .editor-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .editor-tabs {
+      background: #1e1e1e;
+      border-bottom: 1px solid #3e3e42;
+      display: flex;
+      overflow-x: auto;
+      height: 35px;
+      align-items: center;
+    }
+
+    .editor-tab {
+      padding: 8px 15px;
+      border-right: 1px solid #3e3e42;
+      cursor: pointer;
+      font-size: 13px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .editor-tab:hover {
+      background: #2d2d30;
+    }
+
+    .editor-tab.active {
+      background: #252526;
+      border-bottom: 2px solid #007acc;
+    }
+
+    .editor {
+      flex: 1;
+      overflow: hidden;
+      background: #1e1e1e;
+    }
+
+    .editor-textarea {
+      width: 100%;
+      height: 100%;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      border: none;
+      padding: 12px;
+      font-family: 'Courier New', 'Consolas', monospace;
+      font-size: 13px;
+      resize: none;
+      outline: none;
+      line-height: 1.5;
+    }
+
+    .right-panel {
+      width: 300px;
+      background: #252526;
+      border-left: 1px solid #3e3e42;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #3e3e42;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      color: #858585;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 13px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s;
+    }
+
+    .tab-btn:hover {
+      color: #cccccc;
+    }
+
+    .tab-btn.active {
+      color: #ffffff;
+      border-bottom-color: #007acc;
+    }
+
+    .tab-content {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .panel {
+      display: none;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .panel.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .output-header {
+      padding: 8px 12px;
+      border-bottom: 1px solid #3e3e42;
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    .output-text {
+      padding: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #d4d4d4;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .output-text.error {
+      color: #f48771;
+    }
+
+    .output-text.success {
+      color: #89d185;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="container">
+    <header class="topbar">
+      <div class="logo">Strata IDE</div>
+      <nav class="menu">
+        <button id="btn-new-project" class="btn">New Project</button>
+        <button id="btn-open-project" class="btn">Open Project</button>
+        <button id="btn-build" class="btn primary">Build</button>
+        <button id="btn-run" class="btn success">Run</button>
+      </nav>
+    </header>
+
+    <div class="main">
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3>Projects</h3>
+          <ul id="projects-list" class="projects-list"></ul>
+        </div>
+        <div class="sidebar-section">
+          <h3>Files</h3>
+          <ul id="files-list" class="files-list"></ul>
+          <button id="btn-add-file" class="btn-sm">+ Add File</button>
+        </div>
+      </aside>
+
+      <main class="editor-container">
+        <div class="editor-tabs" id="editor-tabs"></div>
+        <div class="editor">
+          <textarea id="editor-input" class="editor-textarea" placeholder="Select or create a file to start..."></textarea>
+        </div>
+      </main>
+
+      <aside class="right-panel">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="output">Output</button>
+          <button class="tab-btn" data-tab="problems">Problems</button>
+        </div>
+        <div class="tab-content">
+          <div id="output-panel" class="panel active">
+            <div class="output-header">
+              <span>Execution Output</span>
+              <button class="btn-sm">Clear</button>
+            </div>
+            <div id="output-text" class="output-text">Ready. Create or open a project to get started.</div>
+          </div>
+          <div id="problems-panel" class="panel">
+            <div class="output-header">Problems</div>
+            <div id="problems-list" class="output-text"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script src="renderer.js" type="module"></script>
+</body>
+</html>

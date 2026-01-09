@@ -1,0 +1,12 @@
+src/
+native/
+gui-dist/
+.git/
+.vscode/
+node_modules/
+*.ts
+tsconfig.json
+package-lock.json
+build/
+cmake/
+CMakeLists.txt
