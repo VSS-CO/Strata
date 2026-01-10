@@ -48,7 +48,11 @@
     "prepublishOnly": "npm run build && npm run test:quick"
   },
   "pkg": {
-    "targets": ["node24-linux-x64", "node24-macos-x64", "node24-win-x64"],
+    "targets": [
+      "node24-linux-x64",
+      "node24-macos-x64",
+      "node24-win-x64"
+    ],
     "outputPath": "dist/bin"
   },
   "dependencies": {
@@ -57,6 +61,7 @@
   "devDependencies": {
     "@eslint/js": "^8.55.0",
     "@types/node": "^25.0.3",
+    "esbuild": "^0.27.2",
     "eslint": "^8.55.0",
     "prettier": "^3.1.1",
     "typescript": "^5.3.3"

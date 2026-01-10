@@ -5,7 +5,7 @@
 #define MyAppName "Strata Extended"
 #define MyAppVersion "1.0.0"
 #define MyAppPublisher "Strata Project"
-#define MyAppURL "https://github.com/strata-lang/strata-extended"
+#define MyAppURL "https://github.com/VSS-CO/Strata"
 #define MyAppExeName "strata.exe"
 #define MyAppAssocName "Strata Source File"
 #define MyAppAssocExt ".str"
@@ -29,15 +29,14 @@ ArchitecturesInstallIn64BitMode=x64compatible
 ChangesAssociations=yes
 ChangesEnvironment=yes
 DisableProgramGroupPage=no
-LicenseFile=F:\files2\language\LICENSE.txt
-OutputDir=F:\files2\language\Output
+LicenseFile=G:\Strata\LICENSE
+OutputDir=G:\Strata\build\win32\Output
 OutputBaseFilename=StrataExtended-1.0.0-Setup
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 SolidCompression=yes
 WizardStyle=modern
 Compression=lzma2
-SolidCompression=yes
 CompressionThreads=auto
 SetupLogging=yes
 
@@ -51,27 +50,31 @@ Name: "createexamples"; Description: "Create example programs in user directory"
 
 [Files]
 ; Main executable
-Source: "F:\files2\language\main.exe"; DestDir: "{app}"; DestName: "strata.exe"; Flags: ignoreversion; Components: main
+Source: "G:\Strata\build\win32\strata.exe"; DestDir: "{app}"; DestName: "strata.exe"; Flags: ignoreversion; Components: main
 
 ; Runtime files
-Source: "F:\files2\language\dist\main.js"; DestDir: "{app}"; Flags: ignoreversion; Components: main
-Source: "F:\files2\language\package.json"; DestDir: "{app}"; Flags: ignoreversion; Components: main
+Source: "G:\Strata\dist\index.js"; DestDir: "{app}"; Flags: ignoreversion; Components: main
+Source: "G:\Strata\package.json"; DestDir: "{app}"; Flags: ignoreversion; Components: main
 
 ; Documentation
-Source: "F:\files2\language\README.md"; DestDir: "{app}\docs"; Components: docs
-Source: "F:\files2\language\AGENTS.md"; DestDir: "{app}\docs"; Components: docs
+Source: "G:\Strata\README.md"; DestDir: "{app}\docs"; Components: docs
+Source: "G:\Strata\ARCHITECTURE.md"; DestDir: "{app}\docs"; Components: docs
+Source: "G:\Strata\AGENTS.md"; DestDir: "{app}\docs"; Components: docs
 
 ; Examples
-Source: "F:\files2\language\simple_test.str"; DestDir: "{app}\examples"; Components: examples
-Source: "F:\files2\language\test_features.str"; DestDir: "{app}\examples"; Components: examples
-Source: "F:\files2\language\test_functions.str"; DestDir: "{app}\examples"; Components: examples
-Source: "F:\files2\language\feature_demo.str"; DestDir: "{app}\examples"; Components: examples
-Source: "F:\files2\language\final_demo.str"; DestDir: "{app}\examples"; Components: examples
+Source: "G:\Strata\examples\01_basic_types.str"; DestDir: "{app}\examples"; Components: examples
+Source: "G:\Strata\examples\02_arithmetic.str"; DestDir: "{app}\examples"; Components: examples
+Source: "G:\Strata\examples\03_comparison.str"; DestDir: "{app}\examples"; Components: examples
+Source: "G:\Strata\examples\10_functions.str"; DestDir: "{app}\examples"; Components: examples
+
+; SDK files (optional)
+Source: "G:\Strata\sdk\dist\*"; DestDir: "{app}\sdk"; Flags: ignoreversion recursesubdirs; Components: sdk
 
 [Components]
 Name: "main"; Description: "Strata Extended Compiler and Runtime"; Types: full compact custom; Flags: fixed
 Name: "docs"; Description: "Documentation and Guides"; Types: full
 Name: "examples"; Description: "Example Programs"; Types: full
+Name: "sdk"; Description: "Strata SDK (IDE, CLI tools, and development libraries)"; Types: full
 
 [Registry]
 ; File association
@@ -121,13 +124,8 @@ begin
 end;
 
 function InitializeSetup(): Boolean;
-var
-  Version: string;
-  VersionNum: Integer;
 begin
   Result := True;
-  
-  // Optional: Check Windows version (Windows 10 or later recommended)
   if not IsWindows10OrGreater() then
   begin
     MsgBox('Warning: Windows 10 or later is recommended for Strata Extended.', mbInformation, MB_OK);
@@ -161,11 +159,7 @@ begin
   case CurUninstallStep of
     usUninstall:
       begin
-        // Clean up PATH if added during installation
-        if IsTaskSelected('addtopath') then
-        begin
-          RemovePathEntry(ExpandConstant('{app}'));
-        end;
+        RemovePathEntry(ExpandConstant('{app}'));
       end;
   end;
 end;

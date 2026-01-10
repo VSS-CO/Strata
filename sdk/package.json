@@ -1,9 +1,10 @@
 {
-  "name": "@strata/sdk",
+  "name": "strata-sdk",
   "version": "1.0.0",
   "description": "Production-grade SDK for Strata programming language with GUI",
   "type": "module",
   "main": "dist/index.js",
+  "author": "VSS.CO",
   "bin": {
     "strata-sdk": "dist/cli.js",
     "strata-gui": "dist/gui.js"
@@ -22,20 +23,32 @@
     "dev": "npm run build:watch & npm run start:gui",
     "test": "node --test dist/**/*.test.js",
     "lint": "eslint src --ext .ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "dependencies": {
     "commander": "^14.0.2",
-    "electron": "^29.0.0",
+    "electron-squirrel-startup": "^1.0.1",
     "express": "^4.18.2",
     "socket.io": "^4.7.0",
     "ws": "^8.15.0"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^7.10.2",
+    "@electron-forge/maker-deb": "^7.10.2",
+    "@electron-forge/maker-rpm": "^7.10.2",
+    "@electron-forge/maker-squirrel": "^7.10.2",
+    "@electron-forge/maker-zip": "^7.10.2",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.10.2",
+    "@electron-forge/plugin-fuses": "^7.10.2",
+    "@electron/fuses": "^1.8.0",
     "@types/express": "^4.17.21",
     "@types/node": "^25.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "electron": "^29.4.6",
     "eslint": "^8.55.0",
     "typescript": "^5.3.3"
   },
