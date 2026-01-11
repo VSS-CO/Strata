@@ -1,0 +1,89 @@
+{
+  "name": "strata-lang",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Strata Extended - A statically-typed scripting language that compiles to C, JavaScript, and more",
+  "main": "dist/index.js",
+  "bin": {
+    "strata": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "npx tsc",
+    "build:watch": "npx tsc --watch",
+    "build:clean": "rm -rf dist/ && npm run build",
+    "build:webpack": "webpack",
+    "compile": "npm run build",
+    "dev": "npm run build:watch",
+    "start": "node dist/main.js",
+    "test": "npm run test:examples",
+    "test:examples": "npm run build && node dist/main.js examples/01_basic_types.str && node dist/main.js examples/02_arithmetic.str && node dist/main.js examples/03_comparison.str && node dist/main.js examples/04_logical.str && node dist/main.js examples/05_unary.str && node dist/main.js examples/06_if_else.str && node dist/main.js examples/07_while_loop.str && node dist/main.js examples/08_for_loop.str && node dist/main.js examples/09_break_continue.str && node dist/main.js examples/10_functions.str",
+    "test:quick": "npm run build && node dist/main.js examples/01_basic_types.str",
+    "test:all": "npm run test:examples && npm run test:type-safety && npm run test:operators && npm run test:control-flow",
+    "test:type-safety": "npm run build && node dist/main.js examples/15_type_safety.str",
+    "test:operators": "npm run build && node dist/main.js examples/19_operators_precedence.str",
+    "test:control-flow": "npm run build && node dist/main.js examples/17_nested_control.str",
+    "test:algorithms": "npm run build && node dist/main.js examples/18_algorithms.str",
+    "test:immutability": "npm run build && node dist/main.js examples/16_immutability.str",
+    "run": "npm run build && node dist/main.js",
+    "run:hello": "npm run build && echo 'import io from str\\nio.print(\"Hello, World!\")' > /tmp/hello.str && node dist/main.js /tmp/hello.str",
+    "watch": "npm run build:watch",
+    "clean": "rm -rf dist/ out.c",
+    "verify": "npm run build && npm run test:quick",
+    "docs": "npm run docs:view",
+    "docs:serve": "python -m http.server 8000 --directory .",
+    "docs:view": "open docs.html || start docs.html || xdg-open docs.html",
+    "docs:build": "echo 'Documentation is in README.md and ARCHITECTURE.md'",
+    "readme": "open README.md || start README.md || xdg-open README.md",
+    "architecture": "open ARCHITECTURE.md || start ARCHITECTURE.md || xdg-open ARCHITECTURE.md",
+    "agents": "open AGENTS.md || start AGENTS.md || xdg-open AGENTS.md",
+    "format": "npx prettier --write src/ *.ts",
+    "format:check": "npx prettier --check src/ *.ts",
+    "lint": "npx eslint . --ext .ts,.js",
+    "lint:fix": "npx eslint . --ext .ts,.js --fix",
+    "typecheck": "npx tsc --noEmit",
+    "check": "npm run typecheck && npm run lint",
+    "ci": "npm run build && npm run test:quick && npm run lint && npm run typecheck",
+    "version": "npm run build && node dist/main.js --version || echo 'Strata v1.0.0'",
+    "help": "node dist/main.js --help || echo 'Usage: strata <file.str>'",
+    "prepublishOnly": "npm run build && npm run test:quick"
+  },
+  "pkg": {
+    "targets": [
+      "node24-linux-x64",
+      "node24-macos-x64",
+      "node24-win-x64"
+    ],
+    "outputPath": "dist/bin"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "@eslint/js": "^8.55.0",
+    "@types/node": "^25.0.3",
+    "esbuild": "^0.27.2",
+    "eslint": "^8.55.0",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VSS-CO/Strata"
+  },
+  "keywords": [
+    "language",
+    "compiler",
+    "scripting",
+    "strata",
+    "c",
+    "javascript",
+    "rust",
+    "go",
+    "python"
+  ],
+  "author": "Strata Contributors",
+  "license": "GPL-3.0"
+}
