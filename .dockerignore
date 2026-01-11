@@ -1,0 +1,94 @@
+# ============================================================================
+# Docker Build Context Exclusions
+# ============================================================================
+# Files and directories excluded from Docker builds to reduce image size
+# and build time
+
+# Version control
+.git
+.gitignore
+.gitattributes
+.github
+
+# Development tools
+.vscode
+.eslintrc*
+.prettierrc
+.env.local
+.env.*.local
+
+# Build and distribution (will be rebuilt in container)
+dist
+node_modules
+build
+out.c
+
+# Package manager
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Documentation (not needed in runtime image)
+*.md
+README.md
+ARCHITECTURE.md
+CONTRIBUTING.md
+QUICK_REFERENCE.md
+REGISTRY_*.md
+*.txt
+
+# Testing and validation
+*.test.ts
+*.test.js
+test
+spec
+coverage
+examples
+
+# Development artifacts
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS specific
+.DS_Store
+Thumbs.db
+.vscode-server
+
+# IDE and editor caches
+.idea
+*.swp
+*.swo
+*~
+
+# Build system
+Makefile
+build.sh
+build.bat
+webpack.config.js
+tsconfig.json
+eslint.config.js
+
+# Binary and executable caches
+sea-prep.blob
+.sea-*
+
+# Web and extension directories (separate builds)
+web
+extension
+
+# Benchmark data
+benchmark_results.json
+benchmark_runner.*
+
+# SDK specific exclusions (for main Dockerfile)
+sdk
+implementations
+packages
+
+# Temporary files
+-p
+*.tmp
+*.temp

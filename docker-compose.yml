@@ -1,0 +1,141 @@
+# ============================================================================
+# Docker Compose Configuration for Strata
+# ============================================================================
+# Orchestrates multiple Strata services for local development and testing
+#
+# Usage:
+#   docker-compose up -d                  # Start all services
+#   docker-compose down                   # Stop and remove containers
+#   docker-compose logs -f strata-runtime # View runtime logs
+# ============================================================================
+
+version: '3.9'
+
+services:
+  # ============================================================================
+  # Strata Runtime Service
+  # ============================================================================
+  # Lightweight runtime for executing Strata programs
+  strata-runtime:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: strata-runtime
+    image: strata:latest
+    volumes:
+      - ${PWD}:/workspace
+      - strata-cache:/home/strata/.cache
+    working_dir: /workspace
+    environment:
+      NODE_ENV: production
+      LOG_LEVEL: info
+    ports:
+      - "3000:3000"  # If runtime starts a server
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "dist/main.js", "--help"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+  # ============================================================================
+  # Strata SDK Service
+  # ============================================================================
+  # Full SDK with development tools and GUI support
+  strata-sdk:
+    build:
+      context: ./sdk
+      dockerfile: Dockerfile
+      target: production
+    container_name: strata-sdk
+    image: strata-sdk:latest
+    volumes:
+      - ${PWD}:/workspace
+      - strata-sdk-cache:/home/strata/.cache
+      - strata-npm-cache:/home/strata/.npm
+    working_dir: /workspace
+    environment:
+      NODE_ENV: production
+      LOG_LEVEL: info
+    ports:
+      - "3001:3000"  # SDK server port
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "dist/cli.js", "--version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    depends_on:
+      - strata-runtime
+
+  # ============================================================================
+  # Strata Development Service
+  # ============================================================================
+  # Development environment with watch mode and all dev tools
+  strata-dev:
+    build:
+      context: ./sdk
+      dockerfile: Dockerfile
+      target: development
+    container_name: strata-dev
+    image: strata-sdk:dev
+    volumes:
+      - ${PWD}:/workspace
+      - strata-dev-cache:/app/node_modules
+      - /app/.next  # Exclude Next.js cache
+    working_dir: /workspace
+    environment:
+      NODE_ENV: development
+      LOG_LEVEL: debug
+    ports:
+      - "3002:3000"
+      - "9229:9229"  # Node.js debugger
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    profiles:
+      - dev
+
+  # ============================================================================
+  # Strata Test Service
+  # ============================================================================
+  # Isolated test runner environment
+  strata-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    container_name: strata-test
+    image: strata:test
+    volumes:
+      - ${PWD}:/workspace
+    working_dir: /workspace
+    environment:
+      NODE_ENV: test
+    command: npm run test:all
+    profiles:
+      - test
+
+# ============================================================================
+# Volumes
+# ============================================================================
+volumes:
+  strata-cache:
+    driver: local
+  strata-sdk-cache:
+    driver: local
+  strata-npm-cache:
+    driver: local
+  strata-dev-cache:
+    driver: local
+
+# ============================================================================
+# Networks
+# ============================================================================
+networks:
+  default:
+    name: strata-network
+    driver: bridge
