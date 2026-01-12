@@ -1,0 +1,29 @@
+{
+  "name": "strataum-registry",
+  "version": "1.0.0",
+  "description": "Official package registry server for the Strata language",
+  "type": "module",
+  "main": "dist/server.js",
+  "bin": {
+    "strataum-server": "dist/server.js",
+    "strataum-client": "dist/client.js"
+  },
+  "scripts": {
+    "build": "npx tsc",
+    "dev": "npx tsc && node dist/server.js",
+    "start": "node dist/server.js",
+    "test": "echo 'Tests coming soon'"
+  },
+  "keywords": [
+    "strata",
+    "package",
+    "registry",
+    "npm"
+  ],
+  "author": "Strata Contributors",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "typescript": "^5.3.3"
+  }
+}
