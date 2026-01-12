@@ -1,0 +1,7 @@
+{
+  "name": "unknown",
+  "version": "0.0.0",
+  "dependencies": {
+    "json-parser": "latest"
+  }
+}

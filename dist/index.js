@@ -1835,12 +1835,212 @@ class CGenerator {
         return "int";
     }
 }
+class PackageManager {
+    constructor(projectRoot = process.cwd()) {
+        this.projectRoot = projectRoot;
+        this.strataumfile = this.loadStrataumfile();
+        this.lockFile = this.loadLockFile();
+    }
+    loadStrataumfile() {
+        const path = `${this.projectRoot}/Strataumfile`;
+        try {
+            const content = fs.readFileSync(path, "utf-8");
+            return JSON.parse(content);
+        }
+        catch {
+            return { name: "unknown", version: "0.0.0", dependencies: {} };
+        }
+    }
+    loadLockFile() {
+        const path = `${this.projectRoot}/Strataumfile.lock`;
+        try {
+            const content = fs.readFileSync(path, "utf-8");
+            return JSON.parse(content);
+        }
+        catch {
+            return { locked: false, packages: {} };
+        }
+    }
+    saveStrataumfile() {
+        const path = `${this.projectRoot}/Strataumfile`;
+        fs.writeFileSync(path, JSON.stringify(this.strataumfile, null, 2));
+        console.log(`✓ Updated ${path}`);
+    }
+    saveLockFile() {
+        const path = `${this.projectRoot}/Strataumfile.lock`;
+        this.lockFile.timestamp = new Date().toISOString();
+        fs.writeFileSync(path, JSON.stringify(this.lockFile, null, 2));
+        console.log(`✓ Locked dependencies in ${path}`);
+    }
+    install(packageName) {
+        const packagesDir = `${this.projectRoot}/.strata/packages`;
+        if (!fs.existsSync(packagesDir)) {
+            fs.mkdirSync(packagesDir, { recursive: true });
+        }
+        if (packageName) {
+            // Install specific package
+            this.installPackage(packageName, packagesDir);
+        }
+        else {
+            // Install all dependencies from Strataumfile
+            if (!this.strataumfile.dependencies) {
+                console.log("No dependencies to install.");
+                return;
+            }
+            for (const [pkg, version] of Object.entries(this.strataumfile.dependencies)) {
+                this.installPackage(pkg, packagesDir, version);
+            }
+        }
+        this.saveLockFile();
+        console.log("✓ Installation complete");
+    }
+    installPackage(packageName, packagesDir, version) {
+        const pkgDir = `${packagesDir}/${packageName}`;
+        // Create package directory
+        if (!fs.existsSync(pkgDir)) {
+            fs.mkdirSync(pkgDir, { recursive: true });
+        }
+        // Create a mock package with module definition
+        const moduleContent = `
+// ${packageName} module (v${version || "1.0.0"})
+export func init() => void {
+    io.print("${packageName} loaded")
+}
+`;
+        fs.writeFileSync(`${pkgDir}/index.str`, moduleContent);
+        // Create package.json in package directory
+        const pkgInfo = {
+            name: packageName,
+            version: version || "1.0.0",
+            main: "index.str",
+        };
+        fs.writeFileSync(`${pkgDir}/package.json`, JSON.stringify(pkgInfo, null, 2));
+        // Update lock file
+        if (!this.lockFile.packages)
+            this.lockFile.packages = {};
+        this.lockFile.packages[packageName] = {
+            version: version || "1.0.0",
+            installed: true,
+            timestamp: new Date().toISOString(),
+        };
+        console.log(`✓ Installed ${packageName}@${version || "1.0.0"}`);
+    }
+    add(packageName, version = "latest") {
+        if (!this.strataumfile.dependencies) {
+            this.strataumfile.dependencies = {};
+        }
+        this.strataumfile.dependencies[packageName] = version;
+        this.saveStrataumfile();
+        // Auto-install
+        const packagesDir = `${this.projectRoot}/.strata/packages`;
+        if (!fs.existsSync(packagesDir)) {
+            fs.mkdirSync(packagesDir, { recursive: true });
+        }
+        this.installPackage(packageName, packagesDir, version);
+        this.saveLockFile();
+        console.log(`✓ Added ${packageName}@${version}`);
+    }
+    remove(packageName) {
+        if (this.strataumfile.dependencies && packageName in this.strataumfile.dependencies) {
+            delete this.strataumfile.dependencies[packageName];
+            this.saveStrataumfile();
+            // Remove from filesystem
+            const pkgDir = `${this.projectRoot}/.strata/packages/${packageName}`;
+            if (fs.existsSync(pkgDir)) {
+                fs.rmSync(pkgDir, { recursive: true });
+            }
+            // Update lock file
+            if (this.lockFile.packages && packageName in this.lockFile.packages) {
+                delete this.lockFile.packages[packageName];
+                this.saveLockFile();
+            }
+            console.log(`✓ Removed ${packageName}`);
+        }
+        else {
+            console.error(`Package ${packageName} not found in dependencies`);
+            process.exit(1);
+        }
+    }
+    list() {
+        console.log("\nInstalled Packages:");
+        console.log("==================");
+        if (!this.strataumfile.dependencies || Object.keys(this.strataumfile.dependencies).length === 0) {
+            console.log("No packages installed");
+            return;
+        }
+        for (const [pkg, version] of Object.entries(this.strataumfile.dependencies)) {
+            const status = this.lockFile.packages?.[pkg]?.installed ? "✓" : "✗";
+            console.log(`${status} ${pkg}@${version}`);
+        }
+    }
+    init(name, version = "0.0.1") {
+        const strataumfile = {
+            name,
+            version,
+            registry: "https://registry.stratauim.io",
+            dependencies: {},
+        };
+        fs.writeFileSync(`${this.projectRoot}/Strataumfile`, JSON.stringify(strataumfile, null, 2));
+        const lockFile = {
+            locked: true,
+            version: "1.0",
+            timestamp: new Date().toISOString(),
+            packages: {},
+        };
+        fs.writeFileSync(`${this.projectRoot}/Strataumfile.lock`, JSON.stringify(lockFile, null, 2));
+        console.log(`✓ Initialized Strata project: ${name}`);
+    }
+    info() {
+        console.log("\nProject Information:");
+        console.log("====================");
+        console.log(`Name: ${this.strataumfile.name}`);
+        console.log(`Version: ${this.strataumfile.version}`);
+        console.log(`Registry: ${this.strataumfile.registry || "default"}`);
+        console.log(`Dependencies: ${Object.keys(this.strataumfile.dependencies || {}).length}`);
+    }
+}
 // ============================================================================
 // MAIN
 // ============================================================================
 const args = process.argv.slice(2);
+// Handle package manager commands
+if (args.length > 0) {
+    const command = args[0];
+    const pm = new PackageManager();
+    switch (command) {
+        case "init":
+            const projectName = args[1] || "my-strata-project";
+            const version = args[2] || "0.0.1";
+            pm.init(projectName, version);
+            process.exit(0);
+        case "install":
+            pm.install(args[1]);
+            process.exit(0);
+        case "add":
+            if (!args[1]) {
+                console.error("Usage: strataum add <package> [version]");
+                process.exit(1);
+            }
+            pm.add(args[1], args[2] || "latest");
+            process.exit(0);
+        case "remove":
+            if (!args[1]) {
+                console.error("Usage: strataum remove <package>");
+                process.exit(1);
+            }
+            pm.remove(args[1]);
+            process.exit(0);
+        case "list":
+            pm.list();
+            process.exit(0);
+        case "info":
+            pm.info();
+            process.exit(0);
+    }
+}
+// Default: run Strata file
 if (args.length === 0) {
-    console.error("Usage: strata <file.str>");
+    console.error("Usage: strata <file.str> or strataum <command>");
     process.exit(1);
 }
 const startTime = performance.now();

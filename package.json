@@ -5,7 +5,8 @@
   "description": "Strata Extended - A statically-typed scripting language that compiles to C, JavaScript, and more",
   "main": "dist/index.js",
   "bin": {
-    "strata": "./dist/index.js"
+    "strata": "./dist/index.js",
+    "strataum": "./dist/index.js"
   },
   "scripts": {
     "build": "npx tsc",
