@@ -4,23 +4,13 @@ import * as https from "https";
 import * as http from "http";
 
 // ============================================================================
-// STRATAUM REGISTRY CLIENT
+// STRATAUM REGISTRY CLIENT WITH REAL DOWNLOADS
 // ============================================================================
 
 interface RegistryConfig {
     registry: string;
     username?: string;
     token?: string;
-}
-
-interface PublishOptions {
-    name: string;
-    version: string;
-    description: string;
-    main: string;
-    license: string;
-    keywords: string[];
-    tarballPath: string;
 }
 
 class StrataumClient {
@@ -92,6 +82,46 @@ class StrataumClient {
             if (body) {
                 req.write(JSON.stringify(body));
             }
+            req.end();
+        });
+    }
+
+    private downloadFile(pathname: string, targetPath: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const registryUrl = new URL(this.config.registry);
+            const options = {
+                hostname: registryUrl.hostname,
+                port: registryUrl.port,
+                path: pathname,
+                method: "GET",
+            } as any;
+
+            if (this.config.token) {
+                options.headers = {
+                    Authorization: `Bearer ${this.config.token}`,
+                };
+            }
+
+            const protocol = registryUrl.protocol === "https:" ? https : http;
+
+            const req = protocol.request(options, (res) => {
+                if (res.statusCode !== 200) {
+                    reject(new Error(`Download failed with status ${res.statusCode}`));
+                    return;
+                }
+
+                const writeStream = fs.createWriteStream(targetPath);
+                res.pipe(writeStream);
+
+                writeStream.on("finish", () => {
+                    writeStream.close();
+                    resolve();
+                });
+
+                writeStream.on("error", reject);
+            });
+
+            req.on("error", reject);
             req.end();
         });
     }
@@ -168,7 +198,7 @@ class StrataumClient {
             const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
             const packageDir = path.dirname(packageJsonPath);
 
-            // Create tarball (simplified - just read main file)
+            // Read main file
             const mainFile = packageJson.main || "index.str";
             const mainPath = path.join(packageDir, mainFile);
 
@@ -177,28 +207,108 @@ class StrataumClient {
                 process.exit(1);
             }
 
-            const tarball = fs.readFileSync(mainPath, "utf-8");
-            const tarballBase64 = Buffer.from(tarball).toString("base64");
+            const fileContent = fs.readFileSync(mainPath, "utf-8");
 
-            const result = await this.request("POST", "/api/publish", {
-                name: packageJson.name,
-                version: packageJson.version,
-                description: packageJson.description,
-                main: packageJson.main || "index.str",
-                license: packageJson.license || "MIT",
-                keywords: packageJson.keywords || [],
-                tarball: tarballBase64,
+            // Create FormData (manual multipart)
+            const boundary = "----FormBoundary" + Date.now();
+            const formData = this.createFormData(
+                boundary,
+                {
+                    name: packageJson.name,
+                    version: packageJson.version,
+                    description: packageJson.description,
+                    main: packageJson.main || "index.str",
+                    license: packageJson.license || "MIT",
+                    keywords: packageJson.keywords || [],
+                },
+                {
+                    fieldname: "tarball",
+                    filename: mainFile,
+                    content: fileContent,
+                }
+            );
+
+            const registryUrl = new URL(this.config.registry);
+            const options = {
+                hostname: registryUrl.hostname,
+                port: registryUrl.port,
+                path: "/api/publish",
+                method: "POST",
+                headers: {
+                    "Content-Type": `multipart/form-data; boundary=${boundary}`,
+                    Authorization: `Bearer ${this.config.token}`,
+                    "Content-Length": Buffer.byteLength(formData),
+                } as any,
+            };
+
+            const protocol = registryUrl.protocol === "https:" ? https : http;
+
+            await new Promise<void>((resolve, reject) => {
+                const req = protocol.request(options, (res) => {
+                    let data = "";
+                    res.on("data", (chunk) => {
+                        data += chunk;
+                    });
+                    res.on("end", () => {
+                        const result = JSON.parse(data);
+                        if (res.statusCode === 201) {
+                            console.log(`✓ Published ${packageJson.name}@${packageJson.version}`);
+                            console.log(`✓ Available at: ${this.config.registry}/api/package/${packageJson.name}/${packageJson.version}`);
+                            resolve();
+                        } else {
+                            console.error("✗ Publish failed:", result.error);
+                            reject(new Error(result.error));
+                        }
+                    });
+                });
+
+                req.on("error", reject);
+                req.write(formData);
+                req.end();
             });
-
-            if (result.status === 201) {
-                console.log(`✓ Published ${packageJson.name}@${packageJson.version}`);
-                console.log(`✓ Available at: ${this.config.registry}/api/package/${packageJson.name}@${packageJson.version}`);
-            } else {
-                console.error("✗ Publish failed:", result.data.error);
-                process.exit(1);
-            }
         } catch (error) {
             console.error("✗ Error:", error instanceof Error ? error.message : String(error));
+            process.exit(1);
+        }
+    }
+
+    private createFormData(
+        boundary: string,
+        fields: Record<string, any>,
+        file: { fieldname: string; filename: string; content: string }
+    ): string {
+        let result = "";
+
+        // Add text fields
+        for (const [key, value] of Object.entries(fields)) {
+            result += `--${boundary}\r\n`;
+            result += `Content-Disposition: form-data; name="${key}"\r\n\r\n`;
+            result += `${typeof value === "object" ? JSON.stringify(value) : value}\r\n`;
+        }
+
+        // Add file field
+        result += `--${boundary}\r\n`;
+        result += `Content-Disposition: form-data; name="${file.fieldname}"; filename="${file.filename}"\r\n`;
+        result += `Content-Type: text/plain\r\n\r\n`;
+        result += `${file.content}\r\n`;
+
+        result += `--${boundary}--\r\n`;
+
+        return result;
+    }
+
+    async download(packageName: string, version: string = "latest", targetDir: string = "."): Promise<void> {
+        try {
+            console.log(`⬇️  Downloading ${packageName}@${version}...`);
+
+            const outputPath = path.join(targetDir, `${packageName}.str`);
+
+            await this.downloadFile(`/api/package/${packageName}/${version}`, outputPath);
+
+            console.log(`✓ Downloaded ${packageName}@${version}`);
+            console.log(`✓ Saved to ${outputPath}`);
+        } catch (error) {
+            console.error("✗ Download failed:", error instanceof Error ? error.message : String(error));
             process.exit(1);
         }
     }
@@ -305,6 +415,14 @@ async function main() {
             await client.publish(args[1]);
             break;
 
+        case "download":
+            if (args.length < 2) {
+                console.error("Usage: strataum download <package> [version] [targetDir]");
+                process.exit(1);
+            }
+            await client.download(args[1], args[2] || "latest", args[3] || ".");
+            break;
+
         case "search":
             if (args.length < 2) {
                 console.error("Usage: strataum search <query>");
@@ -340,6 +458,7 @@ async function main() {
             console.error("  login <username> <password>");
             console.error("  logout");
             console.error("  publish <package.json>");
+            console.error("  download <package> [version] [targetDir]");
             console.error("  search <query>");
             console.error("  info <package>");
             console.error("  whoami");

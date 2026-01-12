@@ -1,0 +1,89 @@
+╔═══════════════════════════════════════════════════════════════════╗
+║                  STRATAUM REGISTRY - QUICK START                  ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+🚀 START SERVER
+===============
+cd g:/Strata/strataum/rewrite
+npm install
+npm run dev
+
+Server: http://localhost:3000
+Admin: admin / admin123
+
+
+🧪 TEST IT (NEW TERMINAL)
+=========================
+
+1. HEALTH CHECK
+curl http://localhost:3000/health
+
+2. LOGIN
+TOKEN=$(curl -s -X POST http://localhost:3000/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"admin123"}' \
+  | grep -o '"token":"[^"]*"' | cut -d'"' -f4)
+echo $TOKEN
+
+3. CREATE PACKAGE
+cat > test.str << 'EOF'
+func add(a: int, b: int) => int {
+  return a + b
+}
+EOF
+
+4. PUBLISH
+curl -X POST http://localhost:3000/publish \
+  -H "Authorization: Bearer $TOKEN" \
+  -F "tarball=@test.str" \
+  -F "name=math" \
+  -F "version=1.0.0"
+
+5. DOWNLOAD
+curl http://localhost:3000/package/math/1.0.0
+
+6. SEARCH
+curl "http://localhost:3000/search?q=math"
+
+7. LIST ALL
+curl http://localhost:3000/packages
+
+
+✅ VERIFY
+=========
+cat test.str    # Original file
+curl http://localhost:3000/package/math/1.0.0  # Downloaded file
+# Should be identical ✓
+
+
+📊 ENDPOINTS
+============
+GET  /                    API info
+GET  /health              Status
+POST /register            Create user
+POST /login               Authenticate
+POST /publish             Upload package
+GET  /search?q=<query>    Search
+GET  /packages            List all
+GET  /package/<name>      Info
+GET  /package/<name>/<version>  Download
+
+
+🎯 DEVELOPMENT
+==============
+npm run build   # Compile TypeScript
+npm run dev     # Build & run
+npm start       # Run compiled
+
+
+📁 FILES
+========
+index.ts        Main server (~330 lines)
+index.js        Compiled (auto-generated)
+package.json    Dependencies
+tsconfig.json   TypeScript config
+README.md       Full documentation
+
+
+✨ STATUS: READY ✅
+Everything built, compiled, and ready to use!

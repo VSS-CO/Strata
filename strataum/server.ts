@@ -1,13 +1,12 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as http from "http";
-import * as url from "url";
-import * as querystring from "querystring";
+import express, { Express, Request, Response } from "express";
+import multer from "multer";
 
 // ============================================================================
-// STRATAUM REGISTRY SERVER
+// STRATAUM REGISTRY SERVER (EXPRESS)
 // ============================================================================
-// Package registry server similar to npm, with storage for serverless
+// Package registry server similar to npm, with real file downloads
 
 interface User {
     username: string;
@@ -25,7 +24,7 @@ interface Package {
     main: string;
     license: string;
     keywords: string[];
-    tarball: string; // base64 encoded
+    content: string; // Actual file content (not base64 anymore)
     createdAt: string;
     updatedAt: string;
 }
@@ -37,21 +36,29 @@ interface RegistryStorage {
 }
 
 class StrataumRegistry {
+    private app: Express;
     private port: number;
     private storage: RegistryStorage;
+    private upload: multer.Multer;
 
     constructor(port: number = 4873) {
         this.port = port;
+        this.app = express();
         this.storage = {
             users: new Map(),
             packages: new Map(),
             tokens: new Map(),
         };
+
+        // Multer for file uploads
+        const storage = multer.memoryStorage();
+        this.upload = multer({ storage });
+
         this.initializeDefaultUsers();
+        this.setupRoutes();
     }
 
     private initializeDefaultUsers(): void {
-        // Create default admin user
         const adminUser: User = {
             username: "admin",
             password: this.hashPassword("admin123"),
@@ -64,7 +71,6 @@ class StrataumRegistry {
     }
 
     private hashPassword(password: string): string {
-        // Simple hash (in production, use bcrypt)
         return Buffer.from(password).toString("base64");
     }
 
@@ -72,48 +78,63 @@ class StrataumRegistry {
         return Buffer.from(Math.random().toString()).toString("hex").slice(0, 40);
     }
 
-    private parseBody(request: http.IncomingMessage): Promise<any> {
-        return new Promise((resolve, reject) => {
-            let body = "";
-            request.on("data", (chunk) => {
-                body += chunk.toString();
-            });
-            request.on("end", () => {
-                try {
-                    resolve(body ? JSON.parse(body) : {});
-                } catch {
-                    resolve(body);
-                }
-            });
-            request.on("error", reject);
+    private sendJSON(res: Response, statusCode: number, data: any): void {
+        res.status(statusCode).json(data);
+    }
+
+    // ========================================================================
+    // MIDDLEWARE
+    // ========================================================================
+
+    private setupRoutes(): void {
+        // Middleware
+        this.app.use(express.json({ limit: "10mb" }));
+        this.app.use(express.urlencoded({ limit: "10mb", extended: true }));
+
+        // CORS
+        this.app.use((req, res, next) => {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+            if (req.method === "OPTIONS") {
+                res.sendStatus(200);
+            } else {
+                next();
+            }
+        });
+
+        // Web UI
+        this.app.get("/", (req, res) => this.handleWebUI(res));
+
+        // API Routes
+        this.app.post("/api/register", (req, res) => this.handleRegister(req, res));
+        this.app.post("/api/login", (req, res) => this.handleLogin(req, res));
+        this.app.post("/api/publish", this.upload.single("tarball"), (req, res) => this.handlePublish(req, res));
+        this.app.get("/api/search", (req, res) => this.handleSearch(req, res));
+        this.app.get("/api/packages", (req, res) => this.handlePackagesList(req, res));
+        this.app.get("/api/package/:name", (req, res) => this.handlePackageInfo(req, res));
+        this.app.get("/api/package/:name/:version", (req, res) => this.handleDownload(req, res));
+
+        // 404
+        this.app.use((req, res) => {
+            this.sendJSON(res, 404, { error: "Not found" });
         });
     }
 
-    private sendJSON(response: http.ServerResponse, statusCode: number, data: any): void {
-        response.writeHead(statusCode, { "Content-Type": "application/json" });
-        response.end(JSON.stringify(data, null, 2));
-    }
-
-    private sendHTML(response: http.ServerResponse, html: string): void {
-        response.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
-        response.end(html);
-    }
-
     // ========================================================================
-    // API ENDPOINTS
+    // API HANDLERS
     // ========================================================================
 
-    private async handleRegister(request: http.IncomingMessage, response: http.ServerResponse): Promise<void> {
-        const body = await this.parseBody(request);
-        const { username, password, email } = body;
+    private handleRegister(req: Request, res: Response): void {
+        const { username, password, email } = req.body;
 
         if (!username || !password || !email) {
-            this.sendJSON(response, 400, { error: "Missing required fields" });
+            this.sendJSON(res, 400, { error: "Missing required fields" });
             return;
         }
 
         if (this.storage.users.has(username)) {
-            this.sendJSON(response, 409, { error: "User already exists" });
+            this.sendJSON(res, 409, { error: "User already exists" });
             return;
         }
 
@@ -129,7 +150,7 @@ class StrataumRegistry {
         this.storage.users.set(username, user);
         this.storage.tokens.set(token, username);
 
-        this.sendJSON(response, 201, {
+        this.sendJSON(res, 201, {
             success: true,
             message: "User registered successfully",
             token,
@@ -137,18 +158,17 @@ class StrataumRegistry {
         });
     }
 
-    private async handleLogin(request: http.IncomingMessage, response: http.ServerResponse): Promise<void> {
-        const body = await this.parseBody(request);
-        const { username, password } = body;
+    private handleLogin(req: Request, res: Response): void {
+        const { username, password } = req.body;
 
         if (!username || !password) {
-            this.sendJSON(response, 400, { error: "Missing username or password" });
+            this.sendJSON(res, 400, { error: "Missing username or password" });
             return;
         }
 
         const user = this.storage.users.get(username);
         if (!user || user.password !== this.hashPassword(password)) {
-            this.sendJSON(response, 401, { error: "Invalid credentials" });
+            this.sendJSON(res, 401, { error: "Invalid credentials" });
             return;
         }
 
@@ -157,28 +177,30 @@ class StrataumRegistry {
         this.storage.users.set(username, user);
         this.storage.tokens.set(token, username);
 
-        this.sendJSON(response, 200, {
+        this.sendJSON(res, 200, {
             success: true,
             token,
             user: { username, email: user.email },
         });
     }
 
-    private async handlePublish(request: http.IncomingMessage, response: http.ServerResponse): Promise<void> {
-        const token = request.headers.authorization?.replace("Bearer ", "");
+    private handlePublish(req: Request, res: Response): void {
+        const token = req.headers.authorization?.replace("Bearer ", "");
         if (!token || !this.storage.tokens.has(token)) {
-            this.sendJSON(response, 401, { error: "Unauthorized" });
+            this.sendJSON(res, 401, { error: "Unauthorized" });
             return;
         }
 
         const username = this.storage.tokens.get(token)!;
-        const body = await this.parseBody(request);
-        const { name, version, description, main, license, keywords, tarball } = body;
+        const { name, version, description, main, license, keywords } = req.body;
 
-        if (!name || !version || !tarball) {
-            this.sendJSON(response, 400, { error: "Missing required fields" });
+        if (!name || !version || !req.file) {
+            this.sendJSON(res, 400, { error: "Missing required fields or file" });
             return;
         }
+
+        // Get actual file content from upload
+        const content = req.file.buffer.toString("utf-8");
 
         const pkg: Package = {
             name,
@@ -188,7 +210,7 @@ class StrataumRegistry {
             main: main || "index.str",
             license: license || "MIT",
             keywords: keywords || [],
-            tarball,
+            content,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
         };
@@ -205,19 +227,18 @@ class StrataumRegistry {
             versions.push(pkg);
         }
 
-        this.sendJSON(response, 201, {
+        this.sendJSON(res, 201, {
             success: true,
             message: `Package ${name}@${version} published`,
             package: { name, version, author: username },
         });
     }
 
-    private handleSearch(request: http.IncomingMessage, response: http.ServerResponse): void {
-        const parsedUrl = url.parse(request.url || "", true);
-        const query = parsedUrl.query.q as string;
+    private handleSearch(req: Request, res: Response): void {
+        const query = req.query.q as string;
 
         if (!query) {
-            this.sendJSON(response, 400, { error: "Missing search query" });
+            this.sendJSON(res, 400, { error: "Missing search query" });
             return;
         }
 
@@ -230,17 +251,28 @@ class StrataumRegistry {
                 author: versions[versions.length - 1].author,
             }));
 
-        this.sendJSON(response, 200, { results, total: results.length });
+        this.sendJSON(res, 200, { results, total: results.length });
     }
 
-    private handlePackageInfo(request: http.IncomingMessage, response: http.ServerResponse, pkgName: string): void {
+    private handlePackagesList(req: Request, res: Response): void {
+        const packages = Array.from(this.storage.packages.entries()).map(([name, versions]) => ({
+            name,
+            latestVersion: versions[versions.length - 1].version,
+            description: versions[versions.length - 1].description,
+            author: versions[versions.length - 1].author,
+        }));
+        this.sendJSON(res, 200, { packages });
+    }
+
+    private handlePackageInfo(req: Request, res: Response): void {
+        const pkgName = req.params.name;
         const versions = this.storage.packages.get(pkgName);
         if (!versions) {
-            this.sendJSON(response, 404, { error: "Package not found" });
+            this.sendJSON(res, 404, { error: "Package not found" });
             return;
         }
 
-        this.sendJSON(response, 200, {
+        this.sendJSON(res, 200, {
             name: pkgName,
             versions: versions.map((v) => ({
                 version: v.version,
@@ -251,10 +283,13 @@ class StrataumRegistry {
         });
     }
 
-    private async handleInstall(request: http.IncomingMessage, response: http.ServerResponse, pkgName: string, version: string): Promise<void> {
+    private handleDownload(req: Request, res: Response): void {
+        const pkgName = req.params.name;
+        const version = req.params.version || "latest";
         const versions = this.storage.packages.get(pkgName);
+
         if (!versions) {
-            this.sendJSON(response, 404, { error: "Package not found" });
+            this.sendJSON(res, 404, { error: "Package not found" });
             return;
         }
 
@@ -263,11 +298,17 @@ class StrataumRegistry {
             pkg = versions[versions.length - 1];
         }
 
-        response.writeHead(200, { "Content-Type": "application/octet-stream" });
-        response.end(Buffer.from(pkg.tarball, "base64"));
+        // Send file content
+        res.setHeader("Content-Type", "text/plain");
+        res.setHeader("Content-Disposition", `attachment; filename="${pkg.name}-${pkg.version}.str"`);
+        res.send(pkg.content);
     }
 
-    private handleWebUI(response: http.ServerResponse): void {
+    // ========================================================================
+    // WEB UI
+    // ========================================================================
+
+    private handleWebUI(res: Response): void {
         const packagesCount = this.storage.packages.size;
         const usersCount = this.storage.users.size;
         const totalVersions = Array.from(this.storage.packages.values()).reduce(
@@ -465,7 +506,6 @@ class StrataumRegistry {
         const API_BASE = window.location.origin;
         let token = localStorage.getItem("strataumToken");
 
-        // Register
         document.getElementById("registerForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             const username = document.getElementById("regUsername").value;
@@ -492,7 +532,6 @@ class StrataumRegistry {
             }
         });
 
-        // Login
         document.getElementById("loginForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             const username = document.getElementById("loginUsername").value;
@@ -518,7 +557,6 @@ class StrataumRegistry {
             }
         });
 
-        // Search
         document.getElementById("searchForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             const query = document.getElementById("searchQuery").value;
@@ -541,7 +579,6 @@ class StrataumRegistry {
             }
         });
 
-        // Load all packages
         async function loadPackages() {
             try {
                 const res = await fetch(API_BASE + "/api/packages");
@@ -567,74 +604,12 @@ class StrataumRegistry {
 </body>
 </html>
         `;
-        this.sendHTML(response, html);
-    }
-
-    // ========================================================================
-    // HTTP REQUEST HANDLER
-    // ========================================================================
-
-    private async handleRequest(request: http.IncomingMessage, response: http.ServerResponse): Promise<void> {
-        const parsedUrl = url.parse(request.url || "", true);
-        const pathname = parsedUrl.pathname || "";
-
-        // CORS
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-        if (request.method === "OPTIONS") {
-            response.writeHead(200);
-            response.end();
-            return;
-        }
-
-        try {
-            // Web UI
-            if (pathname === "/" || pathname === "") {
-                this.handleWebUI(response);
-                return;
-            }
-
-            // API Routes
-            if (pathname === "/api/register" && request.method === "POST") {
-                await this.handleRegister(request, response);
-            } else if (pathname === "/api/login" && request.method === "POST") {
-                await this.handleLogin(request, response);
-            } else if (pathname === "/api/publish" && request.method === "POST") {
-                await this.handlePublish(request, response);
-            } else if (pathname === "/api/search" && request.method === "GET") {
-                this.handleSearch(request, response);
-            } else if (pathname === "/api/packages") {
-                const packages = Array.from(this.storage.packages.entries()).map(([name, versions]) => ({
-                    name,
-                    latestVersion: versions[versions.length - 1].version,
-                    description: versions[versions.length - 1].description,
-                    author: versions[versions.length - 1].author,
-                }));
-                this.sendJSON(response, 200, { packages });
-            } else if (pathname.startsWith("/api/package/")) {
-                const parts = pathname.replace("/api/package/", "").split("@");
-                const pkgName = parts[0];
-                const version = parts[1] || "latest";
-                if (request.method === "GET") {
-                    this.handlePackageInfo(request, response, pkgName);
-                } else if (request.method === "POST") {
-                    await this.handleInstall(request, response, pkgName, version);
-                }
-            } else {
-                this.sendJSON(response, 404, { error: "Not found" });
-            }
-        } catch (error) {
-            console.error(error);
-            this.sendJSON(response, 500, { error: "Internal server error" });
-        }
+        res.setHeader("Content-Type", "text/html; charset=utf-8");
+        res.send(html);
     }
 
     public start(): void {
-        const server = http.createServer((req, res) => this.handleRequest(req, res));
-
-        server.listen(this.port, () => {
+        this.app.listen(this.port, () => {
             console.log(`🚀 Strataum Registry running on http://localhost:${this.port}`);
             console.log(`📦 Web UI: http://localhost:${this.port}`);
             console.log(`🔐 Default credentials: admin / admin123`);
