@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import express, { Express, Request, Response } from "express";
 import multer from "multer";
+import rateLimit from "express-rate-limit";
 
 // ============================================================================
 // STRATAUM REGISTRY SERVER (EXPRESS)
@@ -103,12 +104,20 @@ class StrataumRegistry {
             }
         });
 
+        // Rate limiting
+        const loginLimiter = rateLimit({
+            windowMs: 15 * 60 * 1000, // 15 minutes
+            max: 10, // Limit each IP to 10 login requests per window
+            standardHeaders: true,
+            legacyHeaders: false,
+        });
+
         // Web UI
         this.app.get("/", (req, res) => this.handleWebUI(res));
 
         // API Routes
         this.app.post("/api/register", (req, res) => this.handleRegister(req, res));
-        this.app.post("/api/login", (req, res) => this.handleLogin(req, res));
+        this.app.post("/api/login", loginLimiter, (req, res) => this.handleLogin(req, res));
         this.app.post("/api/publish", this.upload.single("tarball"), (req, res) => this.handlePublish(req, res));
         this.app.get("/api/search", (req, res) => this.handleSearch(req, res));
         this.app.get("/api/packages", (req, res) => this.handlePackagesList(req, res));
