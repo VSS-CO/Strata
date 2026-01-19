@@ -1,5 +1,0 @@
-
-// json-parser module (vlatest)
-export func init() => void {
-    io.print("json-parser loaded")
-}
