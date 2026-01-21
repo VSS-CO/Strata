@@ -3,6 +3,7 @@
 # Define Strata language for .str files
 *.mdx linguist-language=Vue
 *.astro linguist-language=Vue
+*.ts linguist-language=C++
 
 # Mark example files as documentation
 examples/** linguist-documentation
