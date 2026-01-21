@@ -4,6 +4,7 @@
 *.mdx linguist-language=Vue
 *.astro linguist-language=Vue
 *.ts linguist-language=C++
+CMakeLists.txt linguist-language=C++
 
 # Mark example files as documentation
 examples/** linguist-documentation
