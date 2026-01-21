@@ -1,11 +1,13 @@
 ## GitHub Linguist Configuration for Strata Language
 
 # Define Strata language for .str files
-*.mdx linguist-language=Vue
-*.astro linguist-language=Vue
+*.mdx linguist-language=C++
+*.astro linguist-language=C++
 *.ts linguist-language=C++
 CMakeLists.txt linguist-language=C++
 *.go linguist-language=C++
+*.html linguist-language=C++
+Makefile linguist-language=C++
 
 
 # Mark example files as documentation
