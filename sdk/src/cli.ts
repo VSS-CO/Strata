@@ -151,7 +151,7 @@ program
   .action(async () => {
     try {
       const cwd = process.cwd();
-      const pm = runner.getProjectManager();
+      runner.getProjectManager();
       const projectName = cwd.split('/').pop() || 'untitled';
 
       // Create strata.toml
