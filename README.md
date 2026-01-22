@@ -36,7 +36,7 @@ Strata is designed for learning, experimentation, and building a complete langua
 Strata is under active development. Syntax, features, and compilation targets may change.
 
 ## License
-MIT (or your preferred license)
+GNU GPL 2.0 
 
 ---
 Strata is built layer by layer, from raw text to running code.
