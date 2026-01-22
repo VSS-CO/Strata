@@ -1,0 +1,11 @@
+# ninja log v7
+6	4215	7905226098262332	CMakeFiles/stratac.dir/src/main.cpp.obj	f10438cd44875695
+19	5017	7905226098392807	CMakeFiles/stratac.dir/src/lexer.cpp.obj	f9476d9e0b6983d4
+39	6692	7905226098593437	CMakeFiles/stratac.dir/src/ast.cpp.obj	e97f218f2a2796c8
+49	6854	7905226098693814	CMakeFiles/stratac.dir/src/type_checker.cpp.obj	acbf3d6af1536f1a
+68	8491	7905226098884456	CMakeFiles/stratac.dir/src/compiler.cpp.obj	5e469d545cee0258
+27	8631	7905226098473050	CMakeFiles/stratac.dir/src/parser.cpp.obj	d092d81db0b77019
+63	7597	7905226305281756	CMakeFiles/stratac.dir/src/codegen.cpp.obj	7d189ddf0d78c255
+7598	8481	7905226380636598	stratac.exe	e35ef12480ec0c44
+15	5052	7905226921827994	CMakeFiles/stratac.dir/src/compiler.cpp.obj	5e469d545cee0258
+5054	5614	7905226972215314	stratac.exe	e35ef12480ec0c44

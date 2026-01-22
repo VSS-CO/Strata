@@ -1,0 +1,7 @@
+G:/Strata/compiler/build/CMakeFiles/stratac.dir
+G:/Strata/compiler/build/CMakeFiles/edit_cache.dir
+G:/Strata/compiler/build/CMakeFiles/rebuild_cache.dir
+G:/Strata/compiler/build/CMakeFiles/list_install_components.dir
+G:/Strata/compiler/build/CMakeFiles/install.dir
+G:/Strata/compiler/build/CMakeFiles/install/local.dir
+G:/Strata/compiler/build/CMakeFiles/install/strip.dir

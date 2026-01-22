@@ -1,0 +1,44 @@
+[
+{
+  "directory": "G:/Strata/compiler/build",
+  "command": "G:\\winlibs-i686-posix-dwarf-gcc-15.2.0-mingw-w64ucrt-13.0.0-r4\\mingw32\\bin\\c++.exe -IG:/Strata/compiler/include -std=gnu++17 -Wall -Wextra -Werror -pedantic -o CMakeFiles\\stratac.dir\\src\\main.cpp.obj -c G:\\Strata\\compiler\\src\\main.cpp",
+  "file": "G:/Strata/compiler/src/main.cpp",
+  "output": "G:/Strata/compiler/build/CMakeFiles/stratac.dir/src/main.cpp.obj"
+},
+{
+  "directory": "G:/Strata/compiler/build",
+  "command": "G:\\winlibs-i686-posix-dwarf-gcc-15.2.0-mingw-w64ucrt-13.0.0-r4\\mingw32\\bin\\c++.exe -IG:/Strata/compiler/include -std=gnu++17 -Wall -Wextra -Werror -pedantic -o CMakeFiles\\stratac.dir\\src\\lexer.cpp.obj -c G:\\Strata\\compiler\\src\\lexer.cpp",
+  "file": "G:/Strata/compiler/src/lexer.cpp",
+  "output": "G:/Strata/compiler/build/CMakeFiles/stratac.dir/src/lexer.cpp.obj"
+},
+{
+  "directory": "G:/Strata/compiler/build",
+  "command": "G:\\winlibs-i686-posix-dwarf-gcc-15.2.0-mingw-w64ucrt-13.0.0-r4\\mingw32\\bin\\c++.exe -IG:/Strata/compiler/include -std=gnu++17 -Wall -Wextra -Werror -pedantic -o CMakeFiles\\stratac.dir\\src\\parser.cpp.obj -c G:\\Strata\\compiler\\src\\parser.cpp",
+  "file": "G:/Strata/compiler/src/parser.cpp",
+  "output": "G:/Strata/compiler/build/CMakeFiles/stratac.dir/src/parser.cpp.obj"
+},
+{
+  "directory": "G:/Strata/compiler/build",
+  "command": "G:\\winlibs-i686-posix-dwarf-gcc-15.2.0-mingw-w64ucrt-13.0.0-r4\\mingw32\\bin\\c++.exe -IG:/Strata/compiler/include -std=gnu++17 -Wall -Wextra -Werror -pedantic -o CMakeFiles\\stratac.dir\\src\\ast.cpp.obj -c G:\\Strata\\compiler\\src\\ast.cpp",
+  "file": "G:/Strata/compiler/src/ast.cpp",
+  "output": "G:/Strata/compiler/build/CMakeFiles/stratac.dir/src/ast.cpp.obj"
+},
+{
+  "directory": "G:/Strata/compiler/build",
+  "command": "G:\\winlibs-i686-posix-dwarf-gcc-15.2.0-mingw-w64ucrt-13.0.0-r4\\mingw32\\bin\\c++.exe -IG:/Strata/compiler/include -std=gnu++17 -Wall -Wextra -Werror -pedantic -o CMakeFiles\\stratac.dir\\src\\type_checker.cpp.obj -c G:\\Strata\\compiler\\src\\type_checker.cpp",
+  "file": "G:/Strata/compiler/src/type_checker.cpp",
+  "output": "G:/Strata/compiler/build/CMakeFiles/stratac.dir/src/type_checker.cpp.obj"
+},
+{
+  "directory": "G:/Strata/compiler/build",
+  "command": "G:\\winlibs-i686-posix-dwarf-gcc-15.2.0-mingw-w64ucrt-13.0.0-r4\\mingw32\\bin\\c++.exe -IG:/Strata/compiler/include -std=gnu++17 -Wall -Wextra -Werror -pedantic -o CMakeFiles\\stratac.dir\\src\\codegen.cpp.obj -c G:\\Strata\\compiler\\src\\codegen.cpp",
+  "file": "G:/Strata/compiler/src/codegen.cpp",
+  "output": "G:/Strata/compiler/build/CMakeFiles/stratac.dir/src/codegen.cpp.obj"
+},
+{
+  "directory": "G:/Strata/compiler/build",
+  "command": "G:\\winlibs-i686-posix-dwarf-gcc-15.2.0-mingw-w64ucrt-13.0.0-r4\\mingw32\\bin\\c++.exe -IG:/Strata/compiler/include -std=gnu++17 -Wall -Wextra -Werror -pedantic -o CMakeFiles\\stratac.dir\\src\\compiler.cpp.obj -c G:\\Strata\\compiler\\src\\compiler.cpp",
+  "file": "G:/Strata/compiler/src/compiler.cpp",
+  "output": "G:/Strata/compiler/build/CMakeFiles/stratac.dir/src/compiler.cpp.obj"
+}
+]
